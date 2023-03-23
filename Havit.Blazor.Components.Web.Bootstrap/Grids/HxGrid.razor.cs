@@ -52,6 +52,12 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	[Parameter] public bool MultiSelectionEnabled { get; set; } = false;
 
 	/// <summary>
+	/// Indicate whether columns that marked as hidden will be displayed in a separate row under the main row
+	/// It will be used to expand/collapse hidden details
+	/// </summary>
+	[Parameter] public bool ShowHiddenColumnsInSeparateRow { get; set; } = false;
+
+	/// <summary>
 	/// Columns template.
 	/// </summary>
 	[Parameter, EditorRequired] public RenderFragment Columns { get; set; }
@@ -89,6 +95,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	/// Intended for data binding.
 	/// </summary>		
 	[Parameter] public EventCallback<TItem> SelectedDataItemChanged { get; set; }
+
 	/// <summary>
 	/// Triggers the <see cref="SelectedDataItemChanged"/> event. Allows interception of the event in derived components.
 	/// </summary>
@@ -105,6 +112,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	/// Intended for data binding.
 	/// </summary>		
 	[Parameter] public EventCallback<HashSet<TItem>> SelectedDataItemsChanged { get; set; }
+
 	/// <summary>
 	/// Triggers the <see cref="SelectedDataItemsChanged"/> event. Allows interception of the event in derived components.
 	/// </summary>
@@ -156,6 +164,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	/// Event fires when grid state is changed.
 	/// </summary>
 	[Parameter] public EventCallback<GridUserState> CurrentUserStateChanged { get; set; }
+
 	/// <summary>
 	/// Triggers the <see cref="CurrentUserStateChanged"/> event. Allows interception of the event in derived components.
 	/// </summary>
@@ -386,6 +395,14 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	protected List<IHxGridColumn<TItem>> GetColumnsToRender()
 	{
 		return columnsList.Where(column => column.IsVisible()).OrderBy(column => column.GetOrder()).ToList();
+	}
+
+	/// <summary>
+	/// Returns columns marked as hidden to render.
+	/// </summary>
+	protected List<IHxGridColumn<TItem>> GetHiddenColumnsToRender()
+	{
+		return columnsList.Where(column => !column.IsVisible()).OrderBy(column => column.GetOrder()).ToList();
 	}
 
 	/// <summary>

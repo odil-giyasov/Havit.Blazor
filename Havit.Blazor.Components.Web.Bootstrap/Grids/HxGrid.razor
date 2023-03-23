@@ -24,6 +24,7 @@
 
 @{
 	List<IHxGridColumn<TItem>> columnsToRender = GetColumnsToRender();
+	List<IHxGridColumn<TItem>> hiddenColumnsToRender = GetHiddenColumnsToRender();
 
 	bool shouldRenderLoadingData = totalCount == null;
 	bool shouldRenderLoadingDataWithLoadingTemplate = shouldRenderLoadingData && (LoadingDataTemplate != null);
@@ -180,6 +181,18 @@
 										</td>
 									}
 								</tr>
+								@if (ShowHiddenColumnsInSeparateRow && hiddenColumnsToRender.Any())
+								{
+									<tr>
+										@foreach (IHxGridColumn<TItem> column in hiddenColumnsToRender)
+										{
+											GridCellTemplate cellTemplate = column.GetItemCellTemplate(item);
+											<td class="@cellTemplate.CssClass">
+													@cellTemplate.Template
+											</td>
+										}
+									</tr>
+								}
 							}
 							else
 							{
