@@ -5776,6 +5776,12 @@
             Default is <c>false</c>.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ShowHiddenColumnsInSeparateRow">
+            <summary>
+            Indicate whether columns that marked as hidden will be displayed in a separate row under the main row
+            It will be used to expand/collapse hidden details
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.Columns">
             <summary>
             Columns template.
@@ -5992,6 +5998,11 @@
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.GetColumnsToRender">
             <summary>
             Returns columns to render.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.GetHiddenColumnsToRender">
+            <summary>
+            Returns columns marked as hidden to render.
             </summary>
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.GetTableElementCssClass(System.Boolean)">
