@@ -127,7 +127,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	/// <summary>
 	/// Page size for <see cref="GridContentNavigationMode.Pagination"/>, <see cref="GridContentNavigationMode.LoadMore"/> and <see cref="GridContentNavigationMode.PaginationAndLoadMore"/>. Set <c>0</c> to disable paging.
 	/// </summary>
-	[Parameter] public int? PageSize { get; set; }
+	[Parameter] public int? PageSize { get; set; } = 20;
 	protected int PageSizeEffective => this.PageSize ?? this.GetSettings()?.PageSize ?? GetDefaults().PageSize ?? throw new InvalidOperationException(nameof(PageSize) + " default for " + nameof(HxGrid) + " has to be set.");
 
 	/// <summary>
@@ -313,6 +313,17 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	/// <inheritdoc />
 	protected override async Task OnParametersSetAsync()
 	{
+		#region HH Extended
+
+		if (isFirstParameterSet)
+		{
+			pageSizerValue = PageSize.GetValueOrDefault(20);
+
+			isFirstParameterSet = false;
+		}
+
+		#endregion
+
 		await base.OnParametersSetAsync();
 
 		Contract.Requires<InvalidOperationException>(DataProvider != null, $"Property {nameof(DataProvider)} on {GetType()} must have a value.");
