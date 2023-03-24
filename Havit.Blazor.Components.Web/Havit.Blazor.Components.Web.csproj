@@ -17,7 +17,7 @@
 	<Import Project="../NuGet.targets" />
 	<PropertyGroup>
 		<!-- ComponentsPackagesVersion - variable from Directory.Build.props -->
-		<PackageVersion>$(ComponentsPackagesVersion)</PackageVersion>
+		<PackageVersion>3.2.11-pre1</PackageVersion>
 		<Description>HAVIT Blazor Library - Free UI components and supportive classes</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://havit.blazor.eu</PackageProjectUrl>
