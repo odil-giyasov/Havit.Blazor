@@ -26,6 +26,9 @@ public abstract class HxGridColumnBase<TItem> : ComponentBase, IHxGridColumn<TIt
 	bool IHxGridColumn<TItem>.IsVisible() => IsColumnVisible();
 
 	/// <inheritdoc />
+	bool IHxGridColumn<TItem>.HasExpandCollapseElement() => IsColumnHasExpandCollapseElement();
+
+	/// <inheritdoc />
 	int IHxGridColumn<TItem>.GetOrder() => this.GetColumnOrder();
 
 	/// <inheritdoc />
@@ -33,6 +36,12 @@ public abstract class HxGridColumnBase<TItem> : ComponentBase, IHxGridColumn<TIt
 
 	/// <inheritdoc />
 	GridCellTemplate IHxGridColumn<TItem>.GetItemCellTemplate(TItem item) => this.GetItemCellTemplate(item);
+
+	/// <inheritdoc />
+	GridCellTemplate IHxGridColumn<TItem>.GetItemExpandCollapseElementTemplate(TItem item) => this.GetItemExpandCollapseElementTemplate(item);
+
+	/// <inheritdoc />
+	GridCellTemplate IHxGridColumn<TItem>.GetItemExpandCollapseContainerTemplate(TItem item) => this.GetItemExpandCollapseContainerTemplate(item);
 
 	/// <inheritdoc />
 	GridCellTemplate IHxGridColumn<TItem>.GetItemPlaceholderCellTemplate(GridPlaceholderCellContext context) => this.GetItemPlaceholderCellTemplate(context);
@@ -59,6 +68,11 @@ public abstract class HxGridColumnBase<TItem> : ComponentBase, IHxGridColumn<TIt
 	protected virtual bool IsColumnVisible() => true;
 
 	/// <summary>
+	/// Indicates whether the column has an expand/collapse element.
+	/// </summary>
+	protected virtual bool IsColumnHasExpandCollapseElement() => false;
+
+	/// <summary>
 	/// Returns the column order.
 	/// </summary>
 	/// <remarks>
@@ -76,6 +90,18 @@ public abstract class HxGridColumnBase<TItem> : ComponentBase, IHxGridColumn<TIt
 	/// Returns data cell template for the specific item.
 	/// </summary>
 	protected abstract GridCellTemplate GetItemCellTemplate(TItem item);
+
+	/// <summary>
+	/// Returns data cell expand/collapse element template for the specific item.
+	/// </summary>
+	/// <param name="item"></param>
+	protected abstract GridCellTemplate GetItemExpandCollapseElementTemplate(TItem item);
+
+	/// <summary>
+	/// Returns data cell expand/collapse container template for the specific item.
+	/// </summary>
+	/// <param name="item"></param>
+	protected abstract GridCellTemplate GetItemExpandCollapseContainerTemplate(TItem item);
 
 	/// <summary>
 	/// Returns placeholder cell template.

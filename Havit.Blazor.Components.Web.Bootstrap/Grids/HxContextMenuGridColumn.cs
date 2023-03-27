@@ -57,6 +57,11 @@ public class HxContextMenuGridColumn<TItem> : HxGridColumnBase<TItem>
 		return GridCellTemplate.Create(ChildContent(item), cssClass);
 	}
 
+	protected override GridCellTemplate GetItemExpandCollapseTemplate(TItem item)
+	{
+		return GridCellTemplate.Empty;
+	}
+
 	/// <inheritdoc />
 	protected override GridCellTemplate GetItemPlaceholderCellTemplate(GridPlaceholderCellContext context) => GridCellTemplate.Empty;
 
@@ -68,5 +73,4 @@ public class HxContextMenuGridColumn<TItem> : HxGridColumnBase<TItem>
 
 	/// <inheritdoc />
 	protected override int? GetDefaultSortingOrder() => null;
-
 }

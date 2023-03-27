@@ -58,6 +58,11 @@ public class HxMultiSelectGridColumnInternal<TItem> : HxGridColumnBase<TItem>
 		};
 	}
 
+	protected override GridCellTemplate GetItemExpandCollapseTemplate(TItem item)
+	{
+		return GridCellTemplate.Empty;
+	}
+
 	/// <inheritdoc />
 	protected override GridCellTemplate GetItemPlaceholderCellTemplate(GridPlaceholderCellContext context)
 	{
