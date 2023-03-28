@@ -198,40 +198,41 @@
                             RenderFragment<TItem> rowTemplate = (TItem item) =>
                             @<text>
                                 @if (SelectionEnabled || MultiSelectionEnabled)
-                                {  
-                                    foreach (IHxGridColumn<TItem> column in columnsToRender)
-                                    {
-                                        GridCellTemplate cellTemplate = column.GetItemCellTemplate(item);
-                                        GridCellTemplate collapseExpandContainerCellTemplate = column.GetItemExpandCollapseContainerTemplate(item);
+                                {
+                                    <tr role="button"
+                                        height="@((this.ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll) ? rowHeight : null)"
+                                        class="@CssClassHelper.Combine(ItemRowCssClassEffective, ItemRowCssClassSelector?.Invoke(item), ((SelectionEnabled && (item != null) && item.Equals(SelectedDataItem)) ? "table-active" : null))"
+                                        @onclick="async () => await HandleSelectOrMultiSelectDataItemClick(item)"
+                                        @onclick:stopPropagation>
+                                        
+                                        @foreach (IHxGridColumn<TItem> column in columnsToRender)
+                                        {
+                                            GridCellTemplate cellTemplate = column.GetItemCellTemplate(item);
 
-                                        <tr role="button"
-                                            height="@((this.ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll) ? rowHeight : null)"
-                                            class="@CssClassHelper.Combine(
-																    ItemRowCssClassEffective,
-																    ItemRowCssClassSelector?.Invoke(item),
-																    ((SelectionEnabled && (item != null) && item.Equals(SelectedDataItem)) ? "table-active" : null))"
-                                            @onclick="async () => await HandleSelectOrMultiSelectDataItemClick(item)"
-                                            @onclick:stopPropagation>
-                                           
                                             <td class="@cellTemplate.CssClass">
-                                                    @if (column.HasExpandCollapseElement())
-                                                    {
-                                                        GridCellTemplate expandCollapseElementTemplate = column.GetItemExpandCollapseElementTemplate(item);
-                                                        @expandCollapseElementTemplate.Template
-                                                    }
+                                                @if (column.HasExpandCollapseElement())
+                                                {
+                                                    GridCellTemplate expandCollapseElementTemplate = column.GetItemExpandCollapseElementTemplate(item);
+                                                    @expandCollapseElementTemplate.Template
+                                                }
 
-                                                    @cellTemplate.Template
-                                            </td>                                          
-                                        </tr>
+                                                @cellTemplate.Template
+                                            </td>
+                                        }
+                                    </tr>
+
+                                    @foreach (IHxGridColumn<TItem> column in columnsToRender)
+                                    {
+                                        GridCellTemplate collapseExpandContainerCellTemplate = column.GetItemExpandCollapseContainerTemplate(item);
                                         @if (column.HasExpandCollapseElement() && collapseExpandContainerCellTemplate != null)
                                         {
                                             <tr>
-                                            <td class="@collapseExpandContainerCellTemplate.CssClass" colspan="@columnsToRender.Count">
-                                                        @collapseExpandContainerCellTemplate.Template
+                                                <td class="@collapseExpandContainerCellTemplate.CssClass" colspan="@columnsToRender.Count">
+                                                    @collapseExpandContainerCellTemplate.Template
                                                 </td>
                                             </tr>
                                         }
-                                    }
+                                    }                                    
                                 }
                                 else
                                 {
