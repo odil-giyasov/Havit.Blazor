@@ -52,12 +52,6 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	[Parameter] public bool MultiSelectionEnabled { get; set; } = false;
 
 	/// <summary>
-	/// Indicate whether columns that marked as hidden will be displayed in a separate row under the main row
-	/// It will be used to expand/collapse hidden details
-	/// </summary>
-	[Parameter] public bool ShowHiddenColumnsInSeparateRow { get; set; } = false;
-
-	/// <summary>
 	/// Columns template.
 	/// </summary>
 	[Parameter, EditorRequired] public RenderFragment Columns { get; set; }
@@ -406,14 +400,6 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	protected List<IHxGridColumn<TItem>> GetColumnsToRender()
 	{
 		return columnsList.Where(column => column.IsVisible()).OrderBy(column => column.GetOrder()).ToList();
-	}
-
-	/// <summary>
-	/// Returns columns marked as hidden to render.
-	/// </summary>
-	protected List<IHxGridColumn<TItem>> GetHiddenColumnsToRender()
-	{
-		return columnsList.Where(column => !column.IsVisible()).OrderBy(column => column.GetOrder()).ToList();
 	}
 
 	/// <summary>

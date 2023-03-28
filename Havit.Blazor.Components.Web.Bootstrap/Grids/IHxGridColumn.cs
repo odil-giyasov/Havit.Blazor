@@ -56,7 +56,7 @@ public interface IHxGridColumn<TItem>
 	GridCellTemplate GetItemExpandCollapseElementTemplate(TItem item);
 
 	/// <summary>
-	/// Returns data cell expand/collapse template for the container to show on expand.
+	/// Returns data cell expand/collapse container template for the specific item.
 	/// </summary>
 	GridCellTemplate GetItemExpandCollapseContainerTemplate(TItem item);
 
