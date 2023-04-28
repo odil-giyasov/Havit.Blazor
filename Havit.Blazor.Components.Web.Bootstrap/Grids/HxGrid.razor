@@ -65,15 +65,24 @@
 
         <div class="hh-grid-toolbar">
 
-            <div class="hh-grid-pager-sizer">
-                <span>Show</span>
+        @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
+        {
+                <div class="hh-grid-pager-sizer">
+                    <span>Show</span>
 
-                <HxSelect TItem="GridPageSizerDDLItem" TValue="int" Data="@pageSizeEntries" style="transform:scale(80%);"
-                      Value="@pageSizerValue" ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
-                      TextSelector="@(p => p.Name)" ValueSelector="@(p => int.Parse(p.Id))" Nullable="false"></HxSelect>
+                    <HxSelect TItem="GridPageSizerDDLItem" 
+                                TValue="int" 
+                                Data="@pageSizeEntries" 
+                                style="transform:scale(80%);"
+                                Value="@pageSizerValue" 
+                                ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
+                                TextSelector="@(p => p.Name)" 
+                                ValueSelector="@(p => int.Parse(p.Id))" 
+                                Nullable="false"></HxSelect>
 
-                <span>entries</span>
-            </div>
+                    <span>entries</span>
+                </div>
+            }
 
 
             <div class="hh-grid-toolbar-buttons">

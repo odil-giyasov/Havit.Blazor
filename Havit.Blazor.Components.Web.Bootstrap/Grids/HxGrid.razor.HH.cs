@@ -17,6 +17,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 
 	#region Grid Page Sizer
 
+	bool pageSizerChangedValue;
 	private bool isFirstParameterSet = true;   // to ensure pageSizerValue is set once in OnParametersSetAsync 
 
 	private int pageSizerValue; // selected value in Grid Page Sizer
@@ -26,6 +27,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 
 	private async void OnPageSizerValueChanged(int v)
 	{
+		pageSizerChangedValue = true;
 		pageSizerValue = v;
 		await PageSizer_ValueChanged.InvokeAsync(pageSizerValue);
 		this.PageSize = v;

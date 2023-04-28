@@ -182,3 +182,13 @@ form {
 form > .hx-button {
 	align-self: start;
 }
+
+/* HH extentions */
+.toogle-btn[aria-expanded=false] .text-expanded {
+	display: none;
+}
+
+.toogle-btn[aria-expanded=true] .text-collapsed {
+	display: none;
+}
+/* HH extentions end */
