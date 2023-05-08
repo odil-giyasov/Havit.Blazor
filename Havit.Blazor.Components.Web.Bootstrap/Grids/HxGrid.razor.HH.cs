@@ -32,7 +32,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 		await PageSizer_ValueChanged.InvokeAsync(pageSizerValue);
 		this.PageSize = v;
 
-		await RefreshDataAsync();
+		await HandlePagerCurrentPageIndexChanged(0);
 	}
 
 	private List<GridPageSizerDDLItem> pageSizeEntries = new()
@@ -43,6 +43,12 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	};
 
 	#endregion
+
+	private async Task OnRefreshButtonClicked()
+	{
+		await RefreshDataAsync();
+	}
+
 
 }
 

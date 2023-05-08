@@ -67,22 +67,22 @@
 
         @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
         {
-                <div class="hh-grid-pager-sizer">
-                    <span>Show</span>
+            <div class="hh-grid-pager-sizer">
+                <span>Show</span>
 
-                    <HxSelect TItem="GridPageSizerDDLItem" 
-                                TValue="int" 
-                                Data="@pageSizeEntries" 
-                                style="transform:scale(80%);"
-                                Value="@pageSizerValue" 
-                                ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
-                                TextSelector="@(p => p.Name)" 
-                                ValueSelector="@(p => int.Parse(p.Id))" 
-                                Nullable="false"></HxSelect>
+                <HxSelect TItem="GridPageSizerDDLItem" 
+                            TValue="int" 
+                            Data="@pageSizeEntries" 
+                            style="transform:scale(80%);"
+                            Value="@pageSizerValue" 
+                            ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
+                            TextSelector="@(p => p.Name)" 
+                            ValueSelector="@(p => int.Parse(p.Id))" 
+                            Nullable="false"></HxSelect>
 
-                    <span>entries</span>
-                </div>
-            }
+                <span>entries</span>
+            </div>
+        }
 
 
             <div class="hh-grid-toolbar-buttons">
@@ -98,6 +98,8 @@
                 {
                     <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToExcel.InvokeAsync()" title="Export to Excel">Excel</HxButton>
                 }
+
+                <HxButton Color="ThemeColor.Primary" Outline="true" Icon="BootstrapIcon.ArrowRepeat" Size="ButtonSize.Small" OnClick="async() => await OnRefreshButtonClicked()" title="Reload data"></HxButton>
 
             </div>
 
@@ -318,9 +320,9 @@
                 {
                     int currentPageIndex = CurrentUserState.PageIndex + ((CurrentUserState.LoadMoreAdditionalItemsCount + PageSizeEffective - 1) / PageSizeEffective);
                     <HxPager TotalPages="@totalPages"
-                 CurrentPageIndex="@currentPageIndex"
-                 CurrentPageIndexChanged="@HandlePagerCurrentPageIndexChanged"
-                 Settings="@PagerSettingsEffective" />
+                         CurrentPageIndex="@currentPageIndex"
+                         CurrentPageIndexChanged="@HandlePagerCurrentPageIndexChanged"
+                         Settings="@PagerSettingsEffective" />
                 }
             }
 
