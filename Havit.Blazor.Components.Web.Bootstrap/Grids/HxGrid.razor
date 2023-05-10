@@ -65,24 +65,24 @@
 
         <div class="hh-grid-toolbar">
 
-        @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
-        {
             <div class="hh-grid-pager-sizer">
-                <span>Show</span>
+                @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
+                {
+                    <span>Show</span>
 
-                <HxSelect TItem="GridPageSizerDDLItem" 
-                            TValue="int" 
-                            Data="@pageSizeEntries" 
-                            style="transform:scale(80%);"
-                            Value="@pageSizerValue" 
-                            ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
-                            TextSelector="@(p => p.Name)" 
-                            ValueSelector="@(p => int.Parse(p.Id))" 
-                            Nullable="false"></HxSelect>
+                    <HxSelect TItem="GridPageSizerDDLItem" 
+                                TValue="int" 
+                                Data="@pageSizeEntries" 
+                                style="transform:scale(80%);"
+                                Value="@pageSizerValue" 
+                                ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
+                                TextSelector="@(p => p.Name)" 
+                                ValueSelector="@(p => int.Parse(p.Id))" 
+                                Nullable="false"></HxSelect>
 
-                <span>entries</span>
+                    <span>entries</span>
+                }
             </div>
-        }
 
 
             <div class="hh-grid-toolbar-buttons">
@@ -99,7 +99,10 @@
                     <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToExcel.InvokeAsync()" title="Export to Excel">Excel</HxButton>
                 }
 
-                <HxButton Color="ThemeColor.Primary" Outline="true" Icon="BootstrapIcon.ArrowRepeat" Size="ButtonSize.Small" OnClick="async() => await OnRefreshButtonClicked()" title="Reload data"></HxButton>
+                @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
+                {
+                    <HxButton Color="ThemeColor.Primary" Outline="true" Icon="BootstrapIcon.ArrowRepeat" Size="ButtonSize.Small" OnClick="async() => await OnRefreshButtonClicked()" title="Reload data"></HxButton>
+                }
 
             </div>
 
