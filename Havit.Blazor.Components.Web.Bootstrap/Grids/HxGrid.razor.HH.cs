@@ -32,7 +32,14 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 		await PageSizer_ValueChanged.InvokeAsync(pageSizerValue);
 		this.PageSize = v;
 
-		await HandlePagerCurrentPageIndexChanged(0);
+		if (CurrentUserState.PageIndex == 0)
+		{
+			await RefreshDataAsync();
+		}
+		else
+		{
+			await HandlePagerCurrentPageIndexChanged(0);
+		}
 	}
 
 	private List<GridPageSizerDDLItem> pageSizeEntries = new()
