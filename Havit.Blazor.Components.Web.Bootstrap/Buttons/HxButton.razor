@@ -13,6 +13,7 @@
 			@onclick:preventDefault="this.OnClickPreventDefault"
 			disabled="@DisabledEffective"
             form="@FormId"
+            special="true"
             @attributes="this.AdditionalAttributes">
 
         @if ((IconPlacementEffective == ButtonIconPlacement.Start) && ((this.IconEffective is not null) || this.SpinnerEffective))
