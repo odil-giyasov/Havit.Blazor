@@ -55,13 +55,14 @@
 	/* HxEditForm */
 	--hx-form-spacing:									1.25rem;
 	/* HxChipList */
-	--hx-chiplist-chip-margin:							0.75rem 0.25rem .375rem 0;
-	--hx-chiplist-chip-remove-btn-margin: 				0 0 0 .25rem;
-	--hx-chiplist-chip-remove-btn-opacity: 				.75;
-	--hx-chiplist-chip-label-font-weight: 				400;
-	--hx-chiplist-chip-label-margin: 					.25rem;
-	--hx-chiplist-chip-label-opacity: 					.75;
-    --hx-chiplist-gap:									.25rem;
+	--hx-chip-list-chip-margin:							0.75rem 0.25rem .375rem 0;
+	--hx-chip-list-chip-remove-btn-margin: 				0 0 0 .25rem;
+	--hx-chip-list-chip-remove-btn-opacity: 				.75;
+	--hx-chip-list-chip-reset-btn-padding: 				.35em .65em;
+	--hx-chip-list-chip-label-font-weight: 				400;
+	--hx-chip-list-chip-label-margin: 					.25rem;
+	--hx-chip-list-chip-label-opacity: 					.75;
+    --hx-chip-list-gap:									.25rem;
 	/* HxContextMenu */
 	--hx-context-menu-button-color: 						unset;
 	--hx-context-menu-button-border: 					unset;
@@ -80,6 +81,8 @@
 	--hx-input-file-drop-zone-box-shadow: 				none;
 	--hx-input-file-drop-zone-hover-box-shadow: 			0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
 	--hx-input-file-drop-zone-border-color: 				var(--bs-gray-400);
+	--hx-input-file-drop-zone-disabled-color:				var(--bs-gray-400);
+	--hx-input-file-drop-zone-disabled-background-color:	var(--bs-gray-200);
 	--hx-input-file-drop-zone-background-color: 			transparent;
 	--hx-input-file-drop-zone-hover-background-color: 	rgba(var(--bs-primary-rgb), .05);
 	--hx-input-file-drop-zone-hover-border-color: 		var(--bs-primary);
