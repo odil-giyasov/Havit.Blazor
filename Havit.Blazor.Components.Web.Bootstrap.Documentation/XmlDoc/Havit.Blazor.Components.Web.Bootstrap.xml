@@ -741,6 +741,11 @@
             Useful when the customization needs to be updated.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxCalendar.CssClass">
+            <summary>
+            Additional CSS class.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.CardImagePlacement">
             <summary>
             Placement of the image in the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxCard"/> component.
@@ -7134,6 +7139,11 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.CssClass">
+            <summary>
+            Additional CSS class.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxMessageBoxHost">
             <summary>
             Displays message boxes initiated through <see cref="T:Havit.Blazor.Components.Web.IHxMessageBoxService"/>.
@@ -7527,6 +7537,11 @@
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxNamedViewList`1.InvokeOnNamedViewSelectedAsync(Havit.Blazor.Components.Web.Bootstrap.NamedView{`0})">
             <summary>
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxNamedViewList`1.OnNamedViewSelected"/> event. Allows interception of the event in derived components.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxNamedViewList`1.CssClass">
+            <summary>
+            Additional CSS class.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.AnchorFragmentNavigationAutomationMode">
@@ -8885,6 +8900,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxProgressIndicator.ChildContent">
             <summary>
             Wrapped content.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxProgressIndicator.CssClass">
+            <summary>
+            Additional CSS class.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxSpinner">
