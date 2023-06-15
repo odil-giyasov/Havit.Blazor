@@ -25,6 +25,12 @@ public partial class HxSidebarBrand
 	/// </summary>
 	[CascadingParameter] protected HxSidebar ParentSidebar { get; set; }
 
+	/// <summary>
+	/// Additional CSS class.
+	/// </summary>
+	[Parameter] public string CssClass { get; set; }
+
+
 	protected override void OnParametersSet()
 	{
 		Contract.Requires<InvalidOperationException>(ParentSidebar is not null, $"{nameof(HxSidebarBrand)} has to be placed inside {nameof(HxSidebar)}.");

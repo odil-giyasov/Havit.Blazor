@@ -7952,6 +7952,11 @@
             <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxSidebar"/> containing the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxSidebarBrand"/>.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarBrand.CssClass">
+            <summary>
+            Additional CSS class.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxSidebarFooter">
             <summary>
             Item for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxSidebar"/>.
