@@ -50,7 +50,7 @@ public partial class HxButton : ComponentBase, ICascadeEnabledComponent
 	/// <summary>
 	/// Visibility of the button.
 	/// </summary>
-	[Parameter] public bool IsVisible { get; set; }
+	[Parameter] public bool IsVisible { get; set; } = true;
 
 	/// <summary>
 	/// Text of the button.
