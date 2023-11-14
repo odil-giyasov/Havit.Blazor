@@ -48,6 +48,11 @@ public partial class HxButton : ComponentBase, ICascadeEnabledComponent
 	protected virtual ButtonSettings GetSettings() => this.Settings;
 
 	/// <summary>
+	/// Visibility of the button.
+	/// </summary>
+	[Parameter] public bool IsVisible { get; set; }
+
+	/// <summary>
 	/// Text of the button.
 	/// </summary>
 	[Parameter] public string Text { get; set; }
