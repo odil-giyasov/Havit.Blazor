@@ -36,7 +36,8 @@ function handleOffcanvasShown(event) {
 }
 
 function handleOffcanvasHidden(event) {
-	event.target.hxOffcanvasDotnetObjectReference.invokeMethodAsync('HxOffcanvas_HandleOffcanvasHidden');
+	if (event.target && event.target.hxOffcanvasDotnetObjectReference)
+		event.target.hxOffcanvasDotnetObjectReference.invokeMethodAsync('HxOffcanvas_HandleOffcanvasHidden');
 	dispose(event.target);
 }
 
