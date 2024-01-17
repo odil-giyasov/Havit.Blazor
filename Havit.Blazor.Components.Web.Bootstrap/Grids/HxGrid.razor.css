@@ -59,3 +59,9 @@ tr:hover ::deep .hx-context-menu {
 ::deep .hx-context-menu-grid-column {
     padding: .325rem .5rem; 
 }
+
+.hh-grid-display-mode-selector {
+	display:flex;
+	justify-content:end;
+}
+

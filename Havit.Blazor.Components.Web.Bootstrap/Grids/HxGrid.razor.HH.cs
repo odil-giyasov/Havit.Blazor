@@ -53,7 +53,36 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 
 	private async Task OnRefreshButtonClicked()
 	{
-		await RefreshDataAsync();
+		await this.RefreshDataAsync();
+	}
+
+
+	#region Display Mode
+
+	[Parameter] public RenderFragment<TItem> Card { get; set; }
+	[Parameter] public string Caption { get; set; }
+
+	public GridDisplayMode SelectedDisplayMode { get; set; } = GridDisplayMode.Cards;
+	private bool HasCard => this.Card != null;
+
+	private void OnSelectedDisplayModeChanged(GridDisplayMode newDisplayMode)
+	{
+		if (!this.HasCard)
+		{
+			return;
+		}
+
+		this.SelectedDisplayMode = newDisplayMode;
+	}
+
+	#endregion
+
+	/// <summary>
+	/// Sets SelectedDataItem to null
+	/// </summary>
+	public void ClearSelectedDataItem()
+	{
+		this.SelectedDataItem = default;
 	}
 
 
@@ -78,3 +107,10 @@ public enum GridPageSizerValue
 	Size50 = 50,
 	All = 0
 }
+
+public enum GridDisplayMode
+{
+	Rows,
+	Cards
+}
+
