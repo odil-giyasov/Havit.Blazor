@@ -6039,6 +6039,11 @@
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.Dispose">
             <inheritdoc />
         </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ClearSelectedDataItem">
+            <summary>
+            Sets SelectedDataItem to null
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.GridPageSizerValue">
             <summary>
             Values for Grid Page Sizer

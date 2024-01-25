@@ -51,7 +51,7 @@
         paginationDecreasePageIndexAfterRender = true;
     }
 
-    SelectedDisplayMode = HasCard ? SelectedDisplayMode : GridDisplayMode.Rows;
+    DisplayMode = HasCard ? DisplayMode : GridDisplayMode.Rows;
 }
 
 @if (columnsToRender.Any() && (shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData))
@@ -109,8 +109,8 @@
         {
             <div class="hh-grid-display-mode-selector">
                 <nav class="nav nav-tabs hx-tab-panel justify-content-end mb-2 dataTabs">
-                    <a href="javascript:;" title=" " class="nav-link @(SelectedDisplayMode == GridDisplayMode.Cards ? "active" : "")" @onclick="() => OnSelectedDisplayModeChanged(GridDisplayMode.Cards)"><HxIcon Icon="@BootstrapIcon.Grid" /></a>
-                    <a href="javascript:;" title=" " class="nav-link @(SelectedDisplayMode == GridDisplayMode.Rows ? "active" : "")" @onclick="() => OnSelectedDisplayModeChanged(GridDisplayMode.Rows)"><HxIcon Icon="@BootstrapIcon.Table" /></a>
+                    <a href="javascript:;" title=" " class="nav-link @(DisplayMode == GridDisplayMode.Cards ? "active" : "")" @onclick="() => OnDisplayModeChanged(GridDisplayMode.Cards)"><HxIcon Icon="@BootstrapIcon.Grid" /></a>
+                    <a href="javascript:;" title=" " class="nav-link @(DisplayMode == GridDisplayMode.Rows ? "active" : "")" @onclick="() => OnDisplayModeChanged(GridDisplayMode.Rows)"><HxIcon Icon="@BootstrapIcon.Table" /></a>
                 </nav>
             </div>
         }
@@ -119,7 +119,7 @@
 
         <HxProgressIndicator InProgress="@(InProgress ?? (dataProviderInProgress /* indicates data loading */ && !shouldRenderLoadingDataWithPlaceholders /* but not when placeholders are used - in such case we are indicating data loading using the placeholders */))">
 
-            @if(SelectedDisplayMode == GridDisplayMode.Rows)
+            @if (DisplayMode == GridDisplayMode.Rows)
             {
                 <HxCard BodyCssClass="p-0">
                     <HeaderTemplate>
@@ -337,14 +337,55 @@
             }
             else
             {
-                if(paginationDataItemsToRender != null)
+                @if (shouldRenderLoadingData)
                 {
-                    foreach (TItem item in paginationDataItemsToRender)
+                    @if (shouldRenderLoadingDataWithPlaceholders)
                     {
-                        @Card(item)
+                        int rowsToRender = PlaceholdersRowCountEffective;
+
+                        @for (int rowIndex = 0; rowIndex < rowsToRender; rowIndex++)
+                        {
+                            @CardPlaceholderTemplate
+                        }
+                    }
+                    else
+                    {
+                        @if (shouldRenderLoadingDataWithLoadingTemplate)
+                        {
+                            @LoadingDataTemplate
+                        }
+                        else
+                        {
+                            <div class="text-center text-secondary my-5">
+                                <div class="fs-3"><HxIcon Icon="@BootstrapIcon.InboxFill" /></div>
+                                <div>@HxGridLocalizer["LoadingData"]</div>
+                            </div>
+                        }
                     }
                 }
+
+                @if (shouldRenderEmptyData)
+                {
+                    @if (EmptyDataTemplate != null)
+                    {
+                        @EmptyDataTemplate
+                    }
+                }
+
+                @if (shouldRenderData)
+                {
+                    if (paginationDataItemsToRender != null)
+                    {
+                        foreach (TItem item in paginationDataItemsToRender)
+                        {
+                            @Card(item)
+                        }
+                    }
+                }
+
             }
+
+
 
 
 

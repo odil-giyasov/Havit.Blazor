@@ -62,17 +62,20 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	[Parameter] public RenderFragment<TItem> Card { get; set; }
 	[Parameter] public string Caption { get; set; }
 
-	public GridDisplayMode SelectedDisplayMode { get; set; } = GridDisplayMode.Cards;
+	[Parameter] public GridDisplayMode DisplayMode { get; set; } = GridDisplayMode.Cards;
+
+	[Parameter] public RenderFragment CardPlaceholderTemplate { get; set; }
+
 	private bool HasCard => this.Card != null;
 
-	private void OnSelectedDisplayModeChanged(GridDisplayMode newDisplayMode)
+	private void OnDisplayModeChanged(GridDisplayMode newDisplayMode)
 	{
 		if (!this.HasCard)
 		{
 			return;
 		}
 
-		this.SelectedDisplayMode = newDisplayMode;
+		this.DisplayMode = newDisplayMode;
 	}
 
 	#endregion
