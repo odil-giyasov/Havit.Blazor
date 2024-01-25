@@ -121,12 +121,14 @@
 
             @if (DisplayMode == GridDisplayMode.Rows)
             {
-                <HxCard BodyCssClass="p-0">
-                    <HeaderTemplate>
-                        <div class="card-header-title">
-                            @Caption
-                        </div>
-                    </HeaderTemplate>
+                // fix: don't render HeaderTemplate when no Caption supplied
+                RenderFragment headerCaptionTemplate = string.IsNullOrWhiteSpace(Caption) ? null :
+                @<div class="card-header-title">
+                    @Caption
+                </div>;
+
+
+                <HxCard BodyCssClass="p-0" HeaderTemplate="headerCaptionTemplate">
                     <BodyTemplate>
                         <div class="@CssClassHelper.Combine(ResponsiveEffective ? "table-responsive" : null, TableContainerCssClassEffective)">
                             <table class="@GetTableElementCssClass(totalCount > 0)">
