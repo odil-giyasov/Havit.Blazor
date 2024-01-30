@@ -67,6 +67,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	[Parameter] public RenderFragment CardPlaceholderTemplate { get; set; }
 
 	private bool HasCard => this.Card != null;
+	private bool HasColumns => GetColumnsToRender().Any();
 
 	private void OnDisplayModeChanged(GridDisplayMode newDisplayMode)
 	{

@@ -54,7 +54,7 @@
     DisplayMode = HasCard ? DisplayMode : GridDisplayMode.Rows;
 }
 
-@if (columnsToRender.Any() && (shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData))
+@if ((columnsToRender.Any() || DisplayMode == GridDisplayMode.Cards) && (shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData))
 {
     <div class="hh-grid">
 
@@ -105,7 +105,7 @@
 
         </div>
 
-        @if (HasCard)
+        @if (HasCard && HasColumns)
         {
             <div class="hh-grid-display-mode-selector">
                 <nav class="nav nav-tabs hx-tab-panel justify-content-end mb-2 dataTabs">
@@ -371,6 +371,10 @@
                     @if (EmptyDataTemplate != null)
                     {
                         @EmptyDataTemplate
+                    }
+                    else
+                    {
+                        <HxGridEmptyDataTemplateDefaultContent />
                     }
                 }
 
