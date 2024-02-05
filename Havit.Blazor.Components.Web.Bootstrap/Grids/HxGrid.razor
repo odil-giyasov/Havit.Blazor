@@ -1,5 +1,6 @@
 ﻿@namespace Havit.Blazor.Components.Web.Bootstrap
 @using Havit.Blazor.Components.Web.Bootstrap.Internal
+@using Havit.Blazor.Components.Web.Bootstrap.Grids
 @typeparam TItem
 
 <CascadingValue Value="@columnsListRegistration" Name="@ColumnsRegistrationCascadingValueName" IsFixed="true">
@@ -347,7 +348,15 @@
 
                         @for (int rowIndex = 0; rowIndex < rowsToRender; rowIndex++)
                         {
-                            @CardPlaceholderTemplate
+                            @if(CardPlaceholderTemplate == null)
+                            {
+                                <!-- CARD VIEW SKELETON -->
+                                <DefaultGridCardPlaceholderTemplate />
+                            }
+                            else
+                            {
+                                @CardPlaceholderTemplate
+                            }
                         }
                     }
                     else
