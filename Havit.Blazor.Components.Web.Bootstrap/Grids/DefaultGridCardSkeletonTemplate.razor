@@ -1,83 +1,25 @@
 ﻿<HxCard FooterCssClass="border-top d-flex justify-content-between py-2" BodyCssClass="py-2">
     <BodyTemplate>
-        <HxPlaceholderContainer Animation="PlaceholderAnimation.Glow">
-            <div class="loads-data-card data-card">
-                <div class="row">
-                    <div class="col-4 loads-location d-flex border-end">
-                        @if (!string.IsNullOrEmpty("xxx"))
-                        {
-                            <div class="loads-location-border d-flex flex-column align-items-center">
-                                <div class="location-border-dot border-3 rounded-circle"></div>
-                                <div class="location-border-line"></div>
-                                <div class="location-border-dot border-3 rounded-circle"></div>
-                            </div>
-                            <div class="loads-location-data">
-                                <div class="loads-location-data">
-                                    <div class="loads-location-city">
-                                        <div class="loads-location-city-name">
-                                            <HxPlaceholder style="width:80px;"></HxPlaceholder>
-                                        </div>
-                                        <div class="loads-data-description">
-                                            <HxPlaceholder style="width:100px;"></HxPlaceholder>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="loads-location-data mt-3">
-                                    <div class="loads-location-city">
-                                        <div class="loads-location-city-name">
-                                            <HxPlaceholder style="width:80px;"></HxPlaceholder>
-                                        </div>
-                                        <div class="loads-data-description">
-                                            <HxPlaceholder style="width:100px;"></HxPlaceholder>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                    <div class="col-8 row mx-0 load-details">
-                        <div class="col-8">
-                            <div class="d-flex flex-column justify-content-between h-100">
-                                <div>
-                                    <div class="load-name h5 mb-0 text-brand-green fw-bold">
-                                        <HxPlaceholder Color="ThemeColor.Success" style="width:40px;"></HxPlaceholder>
-                                    </div>
-                                    <div class="shipper">
-                                        <HxPlaceholder style="width:40px;"></HxPlaceholder>
-                                    </div>
-                                </div>
-
-                                <div class="load-begin-end d-flex align-items-center">
-
-                                    <div class="status d-flex flex-column align-items-end">
-                                        <div class="load-reqs">
-                                            <HxPlaceholder style="width:50px;"></HxPlaceholder>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4 d-flex flex-column justify-content-between">
-                            <div>
-                                <div class="status d-flex flex-column align-items-end">
-                                    <span class="mb-1">
-                                        <HxPlaceholder Color="ThemeColor.Success" style="width:30px;"></HxPlaceholder>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="load-payout h3 fw-bolder text-right d-flex justify-content-end">
-                                <HxPlaceholder Columns="12"></HxPlaceholder>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <HxPlaceholderButton Color="ThemeColor.Dark" Outline="true" Columns="1" />
-                <div class="col-9"></div>
-                <HxPlaceholderButton Color="ThemeColor.Primary" Columns="1" />
-                <HxPlaceholderButton Color="ThemeColor.Success" Columns="1" />
-            </div>
-        </HxPlaceholderContainer>
+        <HxCardTitle>
+            <HxPlaceholderContainer Animation="PlaceholderAnimation.Glow">
+                <HxPlaceholder Columns="5" />
+            </HxPlaceholderContainer>
+        </HxCardTitle>
+        <HxCardText>
+            <HxPlaceholderContainer Animation="PlaceholderAnimation.Glow">
+                <HxPlaceholder Columns="7" />
+                <HxPlaceholder Columns="4" />
+                <HxPlaceholder Columns="4" />
+                <HxPlaceholder Columns="6" />
+                <HxPlaceholder Columns="8" />
+                <HxPlaceholder Columns="3" />
+                <HxPlaceholder Columns="4" />
+                <HxPlaceholder Columns="6" />
+                <HxPlaceholder Columns="8" />
+                <HxPlaceholder Columns="3" />
+            </HxPlaceholderContainer>
+        </HxCardText>
+        <HxPlaceholderButton Color="ThemeColor.Dark" Columns="2" CssClass="mr-3" />
+        <HxPlaceholderButton Color="ThemeColor.None" Columns="2" />
     </BodyTemplate>
 </HxCard>
