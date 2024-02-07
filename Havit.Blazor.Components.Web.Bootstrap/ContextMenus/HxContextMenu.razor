@@ -3,7 +3,8 @@
 <div class="@CssClassHelper.Combine("hx-context-menu", CssClassEffective)">
 	<div class="@CssClassHelper.Combine("dropdown", DropdownCssClassEffective)">
 		<div role="button" class="hx-context-menu-btn" id="@_id" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" @onclick:stopPropagation>
-			<HxIcon Icon="IconEffective" CssClass="@IconCssClassEffective" />
+          
+            <i class="hx-icon bi-three-dots-vertical text-black-600 me-3"></i>
 		</div>
 		<ul class="@CssClassHelper.Combine("dropdown-menu", DropdownMenuAlignmentEffective.GetCssClass(), DropdownMenuCssClassEffective)" aria-labelledby="@_id">
 			@ChildContent
