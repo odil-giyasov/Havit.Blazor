@@ -7,7 +7,7 @@
 public partial class HxMessenger : ComponentBase, IDisposable
 {
 	/// <summary>
-	/// Position of the messages. Default is <see cref="ToastContainerPosition.None"/>.
+	/// Position of the messages. The default value is <see cref="ToastContainerPosition.None"/>.
 	/// </summary>
 	[Parameter] public ToastContainerPosition Position { get; set; } = ToastContainerPosition.None;
 
@@ -19,7 +19,7 @@ public partial class HxMessenger : ComponentBase, IDisposable
 	[Inject] protected IHxMessengerService Messenger { get; set; }
 	[Inject] protected NavigationManager NavigationManager { get; set; }
 
-	private List<MessengerMessage> messages = new List<MessengerMessage>();
+	private List<MessengerMessage> _messages = new List<MessengerMessage>();
 
 	protected override void OnInitialized()
 	{
@@ -31,7 +31,7 @@ public partial class HxMessenger : ComponentBase, IDisposable
 	{
 		InvokeAsync(() =>
 		{
-			messages.Add(message);
+			_messages.Add(message);
 
 			StateHasChanged();
 		});
@@ -41,18 +41,18 @@ public partial class HxMessenger : ComponentBase, IDisposable
 	{
 		InvokeAsync(() =>
 		{
-			messages.Clear();
+			_messages.Clear();
 
 			StateHasChanged();
 		});
 	}
 
 	/// <summary>
-	/// Receive notification from <see cref="HxToast"/> when message is hidden.
+	/// Receive notification from <see cref="HxToast"/> when the message is hidden.
 	/// </summary>
 	private void HandleToastHidden(MessengerMessage message)
 	{
-		messages.Remove(message);
+		_messages.Remove(message);
 	}
 
 	public void Dispose()

@@ -11,8 +11,8 @@ public interface IHxGridColumn<TItem>
 	string GetId();
 
 	/// <summary>
-	/// Indicates whether the column is visible (otherwise the column is hidden).
-	/// It is not suitable to conditionally display the column using @if statement in the markup code.
+	/// Indicates whether the column is visible (otherwise, the column is hidden).
+	/// It is not suitable to conditionally display the column using an @if statement in the markup code.
 	/// </summary>
 	bool IsVisible();
 
@@ -23,30 +23,29 @@ public interface IHxGridColumn<TItem>
 	bool HasExpandCollapseElement();
 
 	/// <summary>
-	/// Get column order (for scenarios where column order can be modified).
-	/// Default should be <c>0</c>.
-	/// When columns have same order they should render in the order of their registration (Which is usually the same as the column appearance in the source code.
-	/// But it differs when the column is displayed conditionally using @if statement.).
+	/// Gets the column order (for scenarios where the column order can be modified).
+	/// The default value should be <c>0</c>.
+	/// When columns have the same order, they should render in the order of their registration (which is usually the same as the column appearance in the source code, but it differs when the column is displayed conditionally using an @if statement).
 	/// </summary>
 	int GetOrder();
 
 	/// <summary>
-	/// Sorting of the column.
+	/// Gets the sorting of the column.
 	/// </summary>
 	SortingItem<TItem>[] GetSorting();
 
 	/// <summary>
-	/// Sorting of the column.
+	/// Gets the default sorting order of the column.
 	/// </summary>
 	int? GetDefaultSortingOrder();
 
 	/// <summary>
-	/// Returns header cell template.
+	/// Returns the header cell template.
 	/// </summary>
 	GridCellTemplate GetHeaderCellTemplate(GridHeaderCellContext context);
 
 	/// <summary>
-	/// Returns data cell template for the specific item.
+	/// Returns the data cell template for the specific item.
 	/// </summary>
 	GridCellTemplate GetItemCellTemplate(TItem item);
 
@@ -61,12 +60,12 @@ public interface IHxGridColumn<TItem>
 	GridCellTemplate GetItemExpandCollapseContainerTemplate(TItem item);
 
 	/// <summary>
-	/// Returns placeholder cell template.
+	/// Returns the placeholder cell template.
 	/// </summary>
 	GridCellTemplate GetItemPlaceholderCellTemplate(GridPlaceholderCellContext context);
 
 	/// <summary>
-	/// Returns footer cell template.
+	/// Returns the footer cell template.
 	/// </summary>
 	GridCellTemplate GetFooterCellTemplate(GridFooterCellContext context);
 }

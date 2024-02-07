@@ -1,6 +1,7 @@
 using System.Globalization;
 using BlazorAppTest.Resources;
 using Havit.Blazor.Components.Web;
+using Havit.Blazor.Documentation.DemoData;
 using Havit.Blazor.GoogleTagManager;
 
 namespace BlazorAppTest;
@@ -26,12 +27,15 @@ public class Startup
 		services.AddRazorPages();
 		services.AddServerSideBlazor();
 
+		services.AddHxServices();
 		services.AddHxMessenger();
 		services.AddHxMessageBoxHost();
 		services.AddHxGoogleTagManager(options =>
 		{
 			options.GtmId = "GTM-W2CT4P6"; // Havit.Blazor.GoogleTagManager DEV test
 		});
+
+		services.AddTransient<IDemoDataService, DemoDataService>();
 
 		// TESTs for Defaults
 		//HxAutosuggest.Defaults.InputSize = InputSize.Large;
@@ -42,6 +46,7 @@ public class Startup
 		//HxInputDateRange.Defaults.InputSize = InputSize.Large;
 		//HxCalendar.Defaults.DateCustomizationProvider = request => new CalendarDateCustomizationResult { Enabled = request.Date < DateTime.Today };
 		//HxMessageBox.Defaults.ModalSettings.Centered = true;
+		HxPlaceholder.Defaults.Color = ThemeColor.Light;
 	}
 
 	// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

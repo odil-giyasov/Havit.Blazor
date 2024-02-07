@@ -1,0 +1,20 @@
+﻿@inject IDemoDataService DemoDataService
+
+<HxCheckboxList TItem="EmployeeDto"
+				TValue="int"
+				Data="@data"
+				ItemTextSelector="@(employee => employee.Name)"
+				ItemValueSelector="@(employee => employee.Id)"
+				@bind-Value="selectedEmployeeIds"
+				Inline="true" />
+
+@code
+{
+	private IEnumerable<EmployeeDto> data;
+	private List<int> selectedEmployeeIds { get; set; } = new();
+
+	protected override async Task OnParametersSetAsync()
+	{
+		data = await DemoDataService.GetPreferredEmployeesAsync(count: 5);
+	}
+}

@@ -3,32 +3,33 @@
 @using Havit.Blazor.Components.Web.Bootstrap.Grids
 @typeparam TItem
 
-<CascadingValue Value="@columnsListRegistration" Name="@ColumnsRegistrationCascadingValueName" IsFixed="true">
+<CascadingValue Value="@_columnsListRegistration" Name="@ColumnsRegistrationCascadingValueName" IsFixed="true">
     @* To get the components to the collections, we have to let them render with this component. Still we don't want them to render any output. *@
     @if (MultiSelectionEnabled)
     {
-        bool allDataItemsSelected = (paginationDataItemsToRender != null) && (SelectedDataItems != null) && (SelectedDataItems.Count > 0) && (paginationDataItemsToRender.Count == SelectedDataItems.Count);
+		bool allDataItemsSelected = (_paginationDataItemsToRender != null) && (SelectedDataItems != null) && (SelectedDataItems.Count > 0) && (_paginationDataItemsToRender.Count == SelectedDataItems.Count);
         <HxMultiSelectGridColumnInternal TItem="TItem"
-                                     AllDataItemsSelected="@allDataItemsSelected"
-                                     SelectedDataItems="@SelectedDataItems"
-                                     OnSelectDataItemClicked="HandleMultiSelectSelectDataItemClicked"
-                                     OnUnselectDataItemClicked="HandleMultiSelectUnselectDataItemClicked"
-                                     OnSelectAllClicked="HandleMultiSelectSelectAllClicked"
-                                     OnSelectNoneClicked="HandleMultiSelectSelectNoneClicked" />
+										 AllDataItemsSelected="@allDataItemsSelected"
+										 SelectedDataItems="@SelectedDataItems"
+										 OnSelectDataItemClicked="HandleMultiSelectSelectDataItemClicked"
+										 OnUnselectDataItemClicked="HandleMultiSelectUnselectDataItemClicked"
+										 OnSelectAllClicked="HandleMultiSelectSelectAllClicked"
+										 OnSelectNoneClicked="HandleMultiSelectSelectNoneClicked" />
     }
     @Columns
+
 </CascadingValue>
 
 @{
     List<IHxGridColumn<TItem>> columnsToRender = GetColumnsToRender();
 
-    bool shouldRenderLoadingData = totalCount == null;
+	bool shouldRenderLoadingData = (_totalCount == null);
     bool shouldRenderLoadingDataWithLoadingTemplate = shouldRenderLoadingData && (LoadingDataTemplate != null);
-    bool shouldRenderLoadingDataWithPlaceholders = shouldRenderLoadingData && !shouldRenderLoadingDataWithLoadingTemplate && (PlaceholdersRowCountEffective > 0);
+	bool shouldRenderLoadingDataWithPlaceholders = shouldRenderLoadingData && (LoadingDataTemplate is null) && (PlaceholdersRowCountEffective > 0);
 
-    bool shouldRenderEmptyData = totalCount == 0;
+	bool shouldRenderEmptyData = (_totalCount == 0);
     bool shouldRenderData;
-    bool shouldRenderFooter = (totalCount > 0) || ((totalCount == 0) && this.ShowFooterWhenEmptyDataEffective);
+	bool shouldRenderFooter = (_totalCount > 0) || ((_totalCount == 0) && ShowFooterWhenEmptyDataEffective);
     var rowHeightValue = ItemRowHeightEffective;
     string rowHeight = rowHeightValue.ToString() + "px";
 
@@ -37,7 +38,7 @@
         case GridContentNavigationMode.Pagination:
         case GridContentNavigationMode.LoadMore:
         case GridContentNavigationMode.PaginationAndLoadMore:
-            shouldRenderData = (totalCount > 0);
+			shouldRenderData = (_totalCount > 0);
             break;
 
         case GridContentNavigationMode.InfiniteScroll:
@@ -47,9 +48,9 @@
         default: throw new InvalidOperationException(ContentNavigationModeEffective.ToString());
     }
 
-    if ((paginationDataItemsToRender?.Count == 0) && (CurrentUserState.PageIndex > 0))
+	if ((_paginationDataItemsToRender?.Count == 0) && (CurrentUserState.PageIndex > 0))
     {
-        paginationDecreasePageIndexAfterRender = true;
+		_paginationDecreasePageIndexAfterRender = true;
     }
 
     DisplayMode = HasCard ? DisplayMode : GridDisplayMode.Rows;
@@ -113,7 +114,7 @@
 
         <!-- HH Extended end -->
 
-        <HxProgressIndicator InProgress="@(InProgress ?? (dataProviderInProgress /* indicates data loading */ && !shouldRenderLoadingDataWithPlaceholders /* but not when placeholders are used - in such case we are indicating data loading using the placeholders */))">
+        <HxProgressIndicator InProgress="@(InProgress ?? (_dataProviderInProgress /* indicates data loading */ && !shouldRenderLoadingDataWithPlaceholders /* but not when placeholders are used - in such case we are indicating data loading using the placeholders */))">
 
             @if (DisplayMode == GridDisplayMode.Rows)
             {
@@ -126,7 +127,7 @@
                 <HxCard BodyCssClass="p-0" HeaderTemplate="headerCaptionTemplate">
                     <BodyTemplate>
                         <div class="@CssClassHelper.Combine(ResponsiveEffective ? "table-responsive" : null, TableContainerCssClassEffective)">
-                            <table class="@GetTableElementCssClass(totalCount > 0)">
+                            <table class="@GetTableElementCssClass(_totalCount > 0)">
                                 <thead>
                                     <tr class="@HeaderRowCssClassEffective">
                                         @{
@@ -136,9 +137,9 @@
                                         @foreach (IHxGridColumn<TItem> column in columnsToRender)
                                         {
                                             var columnSorting = column.GetSorting();
-                                            bool isCurrentSorting = currentSorting?.FirstOrDefault()?.Column == column;
+                                            bool isCurrentSorting = _currentSorting?.FirstOrDefault()?.Column == column;
                                             var headerCellTemplate = column.GetHeaderCellTemplate(gridHeaderCellContext);
-                                            bool isSortingActive = (totalCount > 0) && columnSorting.Any();
+                                            bool isSortingActive = (_totalCount > 0) && columnSorting.Any();
 
                                             <th role="@(isSortingActive ? "button" : null)"
                                                 class="@CssClassHelper.Combine(headerCellTemplate.CssClass, isSortingActive ? (isCurrentSorting ? "hx-grid-sorted" : "hx-grid-sortable") : null)"
@@ -148,7 +149,7 @@
                                                     <div class="hx-grid-header-cell-template">@headerCellTemplate.Template</div>
                                                     @if (isSortingActive)
                                                     {
-                                                        if (GetSortIconDisplayDirection(isCurrentSorting, currentSorting, columnSorting) == Collections.SortDirection.Ascending)
+                                                        if (GetSortIconDisplayDirection(isCurrentSorting, _currentSorting, columnSorting) == Collections.SortDirection.Ascending)
                                                         {
                                                             <HxIcon CssClass="hx-grid-sort-icon" Icon="@this.SortAscendingIconEffective" />
                                                         }
@@ -279,7 +280,7 @@
 
                                         @if (ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll)
                                         {
-                                            <Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize TItem="TItem" @ref="infiniteScrollVirtualizeComponent" ItemsProvider="VirtualizeItemsProvider" ItemSize="@ItemRowHeightEffective" OverscanCount="@OverscanCountEffective">
+                                            <Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize TItem="TItem" @ref="_infiniteScrollVirtualizeComponent" ItemsProvider="VirtualizeItemsProvider" ItemSize="@ItemRowHeightEffective" OverscanCount="@OverscanCountEffective">
                                                 <ItemContent>
                                                     @rowTemplate(@context)
                                                 </ItemContent>
@@ -299,7 +300,7 @@
 
                                         @if ((ContentNavigationModeEffective == GridContentNavigationMode.Pagination) || (ContentNavigationModeEffective == GridContentNavigationMode.LoadMore) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore))
                                         {
-                                            foreach (TItem item in paginationDataItemsToRender)
+                                            foreach (TItem item in _paginationDataItemsToRender)
                                             {
                                                 @rowTemplate(item)
                                             }
@@ -378,9 +379,9 @@
 
                 @if (shouldRenderData)
                 {
-                    if (paginationDataItemsToRender != null)
+                    if (_paginationDataItemsToRender != null)
                     {
-                        foreach (TItem item in paginationDataItemsToRender)
+                        foreach (TItem item in _paginationDataItemsToRender)
                         {
                             @Card(item)
                         }
@@ -388,9 +389,9 @@
                 }
             }
 
-            @if (((ContentNavigationModeEffective == GridContentNavigationMode.Pagination) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (totalCount != null))
+            @if (((ContentNavigationModeEffective == GridContentNavigationMode.Pagination) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (_totalCount != null))
             {
-                int totalPages = (totalCount.Value + PageSizeEffective - 1) / PageSizeEffective;
+                int totalPages = (_totalCount.Value + PageSizeEffective - 1) / PageSizeEffective;
                 if (totalPages > 1)
                 {
                     int currentPageIndex = CurrentUserState.PageIndex + ((CurrentUserState.LoadMoreAdditionalItemsCount + PageSizeEffective - 1) / PageSizeEffective);
@@ -401,9 +402,9 @@
                 }
             }
 
-            @if (((ContentNavigationModeEffective == GridContentNavigationMode.LoadMore) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (totalCount != null))
+            @if (((ContentNavigationModeEffective == GridContentNavigationMode.LoadMore) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (_totalCount != null))
             {
-                if ((((CurrentUserState.PageIndex + 1) * PageSizeEffective) + CurrentUserState.LoadMoreAdditionalItemsCount) < totalCount.Value)
+                if ((((CurrentUserState.PageIndex + 1) * PageSizeEffective) + CurrentUserState.LoadMoreAdditionalItemsCount) < _totalCount.Value)
                 {
                     <div class="hx-grid-load-more-container">
                         @if (LoadMoreTemplate != null)

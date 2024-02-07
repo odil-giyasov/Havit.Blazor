@@ -1,0 +1,19 @@
+﻿@inject IDemoDataService DemoDataService
+
+<HxRadioButtonList TItem="EmployeeDto"
+				   TValue="int?"
+				   Data="@data"
+				   @bind-Value="@selectedEmployeeId"
+				   ItemTextSelector="@(employee => employee.Name)"
+				   ItemValueSelector="@(employee => employee.Id)"
+				   Inline="true" />
+
+@code {
+	private IEnumerable<EmployeeDto> data;
+	private int? selectedEmployeeId;
+
+	protected override async Task OnInitializedAsync()
+	{
+		data = await DemoDataService.GetPreferredEmployeesAsync(count: 5);
+	}
+}

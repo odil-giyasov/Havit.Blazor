@@ -2,10 +2,6 @@
     display: flex;
 }
 
-.form-control {
-    background-clip: border-box;
-}
-
 ::deep .feedback-floating {
     left: 0;
 }
@@ -26,7 +22,7 @@
 }
 
 ::deep .dropdown {
-    flex: 1 1 auto;
+    flex: 1 0 50%;
 }
 
 ::deep .dropdown:focus-within {

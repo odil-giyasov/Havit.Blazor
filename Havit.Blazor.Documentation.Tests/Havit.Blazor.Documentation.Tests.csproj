@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<IsPackable>false</IsPackable>
+		<EnableMSTestRunner>true</EnableMSTestRunner>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="bunit.web" Version="1.26.64" />
+		<PackageReference Include="MSTest" Version="3.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Havit.Blazor.Documentation\Havit.Blazor.Documentation.csproj" />
+	</ItemGroup>
+
+</Project>

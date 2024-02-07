@@ -32,7 +32,7 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 	/// <summary>
 	/// Reference element of the dropdown menu. Accepts the values of <c>toggle</c> (default), <c>parent</c>,
 	/// an HTMLElement reference (e.g. <c>#id</c>) or an object providing <c>getBoundingClientRect</c>.
-	/// For more information refer to Popper's <see href="https://popper.js.org/docs/v2/constructors/#createpopper">constructor docs</see>
+	/// For more information, refer to Popper's <see href="https://popper.js.org/docs/v2/constructors/#createpopper">constructor docs</see>
 	/// and <see href="https://popper.js.org/docs/v2/virtual-elements/">virtual element docs</see>.
 	/// </summary>
 	[Parameter] public string DropdownReference { get; set; }
@@ -55,18 +55,27 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 	/// </summary>
 	protected virtual Task InvokeOnHiddenAsync() => OnHidden.InvokeAsync();
 
+	/// <summary>
+	/// By default, the dropdown menu is closed when clicking inside or outside the dropdown menu (<see cref="DropdownAutoClose.True"/>).
+	/// You can use the AutoClose parameter to change this behavior of the dropdown.
+	/// <see href="https://getbootstrap.com/docs/5.3/components/dropdowns/#auto-close-behavior">https://getbootstrap.com/docs/5.3/components/dropdowns/#auto-close-behavior</see>.
+	/// The parameter can be used to override the settings of the <see cref="DropdownContainer"/> component or to specify the auto-close behavior when the component is not used.
+	/// </summary>
+	[Parameter] public DropdownAutoClose? AutoClose { get; set; }
+	protected DropdownAutoClose AutoCloseEffective => AutoClose ?? DropdownContainer?.AutoClose ?? DropdownAutoClose.True;
+
 	[CascadingParameter] protected HxDropdown DropdownContainer { get; set; }
 	[CascadingParameter] protected HxNav NavContainer { get; set; }
 
 	[Inject] protected IJSRuntime JSRuntime { get; set; }
 
-	private DotNetObjectReference<HxDropdownToggleButton> dotnetObjectReference;
-	private IJSObjectReference jsModule;
-	private bool disposed;
+	private DotNetObjectReference<HxDropdownToggleButton> _dotnetObjectReference;
+	private IJSObjectReference _jsModule;
+	private bool _disposed;
 
 	public HxDropdownToggleButton()
 	{
-		dotnetObjectReference = DotNetObjectReference.Create(this);
+		_dotnetObjectReference = DotNetObjectReference.Create(this);
 	}
 
 	protected override void OnParametersSet()
@@ -83,7 +92,7 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 			throw new InvalidOperationException($"{nameof(HxDropdownToggleButton)} is expected to used inside {nameof(HxDropdownButtonGroup)} rather than generic {nameof(HxDropdown)} (breaking-change in v2.6.0).");
 		}
 
-		if (!String.IsNullOrEmpty(this.Tooltip))
+		if (!String.IsNullOrEmpty(Tooltip))
 		{
 			throw new InvalidOperationException($"{nameof(HxDropdownToggleButton)} does not support {nameof(Tooltip)}.");
 		}
@@ -91,16 +100,16 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 		AdditionalAttributes ??= new Dictionary<string, object>();
 		AdditionalAttributes["data-bs-toggle"] = "dropdown";
 		AdditionalAttributes["aria-expanded"] = "false";
-		AdditionalAttributes["data-bs-auto-close"] = (DropdownContainer?.AutoClose ?? DropdownAutoClose.True) switch
+		AdditionalAttributes["data-bs-auto-close"] = AutoCloseEffective switch
 		{
 			DropdownAutoClose.True => "true",
 			DropdownAutoClose.False => "false",
 			DropdownAutoClose.Inside => "inside",
 			DropdownAutoClose.Outside => "outside",
-			_ => throw new InvalidOperationException($"Unknown {nameof(DropdownAutoClose)} value {DropdownContainer.AutoClose}.")
+			_ => throw new InvalidOperationException($"Unknown {nameof(DropdownAutoClose)} value {AutoCloseEffective}.")
 		};
 
-		if (this.DropdownOffset is not null)
+		if (DropdownOffset is not null)
 		{
 			AdditionalAttributes["data-bs-offset"] = $"{DropdownOffset.Value.Skidding},{DropdownOffset.Value.Distance}";
 		}
@@ -124,11 +133,11 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 		if (firstRender)
 		{
 			await EnsureJsModuleAsync();
-			if (disposed)
+			if (_disposed)
 			{
 				return;
 			}
-			await jsModule.InvokeVoidAsync("create", buttonElementReference, dotnetObjectReference, DropdownToggleExtensions.GetDropdownJsOptionsReference(this));
+			await _jsModule.InvokeVoidAsync("create", buttonElementReference, _dotnetObjectReference, DropdownToggleExtensions.GetDropdownJsOptionsReference(this));
 		}
 	}
 
@@ -138,7 +147,7 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 	public async Task ShowAsync()
 	{
 		await EnsureJsModuleAsync();
-		await jsModule.InvokeVoidAsync("show", buttonElementReference);
+		await _jsModule.InvokeVoidAsync("show", buttonElementReference);
 	}
 
 	/// <summary>
@@ -147,7 +156,7 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 	public async Task HideAsync()
 	{
 		await EnsureJsModuleAsync();
-		await jsModule.InvokeVoidAsync("hide", buttonElementReference);
+		await _jsModule.InvokeVoidAsync("hide", buttonElementReference);
 	}
 
 	/// <summary>
@@ -181,7 +190,7 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 
 	private async Task EnsureJsModuleAsync()
 	{
-		jsModule ??= await JSRuntime.ImportHavitBlazorBootstrapModuleAsync(nameof(HxDropdown));
+		_jsModule ??= await JSRuntime.ImportHavitBlazorBootstrapModuleAsync(nameof(HxDropdown));
 	}
 
 	/// <inheritdoc/>
@@ -195,21 +204,25 @@ public class HxDropdownToggleButton : HxButton, IAsyncDisposable, IHxDropdownTog
 
 	protected virtual async ValueTask DisposeAsyncCore()
 	{
-		disposed = true;
+		_disposed = true;
 
-		if (jsModule != null)
+		if (_jsModule != null)
 		{
 			try
 			{
-				await jsModule.InvokeVoidAsync("dispose", buttonElementReference);
-				await jsModule.DisposeAsync();
+				await _jsModule.InvokeVoidAsync("dispose", buttonElementReference);
+				await _jsModule.DisposeAsync();
 			}
 			catch (JSDisconnectedException)
 			{
 				// NOOP
 			}
+			catch (TaskCanceledException)
+			{
+				// NOOP
+			}
 		}
 
-		dotnetObjectReference.Dispose();
+		_dotnetObjectReference.Dispose();
 	}
 }

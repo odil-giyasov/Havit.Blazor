@@ -1,0 +1,92 @@
+﻿@inject IDemoDataService DemoDataService
+
+<HxGrid TItem="EmployeeDto"
+		DataProvider="GetGridData"
+		@bind-SelectedDataItem="selectedDataItem"
+		@bind-SelectedDataItem:after="HandleSelectedDataItemChanged"
+		PageSize="5"
+		Responsive="true">
+	<Columns>
+		<HxGridColumn HeaderText="Name">
+			<ItemTemplate Context="employee">
+				@if (selectedDataItem == employee)
+				{
+					<HxInputText @bind-Value="employee.Name" />
+				}
+				else
+				{
+					<div>@employee.Name</div>
+				}
+			</ItemTemplate>
+		</HxGridColumn>
+		<HxGridColumn HeaderText="Phone">
+			<ItemTemplate Context="employee">
+				@if (selectedDataItem == employee)
+				{
+					<HxInputText @bind-Value="employee.Phone" />
+				}
+				else
+				{
+					<div>@employee.Phone</div>
+				}
+			</ItemTemplate>
+		</HxGridColumn>
+		<HxGridColumn HeaderText="Salary">
+			<ItemTemplate Context="employee">
+				@if (selectedDataItem == employee)
+				{
+					<HxInputNumber @bind-Value="employee.Salary" Decimals="0" InputGroupStartText="$" />
+				}
+				else
+				{
+					<div>@employee.Salary.ToString("c0")</div>
+				}
+			</ItemTemplate>
+		</HxGridColumn>
+		<HxGridColumn HeaderText="Position">
+			<ItemTemplate Context="employee">
+				@if (selectedDataItem == employee)
+				{
+					<HxInputText @bind-Value="employee.Position" />
+				}
+				else
+				{
+					<div>@employee.Position</div>
+				}
+			</ItemTemplate>
+		</HxGridColumn>
+		<HxGridColumn HeaderText="Location">
+			<ItemTemplate Context="employee">
+				@if (selectedDataItem == employee)
+				{
+					<HxInputText @bind-Value="employee.Location" />
+				}
+				else
+				{
+					<div>@employee.Location</div>
+				}
+			</ItemTemplate>
+		</HxGridColumn>
+	</Columns>
+</HxGrid>
+
+@code {
+	private EmployeeDto selectedDataItem;
+
+	private async Task<GridDataProviderResult<EmployeeDto>> GetGridData(GridDataProviderRequest<EmployeeDto> request)
+	{
+		return new GridDataProviderResult<EmployeeDto>()
+			{
+				Data = await DemoDataService.GetEmployeesDataFragmentAsync(request.StartIndex, request.Count, request.CancellationToken),
+				TotalCount = await DemoDataService.GetEmployeesCountAsync(request.CancellationToken)
+			};
+	}
+
+	private async Task HandleSelectedDataItemChanged()
+	{
+		if (selectedDataItem != null)
+		{
+			await DemoDataService.UpdateEmployeeAsync(selectedDataItem);
+		}
+	}
+}
