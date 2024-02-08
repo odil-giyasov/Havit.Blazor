@@ -195,7 +195,7 @@ public class HxInputNumber<TValue> : HxInputBaseWithInputGroups<TValue>, IInputW
 				_valueSequenceOffset++;
 				forceRenderValue = false;
 			}
-			builder.AddAttribute(1006 + _valueSequenceOffset, "value", CurrentValueAsString);
+			builder.AddAttribute(1006 + _valueSequenceOffset, "value", CurrentValueAsString == "0" ? string.Empty : CurrentValueAsString);
 		}
 		builder.AddElementReferenceCapture(Int32.MaxValue, elementReference => InputElement = elementReference);
 
