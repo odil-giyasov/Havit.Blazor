@@ -53,7 +53,7 @@
 		_paginationDecreasePageIndexAfterRender = true;
     }
 
-    DisplayMode = HasCard ? DisplayMode : GridDisplayMode.Rows;
+    DisplayMode = HasCard ? DisplayMode : HasListItem ? GridDisplayMode.ListItems : GridDisplayMode.Rows;
 }
 
 @if ((columnsToRender.Any() || DisplayMode == GridDisplayMode.Cards) && (shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData))
@@ -61,7 +61,6 @@
     <div class="hh-grid">
 
         <!-- HH Extended -->
-
         <div class="hh-grid-toolbar">
 
             <div class="hh-grid-pager-sizer">
@@ -113,7 +112,6 @@
         }
 
         <!-- HH Extended end -->
-
         <HxProgressIndicator InProgress="@(InProgress ?? (_dataProviderInProgress /* indicates data loading */ && !shouldRenderLoadingDataWithPlaceholders /* but not when placeholders are used - in such case we are indicating data loading using the placeholders */))">
 
             @if (DisplayMode == GridDisplayMode.Rows)
@@ -428,4 +426,20 @@
         <!-- HH Extended -->
     </div>
     <!-- HH Extended end -->
+}
+
+@if (DisplayMode == GridDisplayMode.ListItems && (shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData))
+{
+    <HxProgressIndicator InProgress="@(InProgress ?? (_dataProviderInProgress))">
+        @if (shouldRenderData)
+        {
+            if (_paginationDataItemsToRender != null)
+            {
+                foreach (TItem item in _paginationDataItemsToRender)
+                {
+                    @ListItem(item)
+                }
+            }
+        }
+    </HxProgressIndicator>
 }

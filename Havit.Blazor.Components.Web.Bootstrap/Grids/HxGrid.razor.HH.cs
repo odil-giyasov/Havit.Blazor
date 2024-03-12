@@ -61,6 +61,9 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	#region Display Mode
 
 	[Parameter] public RenderFragment<TItem> Card { get; set; }
+
+	[Parameter] public RenderFragment<TItem> ListItem { get; set; }
+
 	[Parameter] public string Caption { get; set; }
 
 	[Parameter] public GridDisplayMode DisplayMode { get; set; } = GridDisplayMode.Cards;
@@ -68,6 +71,9 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	[Parameter] public RenderFragment CardPlaceholderTemplate { get; set; }
 
 	private bool HasCard => this.Card != null;
+
+	private bool HasListItem => this.ListItem != null;
+
 	private bool HasColumns => GetColumnsToRender().Any();
 
 	private void OnDisplayModeChanged(GridDisplayMode newDisplayMode)
@@ -116,6 +122,7 @@ public enum GridPageSizerValue
 public enum GridDisplayMode
 {
 	Rows,
-	Cards
+	Cards,
+	ListItems
 }
 
