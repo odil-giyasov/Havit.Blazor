@@ -383,7 +383,10 @@
                     {
                         foreach (TItem item in _paginationDataItemsToRender)
                         {
-                            @Card(item)
+                            <div @onclick="async () => await HandleSelectOrMultiSelectDataItemClick(item)"
+                                 @onclick:stopPropagation>
+                                @Card(item)
+                            </div>
                         }
                     }
                 }
