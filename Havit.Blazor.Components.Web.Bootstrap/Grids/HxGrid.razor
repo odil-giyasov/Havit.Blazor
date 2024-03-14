@@ -61,45 +61,48 @@
     <div class="hh-grid">
 
         <!-- HH Extended -->
-        <div class="hh-grid-toolbar">
+        @if(DisplayMode != GridDisplayMode.Cards && DisplayMode != GridDisplayMode.ListItems)
+        {
+            <div class="hh-grid-toolbar">
 
-            <div class="hh-grid-pager-sizer">
-                @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
-                {
-                    <span>Show</span>
-                    <HxSelect TItem="GridPageSizerDDLItem" 
-                                TValue="int" 
-                                Data="@pageSizeEntries" 
-                                style="transform:scale(80%);"
-                                Value="@pageSizerValue" 
-                                ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
-                                TextSelector="@(p => p.Name)" 
-                                ValueSelector="@(p => int.Parse(p.Id))" 
-                                Nullable="false"></HxSelect>
+                <div class="hh-grid-pager-sizer">
+                    @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
+                    {
+                        <span>Show</span>
+                        <HxSelect TItem="GridPageSizerDDLItem"
+                                  TValue="int"
+                                  Data="@pageSizeEntries"
+                                  style="transform:scale(80%);"
+                                  Value="@pageSizerValue"
+                                  ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
+                                  TextSelector="@(p => p.Name)"
+                                  ValueSelector="@(p => int.Parse(p.Id))"
+                                  Nullable="false"></HxSelect>
 
-                    <span>entries</span>
-                }
+                        <span>entries</span>
+                    }
+                </div>
+
+                <div class="hh-grid-toolbar-buttons">
+                    @ToolbarButtons
+                    @if (ToCsv.HasDelegate)
+                    {
+                        <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToCsv.InvokeAsync()" title="Export to CSV">CSV</HxButton>
+                    }
+
+                    @if (ToExcel.HasDelegate)
+                    {
+                        <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToExcel.InvokeAsync()" title="Export to Excel">Excel</HxButton>
+                    }
+
+                    @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
+                    {
+                        <HxButton Color="ThemeColor.Primary" Outline="true" Icon="BootstrapIcon.ArrowRepeat" Size="ButtonSize.Small" OnClick="async() => await OnRefreshButtonClicked()" title="Reload data"></HxButton>
+                    }
+
+                </div>
             </div>
-
-            <div class="hh-grid-toolbar-buttons">
-                @ToolbarButtons
-                @if (ToCsv.HasDelegate)
-                {
-                    <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToCsv.InvokeAsync()" title="Export to CSV">CSV</HxButton>
-                }
-
-                @if (ToExcel.HasDelegate)
-                {
-                    <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToExcel.InvokeAsync()" title="Export to Excel">Excel</HxButton>
-                }
-
-                @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
-                {
-                    <HxButton Color="ThemeColor.Primary" Outline="true" Icon="BootstrapIcon.ArrowRepeat" Size="ButtonSize.Small" OnClick="async() => await OnRefreshButtonClicked()" title="Reload data"></HxButton>
-                }
-
-            </div>
-        </div>
+        }
 
         @if (HasCard && HasColumns)
         {
