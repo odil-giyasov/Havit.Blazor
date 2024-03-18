@@ -64,7 +64,7 @@ public class HxAutosuggest<TItem, TValue> : HxInputBase<TValue>, IInputWithSize,
 	/// Icon displayed in the input when no item is selected.
 	/// </summary>
 	[Parameter] public IconBase SearchIcon { get; set; }
-	protected IconBase SearchIconEffective => SearchIcon ?? GetSettings()?.SearchIcon ?? GetDefaults().SearchIcon;
+	protected IconBase SearchIconEffective => SearchIcon ?? GetSettings()?.SearchIcon ;
 
 	/// <summary>
 	/// Icon displayed in the input on the selection clear button when an item is selected.
