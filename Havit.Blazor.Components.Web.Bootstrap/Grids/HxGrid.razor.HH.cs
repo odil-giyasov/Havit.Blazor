@@ -47,6 +47,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	{
 		new GridPageSizerDDLItem{ Id = "6", Name = "6" },
 		new GridPageSizerDDLItem{ Id = "10", Name = "10" },
+		new GridPageSizerDDLItem{ Id = "15", Name = "15"},
 		new GridPageSizerDDLItem{ Id = "20", Name = "20" },
 		new GridPageSizerDDLItem{ Id = "50", Name = "50" },
 		new GridPageSizerDDLItem{ Id = "0", Name = "All" }
