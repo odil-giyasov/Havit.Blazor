@@ -582,6 +582,8 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	/// <returns>A <see cref="Task"/> representing the completion of the operation.</returns>
 	public async Task RefreshDataAsync()
 	{
+		this.CurrentUserState.PageIndex = 0;
+
 		if (_firstRenderCompleted)
 		{
 			await RefreshDataCoreAsync();
