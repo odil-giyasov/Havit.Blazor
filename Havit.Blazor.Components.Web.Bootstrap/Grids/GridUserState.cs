@@ -12,7 +12,7 @@ public record class GridUserState
 	/// <remarks>
 	/// This number is not the current page index in the pager when <see cref="LoadMoreAdditionalItemsCount"/> is not zero.
 	/// </remarks>
-	public int PageIndex { get; init; }
+	public int PageIndex { get; set; }
 
 	/// <summary>
 	/// Count of additional items to load for <see cref="GridContentNavigationMode.LoadMore"/> or <see cref="GridContentNavigationMode.PaginationAndLoadMore"/>.
