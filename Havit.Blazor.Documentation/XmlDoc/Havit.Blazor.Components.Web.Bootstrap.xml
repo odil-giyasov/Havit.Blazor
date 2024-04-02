@@ -6680,6 +6680,26 @@
             Total number of pages of data items.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.From">
+            <summary>
+            Total number of data items.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.To">
+            <summary>
+            Total number of data items.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.PageSize">
+            <summary>
+            Total number of data items.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.TotalItems">
+            <summary>
+            Total number of data items.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.CurrentPageIndex">
             <summary>
             Current page index. Zero-based.

@@ -401,6 +401,8 @@
                     int currentPageIndex = CurrentUserState.PageIndex + ((CurrentUserState.LoadMoreAdditionalItemsCount + PageSizeEffective - 1) / PageSizeEffective);
                     <HxPager TotalPages="@totalPages"
                          CurrentPageIndex="@currentPageIndex"
+                             TotalItems="@_totalCount.Value"
+                             PageSize="@PageSizeEffective"
                          CurrentPageIndexChanged="@HandlePagerCurrentPageIndexChanged"
                          Settings="@PagerSettingsEffective" />
                 }

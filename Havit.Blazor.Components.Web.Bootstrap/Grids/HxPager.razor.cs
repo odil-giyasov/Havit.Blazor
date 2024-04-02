@@ -48,6 +48,26 @@ public partial class HxPager : ComponentBase
 	[Parameter, EditorRequired] public int TotalPages { get; set; }
 
 	/// <summary>
+	/// Total number of data items.
+	/// </summary>
+	public int From => CurrentPageIndex * PageSize + 1;
+
+	/// <summary>
+	/// Total number of data items.
+	/// </summary>
+	public int To => (CurrentPageIndex + 1) * PageSize > TotalItems ? TotalItems : (CurrentPageIndex + 1) * PageSize;
+
+	/// <summary>
+	/// Total number of data items.
+	/// </summary>
+	[Parameter, EditorRequired] public int PageSize { get; set; }
+
+	/// <summary>
+	/// Total number of data items.
+	/// </summary>
+	[Parameter, EditorRequired] public int TotalItems { get; set; }
+
+	/// <summary>
 	/// Current page index. Zero-based.
 	/// Displayed numbers start with 1, which is page index 0.
 	/// </summary>
