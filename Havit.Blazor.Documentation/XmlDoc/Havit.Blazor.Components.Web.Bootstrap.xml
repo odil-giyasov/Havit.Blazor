@@ -9547,6 +9547,11 @@
             Additional CSS class.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel.ButtonsTemplate">
+            <summary>
+            Buttons template (will be rendered next to the tabs if not empty)
+            </summary>
+        </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel.OnAfterRenderAsync(System.Boolean)">
             <inheritdoc />
         </member>
