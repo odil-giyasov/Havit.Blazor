@@ -13,6 +13,10 @@
 		<InternalsVisibleTo Include="Havit.Blazor.Components.Web.Bootstrap" />
 	</ItemGroup>
 
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+
 	<!-- NuGet -->
 	<Import Project="../NuGet.targets" />
 	<PropertyGroup>

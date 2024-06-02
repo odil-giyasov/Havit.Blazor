@@ -12,6 +12,10 @@
 		<InternalsVisibleTo Include="Havit.Blazor.Documentation" />
 	</ItemGroup>
 
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+
 
 	<!-- NuGet -->
 	<Import Project="../NuGet.targets" />
