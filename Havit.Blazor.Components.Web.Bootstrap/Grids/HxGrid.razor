@@ -438,16 +438,61 @@
 
 @if (DisplayMode == GridDisplayMode.ListItems && (shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData))
 {
-    <HxProgressIndicator InProgress="@(InProgress ?? (_dataProviderInProgress))">
-        @if (shouldRenderData)
+    if (shouldRenderLoadingData)
+    {
+        if (shouldRenderLoadingDataWithPlaceholders)
         {
-            if (_paginationDataItemsToRender != null)
+            int rowsToRender = PlaceholdersRowCountEffective;
+            for (int rowIndex = 0; rowIndex < rowsToRender; rowIndex++)
             {
-                foreach (TItem item in _paginationDataItemsToRender)
+                if(CardPlaceholderTemplate == null)
                 {
-                    @ListItem(item)
+                    <!-- CARD VIEW SKELETON -->
+                    <DefaultGridCardSkeletonTemplate />
+                }
+                else
+                {
+                    @CardPlaceholderTemplate
                 }
             }
         }
-    </HxProgressIndicator>
+        else
+        {
+            if (shouldRenderLoadingDataWithLoadingTemplate)
+            {
+                @LoadingDataTemplate
+            }
+            else
+            {
+                <div class="text-center text-secondary my-5">
+                    <div class="fs-3"><HxIcon Icon="@BootstrapIcon.InboxFill" /></div>
+                    <div>@HxGridLocalizer["LoadingData"]</div>
+                </div>
+            }
+        }
+    }
+
+    if (shouldRenderEmptyData)
+    {
+        if (EmptyDataTemplate != null)
+        {
+            @EmptyDataTemplate
+        }
+        else
+        {
+            <HxGridEmptyDataTemplateDefaultContent />
+        }
+    }
+
+    if (shouldRenderData)
+    {
+        if (_paginationDataItemsToRender != null)
+        {
+            foreach (TItem item in _paginationDataItemsToRender)
+            {
+                @ListItem(item)
+            }
+        }
+    }
+
 }
