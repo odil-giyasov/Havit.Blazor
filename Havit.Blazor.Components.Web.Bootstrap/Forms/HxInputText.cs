@@ -20,6 +20,14 @@ public class HxInputText : HxInputTextBase
 	}
 
 	/// <summary>
+	/// Returns Input Html Element From Inside Deep Class Structure
+	/// </summary>
+	public ElementReference GetInputElementReference()
+	{
+		return this.InputElement;
+	}
+
+	/// <summary>
 	/// Returns application-wide defaults for the component.
 	/// Enables overriding defaults in descendants (use a separate set of defaults).
 	/// </summary>
