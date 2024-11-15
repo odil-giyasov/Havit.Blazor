@@ -4307,6 +4307,11 @@
             Full documentation and demos: <see href="https://havit.blazor.eu/components/HxInputText">https://havit.blazor.eu/components/HxInputText</see>.
             </summary>
         </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxInputText.GetInputElementReference">
+            <summary>
+            Returns Input Html Element From Inside Deep Class Structure
+            </summary>
+        </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxInputText.GetDefaults">
             <summary>
             Returns application-wide defaults for the component.
