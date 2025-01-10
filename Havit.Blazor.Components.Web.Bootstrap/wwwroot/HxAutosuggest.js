@@ -67,7 +67,9 @@ export function destroy(inputElement) {
 		d.hide();
 
 		inputElement.addEventListener('hidden.bs.dropdown', event => {
-			dropdown.dispose()
+			if (dropdown != null) {
+				dropdown.dispose()
+			}
 		})
 	}
 }
