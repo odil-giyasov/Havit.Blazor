@@ -4385,6 +4385,12 @@
             Gets or sets the behavior when the model is updated from the input.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTextBase.OnEnter">
+            <summary>
+            Custom parameter, which is used to trigger the searching, whenever user clicks on Enter button, while being focused
+            in the text input 
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTextBase.Placeholder">
             <summary>
             Placeholder for the input.
@@ -4400,6 +4406,14 @@
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxInputTextBase.BuildRenderInput(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
             <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxInputTextBase.HandleKeyUpInternal(Microsoft.AspNetCore.Components.Web.KeyboardEventArgs)">
+            <summary>
+            Custom method that is used to check if user clicked on Enter button and the method was provided in "OnEnter" parameter
+            that will be called 
+            </summary>
+            <param name="e"></param>
+            <returns></returns>
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxInputTextBase.GetElementName">
             <summary>

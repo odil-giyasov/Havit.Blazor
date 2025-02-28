@@ -48,6 +48,12 @@ public abstract class HxInputTextBase : HxInputBaseWithInputGroups<string>, IInp
 	[Parameter] public BindEvent BindEvent { get; set; } = BindEvent.OnChange;
 
 	/// <summary>
+	/// Custom parameter, which is used to trigger the searching, whenever user clicks on Enter button, while being focused
+	/// in the text input 
+	/// </summary>
+	[Parameter] public EventCallback OnEnter { get; set; }
+
+	/// <summary>
 	/// Placeholder for the input.
 	/// </summary>
 	[Parameter] public string Placeholder { get; set; }
@@ -83,17 +89,32 @@ public abstract class HxInputTextBase : HxInputBaseWithInputGroups<string>, IInp
 			builder.AddAttribute(1004, "name", NameAttributeValue);
 		}
 #endif
+		builder.AddAttribute(1008, "onkeyup",
+			EventCallback.Factory.Create<KeyboardEventArgs>(this, this.HandleKeyUpInternal));
 
 		if (InputModeEffective is not null)
 		{
 			builder.AddAttribute(1005, "inputmode", InputModeEffective.Value.ToString("f").ToLower());
 		}
+
 		builder.AddEventStopPropagationAttribute(1006, "onclick", true);
 		builder.AddElementReferenceCapture(1007, elementReference => InputElement = elementReference);
 
 		builder.CloseElement();
 	}
-
+	/// <summary>
+	/// Custom method that is used to check if user clicked on Enter button and the method was provided in "OnEnter" parameter
+	/// that will be called 
+	/// </summary>
+	/// <param name="e"></param>
+	/// <returns></returns>
+	private async Task HandleKeyUpInternal(KeyboardEventArgs e)
+	{
+		if ((e.Key == "Enter") && this.OnEnter.HasDelegate)
+		{
+			await this.OnEnter.InvokeAsync(e);
+		}
+	}
 	/// <summary>
 	/// Returns the element name to render.
 	/// </summary>
