@@ -32,16 +32,15 @@ public class HxGoogleTagManager : IHxGoogleTagManager, IAsyncDisposable
 	/// <inheritdoc/>
 	public async Task InitializeAsync()
 	{
+		_jsModule ??= await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Havit.Blazor.GoogleTagManager/" + nameof(HxGoogleTagManager) + ".js");
+
 		if (_isInitialized)
 		{
 			return;
 		}
-
-		_jsModule ??= await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./_content/Havit.Blazor.GoogleTagManager/" + nameof(HxGoogleTagManager) + ".js");
+		_isInitialized = true;
 
 		await _jsModule.InvokeVoidAsync("initialize", _gtmOptions.GtmId);
-
-		_isInitialized = true;
 	}
 
 	/// <inheritdoc/>

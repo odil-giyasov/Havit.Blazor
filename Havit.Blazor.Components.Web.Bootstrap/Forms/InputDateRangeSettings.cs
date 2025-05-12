@@ -5,12 +5,27 @@ namespace Havit.Blazor.Components.Web.Bootstrap;
 /// <summary>
 /// Settings for <see cref="HxInputDateRange"/>.
 /// </summary>
-public record InputDateRangeSettings : InputSettings, IInputSettingsWithSize
+public record InputDateRangeSettings : InputSettings
 {
 	/// <summary>
 	/// Input size.
 	/// </summary>
 	public InputSize? InputSize { get; set; }
+
+	/// <summary>
+	/// Placeholder for the start-date input.
+	/// </summary>
+	public string FromPlaceholder { get; set; }
+
+	/// <summary>
+	/// Placeholder for the end-date input.
+	/// </summary>
+	public string ToPlaceholder { get; set; }
+
+	/// <summary>
+	/// Optional icon to display within the input.
+	/// </summary>
+	public IconBase CalendarIcon { get; set; }
 
 	/// <summary>
 	/// Indicates whether the <i>Clear</i> button in the dropdown calendar should be visible.<br/>

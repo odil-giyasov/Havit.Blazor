@@ -11,6 +11,11 @@ public class SearchBoxSettings
 	public IconBase SearchIcon { get; set; }
 
 	/// <summary>
+	/// Placement of the search icon.<br/>
+	/// </summary>
+	public SearchBoxSearchIconPlacement? SearchIconPlacement { get; set; }
+
+	/// <summary>
 	/// Icon displayed in the input on the selection clear button when an item is selected.
 	/// </summary>
 	public IconBase ClearIcon { get; set; }
@@ -29,6 +34,11 @@ public class SearchBoxSettings
 	/// The input size.
 	/// </summary>
 	public InputSize? InputSize { get; set; }
+
+	/// <summary>
+	/// The label type.
+	/// </summary>
+	public LabelType? LabelType { get; set; }
 
 	/// <summary>
 	/// Additional CSS classes for the wrapping <c>div</c>.
@@ -54,4 +64,9 @@ public class SearchBoxSettings
 	/// The behavior when the item is selected.
 	/// </summary>
 	public SearchBoxItemSelectionBehavior? ItemSelectionBehavior { get; set; }
+
+	/// <summary>
+	/// Defines whether the input may be checked for spelling errors.
+	/// </summary>
+	public bool? Spellcheck { get; set; }
 }

@@ -5,25 +5,47 @@
 	<DataAnnotationsValidator />
 	<ValidationSummary />
 
-	<HxInputDate Label="HxInputDate (default, DateTime), Floating Label" @bind-Value="@model.DateTime" LabelType="LabelType.Floating"/>
+	<HxInputDate @ref="inputDateComponent" Label="HxInputDate (default, DateTime), Floating Label" @bind-Value="@model.DateTime" LabelType="LabelType.Floating" />
 	<HxInputDate InputSize="InputSize.Small" Label="HxInputDate (default, DateTime) InputSize: Small" @bind-Value="@model.DateTime" />
 	<HxInputDate InputSize="InputSize.Large" Label="HxInputDate (default, DateTime) InputSize: Large" @bind-Value="@model.DateTime" />
 	<HxInputDate Label="HxInputDate (default, DateTime?)" @bind-Value="@model.NullableDateTime" Placeholder="Datum narození" />
 	<HxInputDate Label="HxInputDate (default, DateTimeOffset)" @bind-Value="@model.DateTimeOffset" />
 	<HxInputDate Label="HxInputDate (default, DateTimeOffset?)" @bind-Value="@model.NullableDateTimeOffset" />
-	<HxInputDate Label="HxInputDate (DisplayName)" @bind-Value="@model.DateTime" />
+	<HxInputDate Label="HxInputDate (InputGroupStart, w/ CalendarIcon)" CalendarIcon="BootstrapIcon.Calendar" @bind-Value="@model.DateTime" >
+	<InputGroupStartTemplate>
+		<HxButton Text="Button" Color="ThemeColor.Secondary" Outline="true" />
+	</InputGroupStartTemplate>
+	</HxInputDate>
+	<HxInputDate Label="HxInputDate (InputGroupEnd, w/ CalendarIcon)" CalendarIcon="BootstrapIcon.Calendar" @bind-Value="@model.DateTime" >
+	<InputGroupEndTemplate>
+		<HxButton Text="Button" Color="ThemeColor.Secondary" Outline="true" />
+	</InputGroupEndTemplate>
+	</HxInputDate>
+	<HxInputDate Label="HxInputDate (InputGroups, w/ CalendarIcon)" CalendarIcon="BootstrapIcon.Calendar" @bind-Value="@model.DateTime" >
+	<InputGroupStartTemplate>
+		<HxButton Text="Button" Color="ThemeColor.Secondary" Outline="true" />
+	</InputGroupStartTemplate>
+	<InputGroupEndTemplate>
+		<HxButton Text="Button" Color="ThemeColor.Secondary" Outline="true" />
+	</InputGroupEndTemplate>
+	</HxInputDate>
+	<HxInputDate Label="HxInputDate (InputGroups, w/ CalendarIcon)" CalendarIcon="BootstrapIcon.Calendar" @bind-Value="@model.DateTime" InputGroupEndText="InputGroupEndText" />
+	<HxInputDate Label="HxInputDate (InputGroups, w/ CalendarIcon)" CalendarIcon="BootstrapIcon.Calendar" @bind-Value="@model.DateTime" InputGroupStartText="InputGroupStartText" />
 	<HxInputDate Label="HxInputDate (wo/ PredefinedDates, wo/ validation)" @bind-Value="@model.DateTime" ShowPredefinedDates="false" ValidationMessageMode="ValidationMessageMode.None" />
 	<HxInputDate Label="HxInputDate (custom PredefinedDates)" @bind-Value="@model.DateTime" PredefinedDates="@GetPredefinedDates()" />
 	<HxInputDate Label="HxInputDate (disabled)" @bind-Value="@model.DateTime" PredefinedDates="@GetPredefinedDates()" Enabled="false" />
 	<HxInputDate Label="HxInputDate (w/ CalendarIcon)" @bind-Value="@model.DateTime" CalendarIcon="BootstrapIcon.Calendar" />
-	<HxInputDate Label="HxInputDate (w/ CalendarIcon)" @bind-Value="@model.DateTime" CalendarIcon="BootstrapIcon.Calendar" Enabled="false" />
+	<HxInputDate Label="HxInputDate (w/ CalendarIcon, disabled)" @bind-Value="@model.DateTime" CalendarIcon="BootstrapIcon.Calendar" Enabled="false" />
 	<HxInputDate Label="HxInputDate (w/ CalendarIcon, wo/ PredefinedDates)" @bind-Value="@model.DateTime" CalendarIcon="BootstrapIcon.Calendar" ShowPredefinedDates="false" />
 	<HxInputDate Label="HxInputDate (w/ MinDate, MaxDate)" @bind-Value="@model.DateTime" MinDate="new DateTime(1920, 3, 5)" MaxDate="new DateTime(1999, 6, 15)" ShowPredefinedDates="false" CalendarDateCustomizationProvider="GetCalendarDateCustomization" />
 
 	<button type="submit">Submit</button>
 </EditForm>
 
+<HxButton Text="Focus" Color="ThemeColor.Secondary" OnClick="async () => await inputDateComponent.FocusAsync()" />
+
 @code {
+	private HxInputDate<DateTime> inputDateComponent;
 	private FormModel model = new FormModel();
 
 	private IEnumerable<InputDatePredefinedDatesItem> GetPredefinedDates()

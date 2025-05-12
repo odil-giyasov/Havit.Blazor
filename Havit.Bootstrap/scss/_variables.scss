@@ -12,6 +12,7 @@ $nav-tabs-border-color:               var(--#{$prefix}border-color-translucent);
 
 $card-border-radius:                  var(--#{$prefix}border-radius-lg);
 $card-inner-border-radius:            subtract($card-border-radius, $card-border-width);
+$card-cap-bg:                         rgba(var(--#{$prefix}body-color-rgb), .02);
 
 $table-active-bg-factor:              .075;
 $table-active-bg:                     rgba($black, $table-active-bg-factor);
@@ -47,3 +48,22 @@ $badge-font-weight:                 $font-weight-semibold;
 $list-group-border-color:           var(--#{$prefix}border-color-translucent);
 
 $hr-opacity: .125;
+
+// scss-docs-start grid-breakpoints
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px,
+  xxxl: 1600px
+);
+// scss-docs-end grid-breakpoints
+
+$component-active-color:            rgba($primary, 1);  
+$component-active-bg:               rgba($primary, .1);  
+$nav-pills-link-active-color:       $component-active-color;
+$nav-pills-link-active-bg:          $component-active-bg;
+$dropdown-link-active-color:        $component-active-color;
+$dropdown-link-active-bg:           $component-active-bg;

@@ -141,6 +141,11 @@ public partial class HxButton : ComponentBase, ICascadeEnabledComponent
 	[Parameter] public string TooltipCssClass { get; set; }
 
 	/// <summary>
+	/// Appends the tooltip to a specific element. Default is <c>body</c>.
+	/// </summary>
+	[Parameter] public string TooltipContainer { get; set; }
+
+	/// <summary>
 	/// Custom CSS class to render with the tooltip <c>span</c> wrapper of the <c>&lt;button /&gt;</c>.<br />
 	/// If set, the <c>span</c> wrapper will be rendered no matter whether the <see cref="Tooltip"/> text is set or not.
 	/// </summary>
@@ -200,11 +205,6 @@ public partial class HxButton : ComponentBase, ICascadeEnabledComponent
 	/// </summary>
 	[Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
 
-	/// <summary>
-	/// Localization service.
-	/// </summary>
-	[Inject] protected IStringLocalizerFactory StringLocalizerFactory { get; set; }
-
 	protected bool SpinnerEffective => Spinner ?? clickInProgress;
 	protected bool DisabledEffective => !CascadeEnabledComponent.EnabledEffective(this)
 		|| (SingleClickProtection && clickInProgress && (OnClick.HasDelegate || OnValidClick.HasDelegate || OnInvalidClick.HasDelegate));
@@ -219,56 +219,13 @@ public partial class HxButton : ComponentBase, ICascadeEnabledComponent
 	/// </summary>
 	protected virtual string CoreCssClass => "hx-button btn";
 
-
 	protected virtual string GetButtonCssClass()
 	{
-		return CssClassHelper.Combine(CoreCssClass, GetColorCssClass(), GetSizeCssClass(), CssClassEffective);
-	}
-
-	protected string GetColorCssClass()
-	{
-		if (OutlineEffective)
-		{
-			return ColorEffective switch
-			{
-				ThemeColor.Primary => "btn-outline-primary",
-				ThemeColor.Secondary => "btn-outline-secondary",
-				ThemeColor.Success => "btn-outline-success",
-				ThemeColor.Danger => "btn-outline-danger",
-				ThemeColor.Warning => "btn-outline-warning",
-				ThemeColor.Info => "btn-outline-info",
-				ThemeColor.Light => "btn-outline-light",
-				ThemeColor.Dark => "btn-outline-dark",
-				ThemeColor.Link => "btn-link",
-				ThemeColor.None => null,
-				_ => throw new InvalidOperationException($"Unknown {nameof(HxButton)} color {ColorEffective:g}.")
-			};
-		}
-		return ColorEffective switch
-		{
-			ThemeColor.Primary => "btn-primary",
-			ThemeColor.Secondary => "btn-secondary",
-			ThemeColor.Success => "btn-success",
-			ThemeColor.Danger => "btn-danger",
-			ThemeColor.Warning => "btn-warning",
-			ThemeColor.Info => "btn-info",
-			ThemeColor.Light => "btn-light",
-			ThemeColor.Dark => "btn-dark",
-			ThemeColor.Link => "btn-link",
-			ThemeColor.None => null,
-			_ => throw new InvalidOperationException($"Unknown {nameof(HxButton)} color {ColorEffective:g}.")
-		};
-	}
-
-	protected string GetSizeCssClass()
-	{
-		return SizeEffective switch
-		{
-			ButtonSize.Regular => null,
-			ButtonSize.Small => "btn-sm",
-			ButtonSize.Large => "btn-lg",
-			_ => throw new InvalidOperationException($"Unknown {nameof(HxButton)} {nameof(Size)}: {SizeEffective}.")
-		};
+		return CssClassHelper.Combine(
+			CoreCssClass,
+			ColorEffective.ToButtonColorCss(OutlineEffective),
+			SizeEffective.ToButtonSizeCssClass(),
+			CssClassEffective);
 	}
 
 	protected string GetTooltipWrapperCssClass()
@@ -285,8 +242,6 @@ public partial class HxButton : ComponentBase, ICascadeEnabledComponent
 
 	private async Task HandleClick(MouseEventArgs mouseEventArgs)
 	{
-		Contract.Requires<InvalidOperationException>(!DisabledEffective, $"The {GetType().Name} component is in a disabled state.");
-
 		if (!clickInProgress || !SingleClickProtection)
 		{
 			clickInProgress = true;
@@ -299,18 +254,20 @@ public partial class HxButton : ComponentBase, ICascadeEnabledComponent
 	{
 		// #209 [HxButton] Tooltip does not hide when the button opens HxModal
 		// We disable the button (SingleClickProtection) and disabled buttons do not raise any events (the tooltip won't receive <c>mouseout</c> and stays visible).
-		await _tooltipComponent.HideAsync();
+		// UPDATE 06/2024: As of now, only Firefox does not hide the tooltip when the button is disabled.
+		// Removing the HideAsync workaround as it causes #817 [HxButton] Tooltip behavior on mobile devices
+		// await _tooltipComponent.HideAsync();
 
 		if (OnClick.HasDelegate)
 		{
-			Contract.Requires<InvalidOperationException>(!OnValidClick.HasDelegate, $"Cannot use both {nameof(OnClick)} and {nameof(OnValidClick)} parameters.");
-			Contract.Requires<InvalidOperationException>(!OnInvalidClick.HasDelegate, $"Cannot use both {nameof(OnClick)} and {nameof(OnInvalidClick)} parameters.");
+			Contract.Requires<InvalidOperationException>(!OnValidClick.HasDelegate, $"[{this.GetType().Name}] Cannot use both {nameof(OnClick)} and {nameof(OnValidClick)} parameters.");
+			Contract.Requires<InvalidOperationException>(!OnInvalidClick.HasDelegate, $"[{this.GetType().Name}] Cannot use both {nameof(OnClick)} and {nameof(OnInvalidClick)} parameters.");
 
 			await InvokeOnClickAsync(mouseEventArgs);
 		}
 		else if (OnValidClick.HasDelegate || OnInvalidClick.HasDelegate)
 		{
-			Contract.Requires<InvalidOperationException>(EditContextEffective != null, $"{nameof(EditContext)} has to be supplied as cascading value or explicit parameter.");
+			Contract.Requires<InvalidOperationException>(EditContextEffective != null, $"[{this.GetType().Name}] To use {nameof(OnValidClick)}/{nameof(OnInvalidClick)}, {nameof(EditContext)} must be supplied as a cascading value or explicit parameter.");
 
 			var isValid = EditContextEffective.Validate(); // Original .NET comment: This will likely become ValidateAsync later
 

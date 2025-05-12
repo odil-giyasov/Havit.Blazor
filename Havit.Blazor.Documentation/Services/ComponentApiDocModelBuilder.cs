@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using Havit.Blazor.Documentation.Model;
 using LoxSmoke.DocXml;
 using Microsoft.JSInterop;
@@ -83,6 +84,14 @@ public class ComponentApiDocModelBuilder : IComponentApiDocModelBuilder
 		{
 			return _docXmlProvider.GetDocXmlReaderFor("Havit.Blazor.GoogleTagManager.xml");
 		}
+		else if (typeNamespace.Contains("Smart"))
+		{
+			return _docXmlProvider.GetDocXmlReaderFor("Havit.Blazor.Components.Web.Bootstrap.Smart.xml");
+		}
+		else if (typeNamespace.Contains("ECharts"))
+		{
+			return _docXmlProvider.GetDocXmlReaderFor("Havit.Blazor.Components.Web.ECharts.xml");
+		}
 		else if (typeNamespace.Contains("Bootstrap"))
 		{
 			return _docXmlProvider.GetDocXmlReaderFor("Havit.Blazor.Components.Web.Bootstrap.xml");
@@ -145,7 +154,7 @@ public class ComponentApiDocModelBuilder : IComponentApiDocModelBuilder
 			try
 			{
 				var enumValueComment = enumComments.ValueComments
-					.Where(o => o.Value == i)
+					.Where(o => o.Name == enumMember.Name)
 					.FirstOrDefault(c => !string.IsNullOrEmpty(c.Summary));
 
 				if (enumValueComment is not null)
@@ -261,8 +270,20 @@ public class ComponentApiDocModelBuilder : IComponentApiDocModelBuilder
 		return true;
 	}
 
+	// ...
+
 	private bool IsEventCallback(PropertyModel property)
 	{
-		return property.PropertyInfo.PropertyType == typeof(EventCallback<>) || property.PropertyInfo.PropertyType == typeof(EventCallback);
+		string propertyName = property.PropertyInfo.Name;
+
+		// SomethingChanged should be treated as regular property
+		// OnSomethingChanged should be treated as event-callback
+		if (propertyName.EndsWith("Changed") && !Regex.IsMatch(propertyName, @"^On[A-Z]"))
+		{
+			return false;
+		}
+
+		return (property.PropertyInfo.PropertyType.IsGenericType && (property.PropertyInfo.PropertyType.GetGenericTypeDefinition() == typeof(EventCallback<>)))
+			|| property.PropertyInfo.PropertyType == typeof(EventCallback);
 	}
 }

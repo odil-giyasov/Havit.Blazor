@@ -1,29 +1,40 @@
-﻿::deep .dropdown,
-::deep div[data-bs-toggle="dropdown"],
+﻿.hx-search-box {
+	--input-icon-button-width: 2.375rem;
+}
+
+::deep .dropdown {
+    flex-grow: 1;
+}
+
 ::deep .dropdown-menu {
-	width: 100%; /* override for current .btn-group, see issue #117 */
+    min-width: var(--hx-search-box-dropdown-menu-width); /* override for current .btn-group, see issue #117 */
 }
 
 ::deep .hx-search-box-input-icon {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    z-index: 10;
+	position: absolute;
+	top: 0;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 5;
+	width: var(--input-icon-button-width);
 }
 
 ::deep .hx-search-box-input-icon-end {
-    right: .75rem;
+    right: 0;
 }
 
-::deep .hx-search-box-input-with-search-icon {
-	border-top-right-radius: 0.375rem !important;
-	border-bottom-right-radius: 0.375rem !important;
+::deep .hx-search-box-input-icon-start {
+    left: 0;
 }
 
-::deep .hx-search-box-input-with-clear-icon {
-	padding-right: 2.375rem;
+.form-control {
+	padding-right: var(--input-icon-button-width);
+}
+
+.hx-search-box:has(.hx-search-box-input-icon-start) .form-control {
+	padding-left: var(--input-icon-button-width);
 }
 
 .dropdown-item:not(:active) ::deep .hx-search-box-item-title {
@@ -41,4 +52,26 @@
 ::deep .dropdown-menu {
     overflow: auto;
     max-height: var(--hx-search-box-dropdown-menu-height);
+}
+
+.input-group-start ::deep .form-control {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.input-group-end ::deep .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+::deep .dropdown:focus-within {
+    z-index: 6; /* Assures that the inputs' box shadows are always fully visible (rendered on top). Must be larger than 5 because otherwise the validation message is rendered on top. */
+}
+
+::deep .hx-search-box-input-icon-clear {
+    color: var(--hx-search-box-input-clear-icon-color);
+}
+
+::deep .hx-search-box-input-icon-search {
+    color: var(--hx-search-box-input-search-icon-color);
 }

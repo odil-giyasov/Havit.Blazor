@@ -1,4 +1,6 @@
-﻿using Microsoft.JSInterop;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Localization;
+using Microsoft.JSInterop;
 
 namespace Havit.Blazor.Components.Web.Bootstrap.Internal;
 
@@ -60,8 +62,11 @@ public partial class HxAutosuggestInternal<TItem, TValue> : IAsyncDisposable
 	[Parameter] public IconBase ClearIconEffective { get; set; }
 
 	[Parameter] public bool EnabledEffective { get; set; } = true;
+	[Parameter] public InputSize InputSizeEffective { get; set; }
 
 	[Parameter] public LabelType LabelTypeEffective { get; set; }
+
+	[Parameter] public bool? SpellcheckEffective { get; set; }
 
 	[Parameter] public IFormValueComponent FormValueComponent { get; set; }
 
@@ -103,6 +108,7 @@ public partial class HxAutosuggestInternal<TItem, TValue> : IAsyncDisposable
 	/// </summary>
 	[Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> AdditionalAttributes { get; set; }
 
+	[Inject] protected IStringLocalizer<HxAutosuggest> HxAutosuggestLocalizer { get; set; }
 
 	[Inject] protected IJSRuntime JSRuntime { get; set; }
 
@@ -192,7 +198,10 @@ public partial class HxAutosuggestInternal<TItem, TValue> : IAsyncDisposable
 		_userInputModified = true;
 
 		_timer?.Stop(); // if waiting for an interval, stop it
+#pragma warning disable VSTHRD103 // Call async methods when in an async method
+		// TODO Consider CancelAsync() for net8+
 		_cancellationTokenSource?.Cancel(); // if already loading data, cancel it
+#pragma warning restore VSTHRD103 // Call async methods when in an async method
 		_dataProviderInProgress = false; // data provider is no more in progress
 
 		// start new time interval
@@ -222,6 +231,7 @@ public partial class HxAutosuggestInternal<TItem, TValue> : IAsyncDisposable
 		}
 	}
 
+	[SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Required for Timer")]
 	private async void HandleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
 	{
 		// when a time interval reached, update suggestions
@@ -385,7 +395,7 @@ public partial class HxAutosuggestInternal<TItem, TValue> : IAsyncDisposable
 		_userInputModified = false;
 	}
 
-	private async Task HandleCrossClick()
+	private async Task ClearInputAsync()
 	{
 		// user clicked on a cross button (x)
 		await SetValueItemWithEventCallback(default);

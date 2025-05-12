@@ -29,6 +29,25 @@ public partial class HxSidebarItem : IAsyncDisposable
 	[Parameter] public string Href { get; set; }
 
 	/// <summary>
+	/// Raised after the item is clicked.
+	/// </summary>
+	[Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
+	/// <summary>
+	/// Triggers the <see cref="OnClick"/> event. Allows interception of the event in derived components.
+	/// </summary>
+	protected virtual Task InvokeOnClickAsync(MouseEventArgs args) => OnClick.InvokeAsync(args);
+
+	/// <summary>
+	/// Stops onClick-event propagation. Default is <c>false</c>.
+	/// </summary>
+	[Parameter] public bool OnClickStopPropagation { get; set; }
+
+	/// <summary>
+	/// Prevents the default action for the onclick event. Default is <c>false</c>.
+	/// </summary>
+	[Parameter] public bool OnClickPreventDefault { get; set; }
+
+	/// <summary>
 	/// URL matching behavior for the underlying <see cref="NavLink"/>.
 	/// Default is <see cref="NavLinkMatch.Prefix"/>.
 	/// </summary>
@@ -114,14 +133,27 @@ public partial class HxSidebarItem : IAsyncDisposable
 		}
 	}
 
-	private void HandleCollapseShown()
+	protected virtual Task HandleCollapseShown()
 	{
 		expanded = true;
+		return Task.CompletedTask;
 	}
 
-	private void HandleCollapseHidden()
+	protected virtual Task HandleCollapseHidden()
 	{
 		expanded = false;
+		return Task.CompletedTask;
+	}
+
+	// Bootstrap Collapse (data-bs-toggle="collapse") prevents default action (navigation) on click
+	// This is a workaround to handle navigation manually
+	private async Task HandleExpandableItemClick(MouseEventArgs args)
+	{
+		await OnClick.InvokeAsync(args);
+		if (!String.IsNullOrWhiteSpace(Href) && !OnClickPreventDefault)
+		{
+			NavigationManager.NavigateTo(Href);
+		}
 	}
 
 	public async ValueTask DisposeAsync()
@@ -140,81 +172,4 @@ public partial class HxSidebarItem : IAsyncDisposable
 			await ParentSidebarItem.ChildItemsRegistration.UnregisterAsync(this);
 		}
 	}
-
-	#region ShouldMatch (initial expansion) logic replicated from NavLink
-#pragma warning disable IDE1006 // Naming Styles
-	private string _hrefAbsolute;
-#pragma warning restore IDE1006 // Naming Styles
-	private bool ShouldMatch(string currentUriAbsolute)
-	{
-		if (_hrefAbsolute == null)
-		{
-			return false;
-		}
-
-		if (EqualsHrefExactlyOrIfTrailingSlashAdded(currentUriAbsolute))
-		{
-			return true;
-		}
-
-		if (Match == NavLinkMatch.Prefix
-			&& IsStrictlyPrefixWithSeparator(currentUriAbsolute, _hrefAbsolute))
-		{
-			return true;
-		}
-
-		return false;
-	}
-
-	private bool EqualsHrefExactlyOrIfTrailingSlashAdded(string currentUriAbsolute)
-	{
-		Debug.Assert(_hrefAbsolute != null);
-
-		if (string.Equals(currentUriAbsolute, _hrefAbsolute, StringComparison.OrdinalIgnoreCase))
-		{
-			return true;
-		}
-
-		if (currentUriAbsolute.Length == _hrefAbsolute.Length - 1)
-		{
-			// Special case: highlight links to http://host/path/ even if you're
-			// at http://host/path (with no trailing slash)
-			//
-			// This is because the router accepts an absolute URI value of "same
-			// as base URI but without trailing slash" as equivalent to "base URI",
-			// which in turn is because it's common for servers to return the same page
-			// for http://host/vdir as they do for host://host/vdir/ as it's no
-			// good to display a blank page in that case.
-			if (_hrefAbsolute[_hrefAbsolute.Length - 1] == '/'
-				&& _hrefAbsolute.StartsWith(currentUriAbsolute, StringComparison.OrdinalIgnoreCase))
-			{
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private static bool IsStrictlyPrefixWithSeparator(string value, string prefix)
-	{
-		var prefixLength = prefix.Length;
-		if (value.Length > prefixLength)
-		{
-			return value.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)
-				&& (
-					// Only match when there's a separator character either at the end of the
-					// prefix or right after it.
-					// Example: "/abc" is treated as a prefix of "/abc/def" but not "/abcdef"
-					// Example: "/abc/" is treated as a prefix of "/abc/def" but not "/abcdef"
-					prefixLength == 0
-					|| !char.IsLetterOrDigit(prefix[prefixLength - 1])
-					|| !char.IsLetterOrDigit(value[prefixLength])
-				);
-		}
-		else
-		{
-			return false;
-		}
-	}
-	#endregion
 }

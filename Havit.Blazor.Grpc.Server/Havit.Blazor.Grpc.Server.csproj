@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+	  <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
 	  <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -16,11 +16,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Grpc.AspNetCore.Web" Version="2.60.0" />
-		<PackageReference Include="Havit.AspNetCore" Version="2.0.12" />
-		<PackageReference Include="Havit.Core" Version="2.0.29" />
-		<PackageReference Include="protobuf-net" Version="3.2.30" />
-		<PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.1.1" />
+		<PackageReference Include="Grpc.AspNetCore.Web" />
+		<PackageReference Include="Havit.AspNetCore" />
+		<PackageReference Include="Havit.Core" />
+		<PackageReference Include="protobuf-net" />
+		<PackageReference Include="protobuf-net.Grpc.AspNetCore" />
 	</ItemGroup>
 
 	<ItemGroup>

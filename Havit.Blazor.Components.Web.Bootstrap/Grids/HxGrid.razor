@@ -1,338 +1,464 @@
 ﻿@namespace Havit.Blazor.Components.Web.Bootstrap
+@using Havit.Blazor.Components.Web.Internal
 @using Havit.Blazor.Components.Web.Bootstrap.Internal
-@using Havit.Blazor.Components.Web.Bootstrap.Grids
+@using Microsoft.AspNetCore.Components.Web.Virtualization;
 @typeparam TItem
 
 <CascadingValue Value="@_columnsListRegistration" Name="@ColumnsRegistrationCascadingValueName" IsFixed="true">
-    @* To get the components to the collections, we have to let them render with this component. Still we don't want them to render any output. *@
-    @if (MultiSelectionEnabled)
+	@* To get the components to the collections, we have to let them render with this component. Still we don't want them to render any output. *@
+	@if (MultiSelectionEnabled)
     {
-		bool allDataItemsSelected = (_paginationDataItemsToRender != null) && (SelectedDataItems != null) && (SelectedDataItems.Count > 0) && (_paginationDataItemsToRender.Count == SelectedDataItems.Count);
+        bool allDataItemsSelected = (_paginationDataItemsToRender != null) && (SelectedDataItems != null) && (SelectedDataItems.Count > 0) && (_paginationDataItemsToRender.All(SelectedDataItems.Contains));
         <HxMultiSelectGridColumnInternal TItem="TItem"
-										 AllDataItemsSelected="@allDataItemsSelected"
-										 SelectedDataItems="@SelectedDataItems"
-										 OnSelectDataItemClicked="HandleMultiSelectSelectDataItemClicked"
-										 OnUnselectDataItemClicked="HandleMultiSelectUnselectDataItemClicked"
-										 OnSelectAllClicked="HandleMultiSelectSelectAllClicked"
-										 OnSelectNoneClicked="HandleMultiSelectSelectNoneClicked" />
+        AllDataItemsSelected="@allDataItemsSelected"
+        SelectedDataItems="@SelectedDataItems"
+        OnSelectDataItemClicked="HandleMultiSelectSelectDataItemClicked"
+        OnUnselectDataItemClicked="HandleMultiSelectUnselectDataItemClicked"
+        SelectDeselectAllHeaderVisible="ContentNavigationModeEffective != GridContentNavigationMode.InfiniteScroll "
+        OnSelectAllClicked="HandleMultiSelectSelectAllClicked"
+        OnSelectNoneClicked="HandleMultiSelectSelectNoneClicked" />
     }
     @Columns
 
-</CascadingValue>
+    <HxDeferInternal>
+        @{
+            List<IHxGridColumn<TItem>> columnsToRender = GetColumnsToRender();
 
-@{
-    List<IHxGridColumn<TItem>> columnsToRender = GetColumnsToRender();
+            bool shouldRenderLoadingData = (_totalCount == null);
+            bool shouldRenderLoadingDataWithLoadingTemplate = shouldRenderLoadingData && (LoadingDataTemplate != null);
+            bool shouldRenderLoadingDataWithPlaceholders = shouldRenderLoadingData && (LoadingDataTemplate is null) && (PlaceholdersRowCountEffective > 0);
 
-	bool shouldRenderLoadingData = (_totalCount == null);
-    bool shouldRenderLoadingDataWithLoadingTemplate = shouldRenderLoadingData && (LoadingDataTemplate != null);
-	bool shouldRenderLoadingDataWithPlaceholders = shouldRenderLoadingData && (LoadingDataTemplate is null) && (PlaceholdersRowCountEffective > 0);
+            bool shouldRenderEmptyData = (_totalCount == 0);
+            bool shouldRenderData;
+            bool shouldRenderFooter = (_totalCount > 0) || ((_totalCount == 0) && ShowFooterWhenEmptyDataEffective);
+            var rowHeightValue = ItemRowHeightEffective;
+            string rowHeight = rowHeightValue.ToString() + "px";
 
-	bool shouldRenderEmptyData = (_totalCount == 0);
-    bool shouldRenderData;
-	bool shouldRenderFooter = (_totalCount > 0) || ((_totalCount == 0) && ShowFooterWhenEmptyDataEffective);
-    var rowHeightValue = ItemRowHeightEffective;
-    string rowHeight = rowHeightValue.ToString() + "px";
-
-    switch (ContentNavigationModeEffective)
-    {
-        case GridContentNavigationMode.Pagination:
-        case GridContentNavigationMode.LoadMore:
-        case GridContentNavigationMode.PaginationAndLoadMore:
-			shouldRenderData = (_totalCount > 0);
-            break;
-
-        case GridContentNavigationMode.InfiniteScroll:
-            shouldRenderData = true; // we cannot remove the Virtualize when there are no data, see #303 (https://github.com/havit/Havit.Blazor/issues/303)
-            break;
-
-        default: throw new InvalidOperationException(ContentNavigationModeEffective.ToString());
-    }
-
-	if ((_paginationDataItemsToRender?.Count == 0) && (CurrentUserState.PageIndex > 0))
-    {
-		_paginationDecreasePageIndexAfterRender = true;
-    }
-
-    DisplayMode = HasCard ? DisplayMode : HasListItem ? GridDisplayMode.ListItems : GridDisplayMode.Rows;
-}
-
-@if ((columnsToRender.Any() || DisplayMode == GridDisplayMode.Cards) && (shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData))
-{
-    <div class="hh-grid">
-
-        <!-- HH Extended -->
-        @if(DisplayMode != GridDisplayMode.Cards && DisplayMode != GridDisplayMode.ListItems)
-        {
-            <div class="hh-grid-toolbar">
-
-                <div class="hh-grid-pager-sizer">
-                    @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
-                    {
-                        <span>Show</span>
-                        <HxSelect TItem="GridPageSizerDDLItem"
-                                  TValue="int"
-                                  Data="@pageSizeEntries"
-                                  style="transform:scale(80%);"
-                                  Value="@pageSizerValue"
-                                  ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
-                                  TextSelector="@(p => p.Name)"
-                                  ValueSelector="@(p => int.Parse(p.Id))"
-                                  Nullable="false"></HxSelect>
-
-                        <span>entries</span>
-                    }
-                </div>
-
-                <div class="hh-grid-toolbar-buttons">
-                    @ToolbarButtons
-                    @if (ToCsv.HasDelegate)
-                    {
-                        <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToCsv.InvokeAsync()" title="Export to CSV">CSV</HxButton>
-                    }
-
-                    @if (ToExcel.HasDelegate)
-                    {
-                        <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToExcel.InvokeAsync()" title="Export to Excel">Excel</HxButton>
-                    }
-
-                    @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
-                    {
-                        <HxButton Color="ThemeColor.Primary" Outline="true" Icon="BootstrapIcon.ArrowRepeat" Size="ButtonSize.Small" OnClick="async() => await OnRefreshButtonClicked()" title="Reload data"></HxButton>
-                    }
-
-                </div>
-            </div>
-        }
-
-        @if (HasCard && HasColumns)
-        {
-            <div class="hh-grid-display-mode-selector">
-                <nav class="nav nav-tabs hx-tab-panel justify-content-end mb-2 dataTabs">
-                    <a href="javascript:;" title=" " class="nav-link @(DisplayMode == GridDisplayMode.Cards ? "active" : "")" @onclick="() => OnDisplayModeChanged(GridDisplayMode.Cards)"><HxIcon Icon="@BootstrapIcon.Grid" /></a>
-                    <a href="javascript:;" title=" " class="nav-link @(DisplayMode == GridDisplayMode.Rows ? "active" : "")" @onclick="() => OnDisplayModeChanged(GridDisplayMode.Rows)"><HxIcon Icon="@BootstrapIcon.Table" /></a>
-                </nav>
-            </div>
-        }
-
-        <!-- HH Extended end -->
-        <HxProgressIndicator InProgress="@(InProgress ?? (_dataProviderInProgress /* indicates data loading */ && !shouldRenderLoadingDataWithPlaceholders /* but not when placeholders are used - in such case we are indicating data loading using the placeholders */))">
-
-            @if (DisplayMode == GridDisplayMode.Rows)
+            switch (ContentNavigationModeEffective)
             {
-                // fix: don't render HeaderTemplate when no Caption supplied
-                RenderFragment headerCaptionTemplate = string.IsNullOrWhiteSpace(Caption) ? null :
-                @<div class="card-title">
-                    @Caption
-                </div>;
+                case GridContentNavigationMode.Pagination:
+                case GridContentNavigationMode.LoadMore:
+                case GridContentNavigationMode.PaginationAndLoadMore:
+                    shouldRenderData = (_totalCount > 0);
+                    break;
 
-                <HxCard BodyCssClass="p-0" HeaderTemplate="headerCaptionTemplate">
-                    <BodyTemplate>
-                        <div class="@CssClassHelper.Combine(ResponsiveEffective ? "table-responsive" : null, TableContainerCssClassEffective)">
-                            <table class="@GetTableElementCssClass(_totalCount > 0)">
-                                <thead>
-                                    <tr class="@HeaderRowCssClassEffective">
-                                        @{
-                                            GridHeaderCellContext gridHeaderCellContext = CreateGridHeaderCellContext();
-                                        }
+                case GridContentNavigationMode.InfiniteScroll:
+                    shouldRenderData = true; // we cannot remove the Virtualize when there are no data, see #303 (https://github.com/havit/Havit.Blazor/issues/303)
+                    break;
 
-                                        @foreach (IHxGridColumn<TItem> column in columnsToRender)
-                                        {
-                                            var columnSorting = column.GetSorting();
-                                            bool isCurrentSorting = _currentSorting?.FirstOrDefault()?.Column == column;
-                                            var headerCellTemplate = column.GetHeaderCellTemplate(gridHeaderCellContext);
-                                            bool isSortingActive = (_totalCount > 0) && columnSorting.Any();
+                default:
+                    throw new InvalidOperationException(ContentNavigationModeEffective.ToString());
+            }
 
-                                            <th role="@(isSortingActive ? "button" : null)"
-                                                class="@CssClassHelper.Combine(headerCellTemplate.CssClass, isSortingActive ? (isCurrentSorting ? "hx-grid-sorted" : "hx-grid-sortable") : null)"
-                                                @onclick="@(isSortingActive ? async () => await HandleSortingClick(column) : null)"
-                                                @onclick:stopPropagation="isSortingActive">
-                                                <div class="hx-grid-header-cell-container">
-                                                    <div class="hx-grid-header-cell-template">@headerCellTemplate.Template</div>
-                                                    @if (isSortingActive)
-                                                    {
-                                                        if (GetSortIconDisplayDirection(isCurrentSorting, _currentSorting, columnSorting) == Collections.SortDirection.Ascending)
-                                                        {
-                                                            <HxIcon CssClass="hx-grid-sort-icon" Icon="@this.SortAscendingIconEffective" />
-                                                        }
-                                                        else
-                                                        {
-                                                            <HxIcon CssClass="hx-grid-sort-icon" Icon="@this.SortDescendingIconEffective" />
-                                                        }
-                                                    }
-                                                </div>
-                                            </th>
-                                        }
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @if (shouldRenderLoadingData)
-                                    {
-                                        if (shouldRenderLoadingDataWithPlaceholders)
-                                        {
-                                            int rowsToRender = PlaceholdersRowCountEffective;
-                                            int pageOffset = CurrentUserState.PageIndex * PageSizeEffective;
-                                            for (int i = 0; i < rowsToRender; i++)
-                                            {
-                                                GridPlaceholderCellContext placeholderContext = new GridPlaceholderCellContext { Index = pageOffset + i };
-                                                <tr>
-                                                    @foreach (IHxGridColumn<TItem> column in columnsToRender)
-                                                    {
-                                                        GridCellTemplate placeholderCellTemplate = column.GetItemPlaceholderCellTemplate(placeholderContext);
-                                                        <td class="@placeholderCellTemplate.CssClass">
-                                                            @placeholderCellTemplate.Template
-                                                        </td>
-                                                    }
-                                                </tr>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <tr>
-                                                <td colspan="@columnsToRender.Count">
-                                                    @if (shouldRenderLoadingDataWithLoadingTemplate)
-                                                    {
-                                                        @LoadingDataTemplate
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="text-center text-secondary my-5">
-                                                            <div class="fs-3"><HxIcon Icon="@BootstrapIcon.InboxFill" /></div>
-                                                            <div>@HxGridLocalizer["LoadingData"]</div>
-                                                        </div>
-                                                    }
-                                                </td>
-                                            </tr>
-                                        }
-                                    }
+            if ((_paginationDataItemsToRender?.Count == 0) && (CurrentUserState.PageIndex > 0))
+            {
+                _paginationDecreasePageIndexAfterRender = true;
+            }
+        }
 
-                                    @if (shouldRenderEmptyData)
-                                    {
-                                        <tr class="hx-grid-empty-data-row">
-                                            <td colspan="@columnsToRender.Count">
-                                                @if (EmptyDataTemplate != null)
-                                                {
-                                                    @EmptyDataTemplate
+        @if(shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData)
+        {
+            
+            @if (columnsToRender.Any() || DisplayMode == GridDisplayMode.Cards)
+		    {
+			    bool progressIndicatorInProgress =
+								    (InProgress ?? _dataProviderInProgressAfterDelay)
+								    && ((ContentNavigationModeEffective != GridContentNavigationMode.InfiniteScroll) || _virtualizeDataProviderInProgressFromExplicitRefreshRequest)
+								    && !shouldRenderLoadingDataWithPlaceholders;
+
+			    <div class="@CssClassHelper.Combine("hx-grid-container hh-grid",
+												    ResponsiveEffective ? "table-responsive" : null,
+												    progressIndicatorInProgress ? "hx-grid-progress-indicator" : null,
+												    TableContainerCssClassEffective)">
+
+
+                    <!-- HH Extended -->
+                    @if(DisplayMode != GridDisplayMode.Cards && DisplayMode != GridDisplayMode.ListItems)
+                    {
+                        <div class="hh-grid-toolbar">
+
+                            <div class="hh-grid-pager-sizer">
+                                @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
+                                {
+                                    <span>Show</span>
+                                    <HxSelect TItem="GridPageSizerDDLItem"
+                                                TValue="int"
+                                                Data="@pageSizeEntries"
+                                                style="transform:scale(80%);"
+                                                Value="@pageSizerValue"
+                                                ValueChanged="@OnPageSizerValueChanged" ValueExpression="@(() => pageSizerValue)"
+                                                TextSelector="@(p => p.Name)"
+                                                ValueSelector="@(p => int.Parse(p.Id))"
+                                                Nullable="false"></HxSelect>
+
+                                    <span>entries</span>
+                                }
+                            </div>
+
+                            <div class="hh-grid-toolbar-buttons">
+                                @ToolbarButtons
+                                @if (ToCsv.HasDelegate)
+                                {
+                                    <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToCsv.InvokeAsync()" title="Export to CSV">CSV</HxButton>
+                                }
+
+                                @if (ToExcel.HasDelegate)
+                                {
+                                    <HxButton Color="ThemeColor.Primary" Outline="true" Size="ButtonSize.Small" OnClick="async() => await ToExcel.InvokeAsync()" title="Export to Excel">Excel</HxButton>
+                                }
+
+                                @if (PageSize.GetValueOrDefault() != 0 || pageSizerChangedValue)
+                                {
+                                    <HxButton Color="ThemeColor.Primary" Outline="true" Icon="BootstrapIcon.ArrowRepeat" Size="ButtonSize.Small" OnClick="async() => await OnRefreshButtonClicked()" title="Reload data"></HxButton>
+                                }
+
+                            </div>
+                        </div>
+                    }
+
+                    @if (HasCard && HasColumns)
+                    {
+                        <div class="hh-grid-display-mode-selector">
+                            <nav class="nav nav-tabs hx-tab-panel justify-content-end mb-2 dataTabs">
+                                <a href="javascript:;" title=" " class="nav-link @(DisplayMode == GridDisplayMode.Cards ? "active" : "")" @onclick="() => OnDisplayModeChanged(GridDisplayMode.Cards)"><HxIcon Icon="@BootstrapIcon.Grid" /></a>
+                                <a href="javascript:;" title=" " class="nav-link @(DisplayMode == GridDisplayMode.Rows ? "active" : "")" @onclick="() => OnDisplayModeChanged(GridDisplayMode.Rows)"><HxIcon Icon="@BootstrapIcon.Table" /></a>
+                            </nav>
+                        </div>
+                    }
+
+                    <!-- HH Extended end -->
+
+
+                    @if (Card == null)
+                    {
+                        // fix: don't render HeaderTemplate when no Caption supplied
+                        RenderFragment headerCaptionTemplate = string.IsNullOrWhiteSpace(Caption) ? null :
+                        @<div class="card-title">
+                            @Caption
+                        </div>;
+
+                        <HxCard BodyCssClass="p-0" HeaderTemplate="headerCaptionTemplate">
+                            <BodyTemplate>
+                                <div class="@CssClassHelper.Combine(ResponsiveEffective ? "table-responsive" : null, TableContainerCssClassEffective)">
+                                    <table class="@GetTableElementCssClass(_totalCount > 0)">
+                                        <thead>
+                                            <tr class="@HeaderRowCssClassEffective">
+                                                @{
+                                                    GridHeaderCellContext gridHeaderCellContext = CreateGridHeaderCellContext();
                                                 }
-                                                else
-                                                {
-                                                    <HxGridEmptyDataTemplateDefaultContent />
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-
-                                    @if (shouldRenderData)
-                                    {
-                                        RenderFragment<TItem> rowTemplate = (TItem item) =>
-                                        @<text>
-                                            @if (SelectionEnabled || MultiSelectionEnabled)
-                                            {
-                                                <tr role="button"
-                                                    height="@((this.ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll) ? rowHeight : null)"
-                                                    class="@CssClassHelper.Combine(ItemRowCssClassEffective, ItemRowCssClassSelector?.Invoke(item), ((SelectionEnabled && (item != null) && item.Equals(SelectedDataItem)) ? "table-active" : null))"
-                                                    @onclick="async () => await HandleSelectOrMultiSelectDataItemClick(item)"
-                                                    @onclick:stopPropagation>
-                                                        @foreach (IHxGridColumn<TItem> column in columnsToRender)
-                                                        {
-                                                            GridCellTemplate cellTemplate = column.GetItemCellTemplate(item);
-                                                            <td class="@cellTemplate.CssClass">
-                                                                    @if (column.HasExpandCollapseElement())
-                                                                    {
-                                                                        GridCellTemplate expandCollapseElementTemplate = column.GetItemExpandCollapseElementTemplate(item);
-                                                                        @expandCollapseElementTemplate.Template
-                                                                    }
-
-                                                                    @cellTemplate.Template
-                                                            </td>
-                                                        }
-                                                </tr>
 
                                                 @foreach (IHxGridColumn<TItem> column in columnsToRender)
                                                 {
-                                                    GridCellTemplate collapseExpandContainerCellTemplate = column.GetItemExpandCollapseContainerTemplate(item);
-                                                    @if (column.HasExpandCollapseElement() && collapseExpandContainerCellTemplate != null)
+                                                    var columnSorting = column.GetSorting();
+                                                    bool isCurrentSorting = _currentSorting?.FirstOrDefault()?.Column == column;
+                                                    var headerCellTemplate = column.GetHeaderCellTemplate(gridHeaderCellContext);
+                                                    bool isSortingActive = (_totalCount > 0) && columnSorting.Any();
+
+                                                    <th role="@(isSortingActive ? "button" : null)"
+                                                        class="@CssClassHelper.Combine(headerCellTemplate.CssClass, isSortingActive ? (isCurrentSorting ? "hx-grid-sorted" : "hx-grid-sortable") : null)"
+                                                        @onclick="@(isSortingActive ? async () => await HandleSortingClick(column) : null)"
+                                                        @onclick:stopPropagation="isSortingActive">
+                                                        <div class="hx-grid-header-cell-container">
+                                                            <div class="hx-grid-header-cell-template">@headerCellTemplate.Template</div>
+                                                            @if (isSortingActive)
+                                                            {
+                                                                if (GetSortIconDisplayDirection(isCurrentSorting, _currentSorting, columnSorting) == Collections.SortDirection.Ascending)
+                                                                {
+                                                                    <HxIcon CssClass="hx-grid-sort-icon" Icon="@this.SortAscendingIconEffective" />
+                                                                }
+                                                                else
+                                                                {
+                                                                    <HxIcon CssClass="hx-grid-sort-icon" Icon="@this.SortDescendingIconEffective" />
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </th>
+                                                }
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (shouldRenderLoadingData)
+                                            {
+                                                if (shouldRenderLoadingDataWithPlaceholders)
+                                                {
+                                                    int rowsToRender = PlaceholdersRowCountEffective;
+                                                    int pageOffset = CurrentUserState.PageIndex * PageSizeEffective;
+                                                    for (int i = 0; i < rowsToRender; i++)
                                                     {
+                                                        GridPlaceholderCellContext placeholderContext = new GridPlaceholderCellContext { Index = pageOffset + i };
                                                         <tr>
-                                                            <td class="@collapseExpandContainerCellTemplate.CssClass" colspan="@columnsToRender.Count">
-                                                                    @collapseExpandContainerCellTemplate.Template
-                                                            </td>
+                                                            @foreach (IHxGridColumn<TItem> column in columnsToRender)
+                                                            {
+                                                                GridCellTemplate placeholderCellTemplate = column.GetItemPlaceholderCellTemplate(placeholderContext);
+                                                                <td class="@placeholderCellTemplate.CssClass">
+                                                                    @placeholderCellTemplate.Template
+                                                                </td>
+                                                            }
                                                         </tr>
                                                     }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                // !SelectionEnabled && !MultiSelectionEnabled - no table-active, no event handlers
-                                                <tr height="@((this.ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll) ? rowHeight : null)"
-                                                    class="@CssClassHelper.Combine(ItemRowCssClassEffective, ItemRowCssClassSelector?.Invoke(item))"
-                                                    @onclick:stopPropagation>
-
-                                                        @foreach (IHxGridColumn<TItem> column in columnsToRender)
-                                                        {
-                                                            // same as above this else section
-                                                            GridCellTemplate cellTemplate = column.GetItemCellTemplate(item);
-                                                        <td class="@cellTemplate.CssClass">
-                                                                @cellTemplate.Template
+                                                else
+                                                {
+                                                    <tr>
+                                                        <td colspan="@columnsToRender.Count">
+                                                            @if (shouldRenderLoadingDataWithLoadingTemplate)
+                                                            {
+                                                                @LoadingDataTemplate
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="text-center text-secondary my-5">
+                                                                    <div class="fs-3"><HxIcon Icon="@BootstrapIcon.InboxFill" /></div>
+                                                                    <div>@HxGridLocalizer["LoadingData"]</div>
+                                                                </div>
+                                                            }
                                                         </td>
+                                                    </tr>
+                                                }
+                                            }
+
+                                            @if (shouldRenderEmptyData)
+                                            {
+                                                <tr class="hx-grid-empty-data-row">
+                                                    <td colspan="@columnsToRender.Count">
+                                                        @if (EmptyDataTemplate != null)
+                                                        {
+                                                            @EmptyDataTemplate
                                                         }
+                                                        else
+                                                        {
+                                                            <HxGridEmptyDataTemplateDefaultContent />
+                                                        }
+                                                    </td>
                                                 </tr>
                                             }
-                                    </text>;
 
-                                        @if (ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll)
-                                        {
-                                            <Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize TItem="TItem" @ref="_infiniteScrollVirtualizeComponent" ItemsProvider="VirtualizeItemsProvider" ItemSize="@ItemRowHeightEffective" OverscanCount="@OverscanCountEffective">
-                                                <ItemContent>
-                                                    @rowTemplate(@context)
-                                                </ItemContent>
-                                                <Placeholder Context="placeholderContext">
-                                                    <tr height="@rowHeight">
+                                            @if (shouldRenderData)
+                                            {
+                                                RenderFragment<TItem> rowTemplate = (TItem item) =>
+                                                @<text>
+                                                    @if (SelectionEnabled || MultiSelectionEnabled)
+                                                    {
+                                                        <tr role="button"
+                                                            height="@((this.ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll) ? rowHeight : null)"
+                                                            class="@CssClassHelper.Combine(ItemRowCssClassEffective, ItemRowCssClassSelector?.Invoke(item), ((SelectionEnabled && (item != null) && item.Equals(SelectedDataItem)) ? "table-active" : null))"
+                                                            @onclick="async () => await HandleSelectOrMultiSelectDataItemClick(item)"
+                                                            @onclick:stopPropagation>
+                                                                @foreach (IHxGridColumn<TItem> column in columnsToRender)
+                                                                {
+                                                                    GridCellTemplate cellTemplate = column.GetItemCellTemplate(item);
+                                                                    <td class="@cellTemplate.CssClass">
+                                                                            @if (column.HasExpandCollapseElement())
+                                                                            {
+                                                                                GridCellTemplate expandCollapseElementTemplate = column.GetItemExpandCollapseElementTemplate(item);
+                                                                                @expandCollapseElementTemplate.Template
+                                                                            }
+
+                                                                            @cellTemplate.Template
+                                                                    </td>
+                                                                }
+                                                        </tr>
+
                                                         @foreach (IHxGridColumn<TItem> column in columnsToRender)
                                                         {
-                                                            GridCellTemplate placeholderCellTemplate = column.GetItemPlaceholderCellTemplate(new GridPlaceholderCellContext { Index = placeholderContext.Index });
-                                                            <td class="@placeholderCellTemplate.CssClass">
-                                                                @placeholderCellTemplate.Template
-                                                            </td>
+                                                            GridCellTemplate collapseExpandContainerCellTemplate = column.GetItemExpandCollapseContainerTemplate(item);
+                                                            @if (column.HasExpandCollapseElement() && collapseExpandContainerCellTemplate != null)
+                                                            {
+                                                                <tr>
+                                                                    <td class="@collapseExpandContainerCellTemplate.CssClass" colspan="@columnsToRender.Count">
+                                                                            @collapseExpandContainerCellTemplate.Template
+                                                                    </td>
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        // !SelectionEnabled && !MultiSelectionEnabled - no table-active, no event handlers
+                                                        <tr height="@((this.ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll) ? rowHeight : null)"
+                                                            class="@CssClassHelper.Combine(ItemRowCssClassEffective, ItemRowCssClassSelector?.Invoke(item))"
+                                                            @onclick:stopPropagation>
+
+                                                                @foreach (IHxGridColumn<TItem> column in columnsToRender)
+                                                                {
+                                                                    // same as above this else section
+                                                                    GridCellTemplate cellTemplate = column.GetItemCellTemplate(item);
+                                                                <td class="@cellTemplate.CssClass">
+                                                                        @cellTemplate.Template
+                                                                </td>
+                                                                }
+                                                        </tr>
+                                                    }
+                                            </text>;
+
+                                                @if (ContentNavigationModeEffective == GridContentNavigationMode.InfiniteScroll)
+                                                {
+                                                    <Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize TItem="TItem" @ref="_infiniteScrollVirtualizeComponent" ItemsProvider="VirtualizeItemsProvider" ItemSize="@ItemRowHeightEffective" OverscanCount="@OverscanCountEffective">
+                                                        <ItemContent>
+                                                            @rowTemplate(@context)
+                                                        </ItemContent>
+                                                        <Placeholder Context="placeholderContext">
+                                                            <tr height="@rowHeight">
+                                                                @foreach (IHxGridColumn<TItem> column in columnsToRender)
+                                                                {
+                                                                    GridCellTemplate placeholderCellTemplate = column.GetItemPlaceholderCellTemplate(new GridPlaceholderCellContext { Index = placeholderContext.Index });
+                                                                    <td class="@placeholderCellTemplate.CssClass">
+                                                                        @placeholderCellTemplate.Template
+                                                                    </td>
+                                                                }
+                                                            </tr>
+                                                        </Placeholder>
+                                                    </Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize>
+                                                }
+
+                                                @if ((ContentNavigationModeEffective == GridContentNavigationMode.Pagination) || (ContentNavigationModeEffective == GridContentNavigationMode.LoadMore) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore))
+                                                {
+                                                    foreach (TItem item in _paginationDataItemsToRender)
+                                                    {
+                                                        @rowTemplate(item)
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                        @{
+                                            GridFooterCellContext gridFooterCellContext = CreateGridFooterCellContext();
+                                            GridCellTemplate[] footerTemplates = columnsToRender.Select(column => column.GetFooterCellTemplate(gridFooterCellContext)).ToArray();
+                                            if (footerTemplates.Any(cellTemplate => cellTemplate.Template != null) // there must be a tempate
+                                            && shouldRenderFooter)
+                                            {
+                                                <tfoot>
+                                                    <tr class="@FooterRowCssClassEffective">
+                                                        @foreach (GridCellTemplate footerCellTemplate in footerTemplates)
+                                                        {
+                                                            <td class="@footerCellTemplate.CssClass">@footerCellTemplate.Template</td>
                                                         }
                                                     </tr>
-                                                </Placeholder>
-                                            </Microsoft.AspNetCore.Components.Web.Virtualization.Virtualize>
-                                        }
-
-                                        @if ((ContentNavigationModeEffective == GridContentNavigationMode.Pagination) || (ContentNavigationModeEffective == GridContentNavigationMode.LoadMore) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore))
-                                        {
-                                            foreach (TItem item in _paginationDataItemsToRender)
-                                            {
-                                                @rowTemplate(item)
+                                                </tfoot>
                                             }
                                         }
-                                    }
-                                </tbody>
-                                @{
-                                    GridFooterCellContext gridFooterCellContext = CreateGridFooterCellContext();
-                                    GridCellTemplate[] footerTemplates = columnsToRender.Select(column => column.GetFooterCellTemplate(gridFooterCellContext)).ToArray();
-                                    if (footerTemplates.Any(cellTemplate => cellTemplate.Template != null) // there must be a tempate
-                                    && shouldRenderFooter)
+                                    </table>
+                                </div>
+
+                            </BodyTemplate>
+                        </HxCard>
+
+                    }
+                    else
+                    {
+                        @if (shouldRenderLoadingData)
+                        {
+                            if (shouldRenderLoadingDataWithPlaceholders)
+                            {
+                                int rowsToRender = PlaceholdersRowCountEffective;
+                                for (int rowIndex = 0; rowIndex < rowsToRender; rowIndex++)
+                                {
+                                    if(CardPlaceholderTemplate == null)
                                     {
-                                        <tfoot>
-                                            <tr class="@FooterRowCssClassEffective">
-                                                @foreach (GridCellTemplate footerCellTemplate in footerTemplates)
-                                                {
-                                                    <td class="@footerCellTemplate.CssClass">@footerCellTemplate.Template</td>
-                                                }
-                                            </tr>
-                                        </tfoot>
+                                        <!-- CARD VIEW SKELETON -->
+                                        <DefaultGridCardSkeletonTemplate />
+                                    }
+                                    else
+                                    {
+                                        @CardPlaceholderTemplate
                                     }
                                 }
-                            </table>
-                        </div>
+                            }
+                            else
+                            {
+                                if (shouldRenderLoadingDataWithLoadingTemplate)
+                                {
+                                    @LoadingDataTemplate
+                                }
+                                else
+                                {
+                                    <div class="text-center text-secondary my-5">
+                                        <div class="fs-3"><HxIcon Icon="@BootstrapIcon.InboxFill" /></div>
+                                        <div>@HxGridLocalizer["LoadingData"]</div>
+                                    </div>
+                                }
+                            }
+                        }
 
-                    </BodyTemplate>
-                </HxCard>
-            }
-            else
+                        @if (shouldRenderEmptyData)
+                        {
+                            if (EmptyDataTemplate != null)
+                            {
+                                @EmptyDataTemplate
+                            }
+                            else
+                            {
+                                <HxGridEmptyDataTemplateDefaultContent />
+                            }
+                        }
+
+                        @if (shouldRenderData)
+                        {
+                            if (_paginationDataItemsToRender != null)
+                            {
+                                foreach (TItem item in _paginationDataItemsToRender)
+                                {
+                                    <div @onclick="async () => await HandleSelectOrMultiSelectDataItemClick(item)"
+                                         @onclick:stopPropagation>
+                                        @Card(item)
+                                    </div>
+                                }
+                            }
+                        }
+                    }
+			    </div>
+
+
+			    @if (((ContentNavigationModeEffective == GridContentNavigationMode.Pagination) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (_totalCount != null))
+			    {
+				    int totalPages = (_totalCount.Value + PageSizeEffective - 1) / PageSizeEffective;
+				    int currentPageIndex = CurrentUserState.PageIndex + ((CurrentUserState.LoadMoreAdditionalItemsCount + PageSizeEffective - 1) / PageSizeEffective);
+				    if (PaginationTemplate != null)
+				    {
+					    var paginationContext = new GridPaginationTemplateContext(HandlePagerCurrentPageIndexChanged)
+							    {
+								    CurrentUserState = CurrentUserState with { },
+								    PageSize = PageSizeEffective,
+								    TotalCount = _totalCount.Value,
+								    PagerSettings = PagerSettingsEffective,
+							    };
+					    @PaginationTemplate(paginationContext)
+				    }
+				    else if (totalPages > 1) // if there is only one page, we do not need to render the pager (default behavior, the PaginationTemplate can override this behavior)
+				    {
+					    <HxPager TotalPages="@totalPages"
+								    CurrentPageIndex="@currentPageIndex"
+								    CurrentPageIndexChanged="@HandlePagerCurrentPageIndexChanged"
+								    Settings="@PagerSettingsEffective" />
+				    }
+			    }
+
+			    @if (((ContentNavigationModeEffective == GridContentNavigationMode.LoadMore) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (_totalCount != null))
+			    {
+				    if ((((CurrentUserState.PageIndex + 1) * PageSizeEffective) + CurrentUserState.LoadMoreAdditionalItemsCount) < _totalCount.Value)
+				    {
+					    <div class="hx-grid-load-more-container">
+						    @if (LoadMoreTemplate != null)
+						    {
+							    var loadMoreContext = GridLoadMoreTemplateContext.CreateFor(this);
+							    <text>
+								    @LoadMoreTemplate(loadMoreContext)
+							    </text>
+						    }
+						    else
+						    {
+							    string buttonText = LoadMoreButtonText ?? HxGridLocalizer["LoadMoreData"];
+							    <HxButton Text="@buttonText" Settings="LoadMoreButtonSettingsEffective" OnClick="HandleLoadMoreClick" />
+						    }
+					    </div>
+				    }
+			    }
+		    }
+
+
+            <!-- LIST ITEMS -->
+            @if(DisplayMode == GridDisplayMode.ListItems)
             {
-                @if (shouldRenderLoadingData)
+                if (shouldRenderLoadingData)
                 {
                     if (shouldRenderLoadingDataWithPlaceholders)
                     {
@@ -366,7 +492,7 @@
                     }
                 }
 
-                @if (shouldRenderEmptyData)
+                if (shouldRenderEmptyData)
                 {
                     if (EmptyDataTemplate != null)
                     {
@@ -378,121 +504,20 @@
                     }
                 }
 
-                @if (shouldRenderData)
+                if (shouldRenderData)
                 {
                     if (_paginationDataItemsToRender != null)
                     {
                         foreach (TItem item in _paginationDataItemsToRender)
                         {
-                            <div @onclick="async () => await HandleSelectOrMultiSelectDataItemClick(item)"
-                                 @onclick:stopPropagation>
-                                @Card(item)
-                            </div>
+                            @ListItem(item)
                         }
                     }
                 }
+
             }
 
-            @if (((ContentNavigationModeEffective == GridContentNavigationMode.Pagination) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (_totalCount != null))
-            {
-                int totalPages = (_totalCount.Value + PageSizeEffective - 1) / PageSizeEffective;
-                if (totalPages > 1)
-                {
-                    int currentPageIndex = CurrentUserState.PageIndex + ((CurrentUserState.LoadMoreAdditionalItemsCount + PageSizeEffective - 1) / PageSizeEffective);
-                    <HxPager TotalPages="@totalPages"
-                         CurrentPageIndex="@currentPageIndex"
-                             TotalItems="@_totalCount.Value"
-                             PageSize="@PageSizeEffective"
-                         CurrentPageIndexChanged="@HandlePagerCurrentPageIndexChanged"
-                         Settings="@PagerSettingsEffective" />
-                }
-            }
-
-            @if (((ContentNavigationModeEffective == GridContentNavigationMode.LoadMore) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (_totalCount != null))
-            {
-                if ((((CurrentUserState.PageIndex + 1) * PageSizeEffective) + CurrentUserState.LoadMoreAdditionalItemsCount) < _totalCount.Value)
-                {
-                    <div class="hx-grid-load-more-container">
-                        @if (LoadMoreTemplate != null)
-                        {
-                            var loadMoreContext = GridLoadMoreTemplateContext.CreateFor(this);
-                            <text>
-                                @LoadMoreTemplate(loadMoreContext)
-                            </text>
-                        }
-                        else
-                        {
-                            string buttonText = this.LoadMoreButtonText ?? HxGridLocalizer["LoadMoreData"];
-                            <HxButton Text="@buttonText" Settings="this.LoadMoreButtonSettingsEffective" OnClick="HandleLoadMoreClick" />
-                        }
-                    </div>
-                }
-            }
-
-        </HxProgressIndicator>
-
-        <!-- HH Extended -->
-    </div>
-    <!-- HH Extended end -->
-}
-
-@if (DisplayMode == GridDisplayMode.ListItems && (shouldRenderLoadingData || shouldRenderEmptyData || shouldRenderData))
-{
-    if (shouldRenderLoadingData)
-    {
-        if (shouldRenderLoadingDataWithPlaceholders)
-        {
-            int rowsToRender = PlaceholdersRowCountEffective;
-            for (int rowIndex = 0; rowIndex < rowsToRender; rowIndex++)
-            {
-                if(CardPlaceholderTemplate == null)
-                {
-                    <!-- CARD VIEW SKELETON -->
-                    <DefaultGridCardSkeletonTemplate />
-                }
-                else
-                {
-                    @CardPlaceholderTemplate
-                }
-            }
         }
-        else
-        {
-            if (shouldRenderLoadingDataWithLoadingTemplate)
-            {
-                @LoadingDataTemplate
-            }
-            else
-            {
-                <div class="text-center text-secondary my-5">
-                    <div class="fs-3"><HxIcon Icon="@BootstrapIcon.InboxFill" /></div>
-                    <div>@HxGridLocalizer["LoadingData"]</div>
-                </div>
-            }
-        }
-    }
 
-    if (shouldRenderEmptyData)
-    {
-        if (EmptyDataTemplate != null)
-        {
-            @EmptyDataTemplate
-        }
-        else
-        {
-            <HxGridEmptyDataTemplateDefaultContent />
-        }
-    }
-
-    if (shouldRenderData)
-    {
-        if (_paginationDataItemsToRender != null)
-        {
-            foreach (TItem item in _paginationDataItemsToRender)
-            {
-                @ListItem(item)
-            }
-        }
-    }
-
-}
+	</HxDeferInternal>
+</CascadingValue>

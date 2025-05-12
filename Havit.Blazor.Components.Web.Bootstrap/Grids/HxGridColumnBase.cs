@@ -27,7 +27,7 @@ public abstract class HxGridColumnBase<TItem> : ComponentBase, IHxGridColumn<TIt
 
 	/// <inheritdoc />
 	int IHxGridColumn<TItem>.GetOrder() => GetColumnOrder();
-	
+
 	/// <inheritdoc />
 	bool IHxGridColumn<TItem>.HasExpandCollapseElement() => IsColumnHasExpandCollapseElement();
 
@@ -39,7 +39,7 @@ public abstract class HxGridColumnBase<TItem> : ComponentBase, IHxGridColumn<TIt
 
 	/// <inheritdoc />
 	GridCellTemplate IHxGridColumn<TItem>.GetItemPlaceholderCellTemplate(GridPlaceholderCellContext context) => GetItemPlaceholderCellTemplate(context);
-	
+
 	/// <inheritdoc />
 	GridCellTemplate IHxGridColumn<TItem>.GetItemExpandCollapseElementTemplate(TItem item) => this.GetItemExpandCollapseElementTemplate(item);
 
@@ -50,8 +50,7 @@ public abstract class HxGridColumnBase<TItem> : ComponentBase, IHxGridColumn<TIt
 	GridCellTemplate IHxGridColumn<TItem>.GetFooterCellTemplate(GridFooterCellContext context) => GetFooterCellTemplate(context);
 
 	/// <inheritdoc />
-	SortingItem<TItem>[] IHxGridColumn<TItem>.GetSorting() => _sorting ??= GetSorting().ToArray();
-	private SortingItem<TItem>[] _sorting;
+	SortingItem<TItem>[] IHxGridColumn<TItem>.GetSorting() => GetSorting().ToArray();
 
 	/// <inheritdoc />
 	int? IHxGridColumn<TItem>.GetDefaultSortingOrder() => GetDefaultSortingOrder();

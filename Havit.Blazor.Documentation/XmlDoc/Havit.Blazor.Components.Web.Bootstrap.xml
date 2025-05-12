@@ -19,11 +19,13 @@
             <summary>
             IDs of the expanded items (if <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.StayOpen"/> is <code>true</code>, several items can be expanded).
             Do not use a constant value as it resets the accordion on every roundtrip. Use <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.InitialExpandedItemIds"/> to set the initial state.
+            When <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.StayOpen"/> is <c>true</c>, this parameter must be used to manage expanded items, and the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.ExpandedItemIdsChanged"/> event callback will be invoked for changes.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.ExpandedItemId">
             <summary>
-            ID of the single expanded item (if <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.StayOpen"/> is <code>true</code>, use <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.ExpandedItemIds" />, several items can be expanded).
+            ID of the single expanded item. If <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.StayOpen"/> is <c>true</c>, this parameter is ignored, and you must use <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.ExpandedItemIds"/> instead.
+            When <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.StayOpen"/> is <c>true</c>, the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.ExpandedItemIdChanged"/> event callback will not be invoked.
             Do not use a constant value as it reverts the accordion to that item on every roundtrip. Use <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.InitialExpandedItemId"/> to set the initial state.
             </summary>
         </member>
@@ -31,6 +33,7 @@
             <summary>
             Set to <c>true</c> to make accordion items stay open when another item is opened.
             The default is <c>false</c>, opening another item collapses the current item.
+            When <c>true</c>, <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.ExpandedItemIds"/> must be used to manage expanded items.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAccordion.InitialExpandedItemId">
@@ -132,6 +135,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAlert.CssClass">
             <summary>
             Any additional CSS class to apply.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAlert.AdditionalAttributes">
+            <summary>
+            Additional attributes to be splatted onto an underlying HTML element.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.BadgeSettings">
@@ -414,6 +422,11 @@
             Custom CSS class to render with the tooltip.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxButton.TooltipContainer">
+            <summary>
+            Appends the tooltip to a specific element. Default is <c>body</c>.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxButton.TooltipWrapperCssClass">
             <summary>
             Custom CSS class to render with the tooltip <c>span</c> wrapper of the <c>&lt;button /&gt;</c>.<br />
@@ -475,11 +488,6 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxButton.AdditionalAttributes">
             <summary>
             Additional attributes to be splatted onto an underlying <c>&lt;button&gt;</c> element.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxButton.StringLocalizerFactory">
-            <summary>
-            Localization service.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxButton.CoreCssClass">
@@ -890,6 +898,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxCard.FooterCssClass">
             <summary>
             Additional CSS class for the footer.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxCard.ImageCssClass">
+            <summary>
+            Additional CSS class for the image.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxCard.AdditionalAttributes">
@@ -1559,6 +1572,11 @@
             Items of the context menu. Use <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxContextMenuItem"/> components.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxContextMenu.PopperStrategy">
+            <summary>
+            Popper positioning strategy. Default is <see cref="F:Havit.Blazor.Components.Web.Bootstrap.PopperStrategy.Absolute"/>.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxContextMenuItem.Text">
             <summary>
             Item text.
@@ -1615,6 +1633,12 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxContextMenuItem.Enabled">
             <inheritdoc cref="P:Havit.Blazor.Components.Web.Infrastructure.ICascadeEnabledComponent.Enabled" />
         </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.PopperStrategy">
+            <summary>
+            Popper positioning strategy.
+            <a href="https://popper.js.org/docs/v2/constructors/#strategy">Related Popper.js documentation</a>.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.DropdownAutoClose">
             <summary>
             Auto-close behavior of the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxDropdown"/> (<see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton"/> respectively).
@@ -1655,6 +1679,11 @@
         <member name="F:Havit.Blazor.Components.Web.Bootstrap.DropdownDirection.End">
             <summary>
             Right (in LTR).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.DropdownHidingEventArgs.Cancel">
+            <summary>
+            Set <c>true</c> to prevent dropdown hiding.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.DropdownMenuAlignment">
@@ -1748,6 +1777,16 @@
             Any additional CSS class to apply.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownHeader.Icon">
+            <summary>
+            Item icon (use <see cref="T:Havit.Blazor.Components.Web.Bootstrap.BootstrapIcon" />).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownHeader.IconCssClass">
+            <summary>
+            Additional CSS class(es) for the context menu item icon.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItem">
             <summary>
             Generic item for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxDropdownMenu"/>.
@@ -1761,6 +1800,16 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItem.ContainerCssClass">
             <summary>
             Additional CSS class for the underlying <c>li</c> container (wrapping the main <c>span</c> inside).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItem.Icon">
+            <summary>
+            Item icon (use <see cref="T:Havit.Blazor.Components.Web.Bootstrap.BootstrapIcon" />).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItem.IconCssClass">
+            <summary>
+            Additional CSS class(es) for the context menu item icon.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItem.OnClick">
@@ -1823,6 +1872,16 @@
             Additional CSS class for the underlying <c>li</c> container (wrapping the main <c>a</c> inside).
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItemNavLink.Icon">
+            <summary>
+            Item icon (use <see cref="T:Havit.Blazor.Components.Web.Bootstrap.BootstrapIcon" />).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItemNavLink.IconCssClass">
+            <summary>
+            Additional CSS class(es) for the context menu item icon.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItemNavLink.Enabled">
             <inheritdoc cref="P:Havit.Blazor.Components.Web.Infrastructure.ICascadeEnabledComponent.Enabled" />
         </member>
@@ -1849,6 +1908,16 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItemText.ContainerCssClass">
             <summary>
             Additional CSS class for the underlying <c>li</c> container (wrapping the main <c>span</c> inside).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItemText.Icon">
+            <summary>
+            Item icon (use <see cref="T:Havit.Blazor.Components.Web.Bootstrap.BootstrapIcon" />).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownItemText.IconCssClass">
+            <summary>
+            Additional CSS class(es) for the context menu item icon.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxDropdownMenu">
@@ -1903,6 +1972,16 @@
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.OnShown"/> event. Allows interception of the event in derived components.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.OnHiding">
+            <summary>
+            Fired immediately when the 'hide' instance method is called.
+            To cancel hiding, set <see cref="P:Havit.Blazor.Components.Web.Bootstrap.DropdownHidingEventArgs.Cancel"/> to <c>true</c>.
+            </summary>
+            <remarks>
+            There is intentionally no <c>virtual InvokeOnHidingAsync()</c> method to override to avoid confusion.
+            The <code>hide.bs.dropdown</code> event is only subscribed to when the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.OnHiding"/> callback is set.
+            </remarks>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.OnHidden">
             <summary>
             Fired when the dropdown has finished being hidden from the user and CSS transitions have completed.
@@ -1924,6 +2003,12 @@
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.OnAfterRenderAsync(System.Boolean)">
             <inheritdoc cref="M:Microsoft.AspNetCore.Components.ComponentBase.OnAfterRenderAsync(System.Boolean)" />
         </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.GetDropdownJsOptions(System.String)">
+            <summary>
+            Override this method to provide additional options for the dropdown (allows specific customizations such as dropdown with backdrop).
+            </summary>
+            <param name="referenceOption"><c>reference</c> option to be used</param>
+        </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.ShowAsync">
             <summary>
             Shows the dropdown.
@@ -1941,6 +2026,11 @@
             <remarks>
             the shown-event gets raised as the "show" CSS class is added to the HTML element and the transition is completed
             </remarks>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.HandleJsHide">
+            <summary>
+            Receives notification from JS for <c>hide.bs.dropdown</c> event.
+            </summary>
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleButton.HandleJsHidden">
             <summary>
@@ -2003,6 +2093,16 @@
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.OnShown"/> event. Allows interception of the event in derived components.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.OnHiding">
+            <summary>
+            Fired immediately when the 'hide' instance method is called.
+            To cancel hiding, set <see cref="P:Havit.Blazor.Components.Web.Bootstrap.DropdownHidingEventArgs.Cancel"/> to <c>true</c>.
+            </summary>
+            <remarks>
+            There is intentionally no <c>virtual InvokeOnHidingAsync()</c> method to override to avoid confusion.
+            The <code>hide.bs.dropdown</code> event is only subscribed to when the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.OnHiding"/> callback is set.
+            </remarks>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.OnHidden">
             <summary>
             Fired when the dropdown has finished being hidden from the user and CSS transitions have completed.
@@ -2036,6 +2136,12 @@
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.OnAfterRenderAsync(System.Boolean)">
             <inheritdoc cref="M:Microsoft.AspNetCore.Components.ComponentBase.OnAfterRenderAsync(System.Boolean)" />
         </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.GetDropdownJsOptions(System.String)">
+            <summary>
+            Override this method to provide additional options for the dropdown (allows specific customizations such as dropdown with backdrop).
+            </summary>
+            <param name="referenceOption"><c>reference</c> option to be used</param>
+        </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.ShowAsync">
             <summary>
             Shows the dropdown.
@@ -2054,6 +2160,11 @@
             the shown-event gets raised as the "show" CSS class is added to the HTML element and the transition is completed
             </remarks>
         </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.HandleJsHide">
+            <summary>
+            Receives notification from JS for <c>hide.bs.dropdown</c> event.
+            </summary>
+        </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxDropdownToggleElement.HandleJsHidden">
             <summary>
             Receives notification from JavaScript when item is hidden.
@@ -2070,6 +2181,687 @@
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.IHxDropdownToggle">
             <summary>
             Interface to help keep the dropdown-toggle implementations aligned.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInputInternal.DropdownOffset">
+            <summary>
+            Offset between the dropdown and the input.
+            <see href="https://popper.js.org/docs/v2/modifiers/offset/#options"/>
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInputInternal.AdditionalAttributes">
+            <summary>
+            Additional attributes to be splatted onto an underlying HTML element.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.ValueSelector">
+            <summary>
+            Selects value from item.
+            Not required when TValue is same as TItemTime.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.TextSelector">
+            <summary>
+            Selects text to display from item.
+            When not set ToString() is used.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.ItemTemplate">
+            <summary>
+            Template to display item.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.EmptyTemplate">
+            <summary>
+            Template to display when items collection is empty
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.ItemFromValueResolver">
+            <summary>
+            Gets item from <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.Value"/>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.MinimumLengthEffective">
+            <summary>
+            Minimal number of characters to start suggesting. Default is <c>2</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.Placeholder">
+            <summary>
+            Short hint displayed in the input field before the user enters a value.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.DelayEffective">
+            <summary>
+            Debounce delay in milliseconds. Default is <c>300 ms</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.DropdownOffset">
+            <summary>
+            Offset between the dropdown and the input.
+            <see href="https://popper.js.org/docs/v2/modifiers/offset/#options"/>
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupCssClass">
+            <summary>
+            Custom CSS class to render with input-group span.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupStartText">
+            <summary>
+            Input-group at the beginning of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupStartTemplate">
+            <summary>
+            Input-group at the beginning of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupEndText">
+            <summary>
+            Input-group at the end of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupEndTemplate">
+            <summary>
+            Input-group at the end of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.AdditionalAttributes">
+            <summary>
+            Additional attributes to be splatted onto an underlying HTML element.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.ChipRemoveActionBuilder">
+            <summary>
+            ChipRemoveActionBuilder is responsible for generating an Action that resets
+            a property referenced by a lambda expression to a specified value (typically default).
+            
+            Unlike most expression-based tools, this builder defers all expression analysis to the point
+            of action invocation. This enables fast action construction (suitable for per-render use)
+            and evaluates constraints and assumptions only when the action is actually executed.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueComponentExtensions">
+            <summary>
+            Extension methods for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" />.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueComponentExtensions.ShouldRenderInputGroups(Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent)">
+            <summary>
+            Returns <c>true</c> if <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" /> should render input groups (at least one input group).
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueRenderer">
+            <summary>
+            Renders <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" />.
+            The purpose of this class is to allow the use of a custom renderer.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueRenderer.Current">
+            <summary>
+            Current renderer.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueRenderer.Render(System.Int32,Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder,Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent)">
+            <summary>
+            Renders <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" />.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.FormValueComponent">
+            <summary>
+            Values for the component renderer.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderValueWithFloatingLabel(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <summary>
+            Renders the value/input and label inside floating label wrapper.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderLabel(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <summary>
+            Renders the label when properties are set.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderInputGroups(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder,Microsoft.AspNetCore.Components.RenderFragment)">
+            <summary>
+            Renders the input groups (with content).
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderValue(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <summary>
+            Renders the value/input.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderHint(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <summary>
+            Renders the hint when the HintTemplate property is set.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderValidationMessage(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <summary>
+            Renders the validation message.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueRenderer">
+            <summary>
+            Default <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" /> renderer.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueRenderer.Render(System.Int32,Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder,Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent)">
+            <summary>
+            Adds <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer"/> to a builder.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupCssClass">
+            <summary>
+            Custom CSS class to render with input-group span.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupStartText">
+            <summary>
+            Input-group at the beginning of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupStartTemplate">
+            <summary>
+            Input-group at the beginning of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupEndText">
+            <summary>
+            Input-group at the end of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupEndTemplate">
+            <summary>
+            Input-group at the end of the input.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.DisposeAsync">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateRangeInternal.DisposeAsync">
+            <inheritdoc />
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectInternal`2.AdditionalAttributes">
+            <summary>
+            Additional attributes to be splatted onto an underlying HTML element.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectInternal`2.OnAfterRenderAsync(System.Boolean)">
+            <inheritdoc cref="M:Microsoft.AspNetCore.Components.ComponentBase.OnAfterRenderAsync(System.Boolean)" />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectInternal`2.HandleJsHidden">
+            <summary>
+            Receives notification from JavaScript when item is hidden.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent">
+            <summary>
+            Represents properties (and methods) of a component that renders a form value (i.e., form inputs).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.CssClass">
+            <summary>
+            Custom CSS class to render with the wrapping div.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.Label">
+            <summary>
+            Label to render before the input (or after the input for Checkbox).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.LabelTemplate">
+            <summary>
+            Label to render before the input (or after the input for Checkbox).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.LabelFor">
+            <summary>
+            Element id to render as the label for attribute.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.LabelCssClass">
+            <summary>
+            Custom CSS class to render with the label.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.RenderValue(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <summary>
+            Renders the content of the component (value, input).
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.RenderValidationMessage(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <summary>
+            Renders the validation message.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.Hint">
+            <summary>
+            Hint to render after the input as form-text.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.HintTemplate">
+            <summary>
+            Hint to render after the input as form-text.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.CoreCssClass">
+            <summary>
+            CSS class to be rendered with the wrapping div.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.CoreLabelCssClass">
+            <summary>
+            CSS class to be rendered with the label.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.CoreHintCssClass">
+            <summary>
+            CSS class to be rendered with the hint.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.RenderOrder">
+            <summary>
+            Render order LabelValue or ValueLabel.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups">
+            <summary>
+            Extends <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent"/> with properties for rendering input groups.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupCssClass">
+            <summary>
+            Custom CSS class to be rendered with the input-group span.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupStartText">
+            <summary>
+            Input-group-text at the beginning of the input.
+            In comparison to <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupStartTemplate"/>, this property is rendered as <c>.input-group-text</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupStartTemplate">
+            <summary>
+            Input-group at the beginning of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupEndText">
+            <summary>
+            Input-group-text at the end of the input.
+            In comparison to <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupEndTemplate"/>, this property is rendered as <c>.input-group-text</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupEndTemplate">
+            <summary>
+            Input-group at the end of the input.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithLabelType">
+            <summary>
+            Represents an input with a label type.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithLabelType.LabelTypeEffective">
+            <summary>
+            Gets the effective label type.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithPlaceholder">
+            <summary>
+            Input with placeholder support.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithPlaceholder.Placeholder">
+            <summary>
+            Placeholder for the input.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithSize">
+            <summary>
+            Input with sizing support.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithSize.InputSizeEffective">
+            <summary>
+            The effective size of the input after all the defaults and cascading settings are applied.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithSize.GetInputSizeCssClass">
+            <summary>
+            Gets the CSS class for the input size.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithSize.GetInputGroupSizeCssClass">
+            <summary>
+            Gets the CSS class for the input group size.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.LabelValueRenderOrder">
+            <summary>
+            Specifies the render order of label and value/input.
+            </summary>
+        </member>
+        <member name="F:Havit.Blazor.Components.Web.Bootstrap.Internal.LabelValueRenderOrder.LabelValue">
+            <summary>
+            Renders the label first, followed by the value/input (used by the majority of components).
+            </summary>
+        </member>
+        <member name="F:Havit.Blazor.Components.Web.Bootstrap.Internal.LabelValueRenderOrder.ValueLabel">
+            <summary>
+            Renders the value/input first, followed by the label (used by the former HxInputCheckbox).
+            Obsolete, should not be needed anymore.
+            </summary>
+        </member>
+        <member name="F:Havit.Blazor.Components.Web.Bootstrap.Internal.LabelValueRenderOrder.ValueOnly">
+            <summary>
+            Renders only the value/input. The label is not rendered (used by HxAutosuggest{TItem, TValue} with floating label which renders the label internally).
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetId">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetColumnOrder">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetHeaderCellTemplate(Havit.Blazor.Components.Web.Bootstrap.GridHeaderCellContext)">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetItemCellTemplate(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetItemPlaceholderCellTemplate(Havit.Blazor.Components.Web.Bootstrap.GridPlaceholderCellContext)">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetFooterCellTemplate(Havit.Blazor.Components.Web.Bootstrap.GridFooterCellContext)">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetSorting">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetDefaultSortingOrder">
+            <inheritdoc />
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal">
+            <summary>
+            Variation of <see cref="T:Microsoft.AspNetCore.Components.Routing.NavLink"/> that adds <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal.OnClick"/> and related functionality.
+            </summary>
+            <remarks>
+            See <see href="https://github.com/dotnet/aspnetcore/issues/18460#issuecomment-577175682">https://github.com/dotnet/aspnetcore/issues/18460#issuecomment-577175682</see> for more information.
+            </remarks>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal.OnClick">
+            <summary>
+            Raised when the item is clicked.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal.OnClickStopPropagation">
+            <summary>
+            Stops event propagation when the item is clicked. Default is <c>null</c>, which means <c>true</c> when <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal.OnClick"/> is set.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal.OnClickPreventDefault">
+            <summary>
+            Prevents the default action for the onclick event. Default is <c>null</c>, which means <c>true</c> when <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal.OnClick"/> is set.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxSidebarItemNavLinkContentInternal">
+            <summary>
+            Inner content of the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxSidebarItem"/>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInputInternal.Offset">
+            <summary>
+            Offset between dropdown input and dropdown menu
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal">
+            <summary>
+            Internal implementation for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxInputTags"/>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.AllowCustomTags">
+            <summary>
+            Indicates whether you are restricted to suggested items only (<c>false</c>).
+            Default is <c>true</c> (you can type your own tags).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.SuggestMinimumLengthEffective">
+            <summary>
+            Minimal number of characters to start suggesting. Default is <c>2</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.DelimitersEffective">
+            <summary>
+            Characters, when typed, divide the current input into separate tags.
+            Default is comma, semicolon and space.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.ShowAddButtonEffective">
+            <summary>
+            Indicates whether the add-icon (+) should be displayed.
+            Default is <c>false</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.AddButtonText">
+            <summary>
+            Optional text for the add-button.
+            Displayed only when there are no tags (the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.Value"/> is empty).
+            Default is <c>null</c> (none).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.Naked">
+            <summary>
+            Indicates whether a "naked" variant should be displayed (no border).
+            Default is <c>false</c>.
+            Consider enabling <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTags.ShowAddButton"/> when using <c>Naked</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.Placeholder">
+            <summary>
+            Short hint displayed in the input field before the user enters a value.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.TagBadgeSettingsEffective">
+            <summary>
+            Settings for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxBadge"/> used to render tags.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.CoreFormControlCssClass">
+            <summary>
+            CSS of the wrapping .form-control container (corresponds to InputCssClass on regular inputs)
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputOffset">
+            <summary>
+            Offset between dropdown input and dropdown menu
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.CssClass">
+            <summary>
+            Any additional CSS class to apply.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupCssClass">
+            <summary>
+            Custom CSS class to render with input-group span.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupStartText">
+            <summary>
+            Input-group at the beginning of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupStartTemplate">
+            <summary>
+            Input-group at the beginning of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupEndText">
+            <summary>
+            Input-group at the end of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupEndTemplate">
+            <summary>
+            Input-group at the end of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.AdditionalAttributes">
+            <summary>
+            Additional attributes to be splatted onto an underlying HTML input.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase">
+            <summary>
+            Common implementation for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxTooltip"/> and <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxPopover"/>.
+            </summary>
+            <remarks>
+            We do not want HxPopover to derive from HxTooltip directly as we want
+            to keep the API consistent, e.g. HxPopover.Placement = PopoverPlacement.Auto, not TooltipPlacement.Auto or anything else.
+            </remarks>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.GetSettings">
+            <summary>
+            Returns optional set of component settings.
+            </summary>
+            <remarks>
+            Similar to <see cref="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.GetDefaults"/>, enables defining wider Settings in components descendants (by returning a derived settings class).
+            </remarks>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.GetDefaults">
+            <summary>
+            Returns application-wide defaults for the component.
+            Enables overriding defaults in descendants (use separate set of defaults).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Html">
+            <summary>
+            Allows you to insert HTML. If <c>false</c>, <c>innerText</c> property will be used to insert content into the DOM.
+            Use text if you're worried about XSS attacks.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Container">
+            <summary>
+            Appends the tooltip/popover to a specific element. Default is <c>body</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Sanitize">
+            <summary>
+            Enable or disable the sanitization. If activated, HTML content will be sanitized. <see href="https://getbootstrap.com/docs/5.3/getting-started/javascript/#sanitizer">See the sanitizer section in Bootstrap JavaScript documentation</see>.
+            Default is <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Offset">
+            <summary>
+            Offset of the component relative to its target (ChildContent).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Animation">
+            <summary>
+            Apply a CSS fade transition to the tooltip (enable/disable).<br/>
+            Default is <c>true</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.CssClass">
+            <summary>
+            Custom CSS class to add.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.WrapperCssClass">
+            <summary>
+            Custom CSS class to render with the <c>span</c> wrapper of the child-content.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.ChildContent">
+            <summary>
+            Child content to wrap.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.OnShown">
+            <summary>
+            Fired when the content has been made visible to the user and CSS transitions have completed.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.InvokeOnShownAsync">
+            <summary>
+            Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.OnShown"/> event. Allows interception of the event in derived components.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.OnHidden">
+            <summary>
+            Fired when the content has finished being hidden from the user and CSS transitions have completed.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.InvokeOnHiddenAsync">
+            <summary>
+            Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.OnHidden"/> event. Allows interception of the event in derived components.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.ShowAsync">
+            <summary>
+            Shows the component.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.HideAsync">
+            <summary>
+            Hides the component.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.EnableAsync">
+            <summary>
+            Gives the component the ability to be shown.<br />
+            The component is enabled by default (i.e. this method is not necessary to be called if the component has not been disabled).
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.DisableAsync">
+            <summary>
+            Removes the ability for the component to be shown.<br />
+            It will only be able to be shown if it is re-enabled.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.HandleJsShown">
+            <summary>
+            Receives notification from JavaScript when content is shown.
+            </summary>
+            <remarks>
+            the shown-event gets raised as the "show" CSS class is added to the HTML element and the transition is completed
+            </remarks>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.HandleJsHidden">
+            <summary>
+            Receives notification from JavaScript when content is hidden.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.Animation">
+            <summary>
+            Apply a CSS fade transition to the tooltip (enable/disable).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.CssClass">
+            <summary>
+            Custom CSS class to add.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.Container">
+            <summary>
+            Appends the tooltip/popover to a specific element. Default is <c>body</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.WrapperCssClass">
+            <summary>
+            Custom CSS class to render with the <c>span</c> wrapper of the child-content.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.Offset">
+            <summary>
+            Offset of the component relative to its target (ChildContent).
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxInputFile">
@@ -2105,6 +2897,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputFile.UploadUrl">
             <summary>
             URL of the server endpoint receiving the files.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputFile.UploadHttpMethod">
+            <summary>
+            HTTP Method (verb) used for file upload. The default is <c>POST</c>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputFile.OnChange">
@@ -2266,6 +3063,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputFileDropZone.UploadUrl">
             <summary>
             URL of the server endpoint receiving the files.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputFileDropZone.UploadHttpMethod">
+            <summary>
+            HTTP Method (verb) used for file upload. The default is <c>POST</c>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputFileDropZone.OnChange">
@@ -2459,6 +3261,16 @@
             The input size.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.AutosuggestSettings.LabelType">
+            <summary>
+            The label type.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.AutosuggestSettings.Spellcheck">
+            <summary>
+            Defines whether the input may be checked for spelling errors.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxAutosuggest`2">
             <summary>
             Component for single item selection with dynamic suggestions (based on typed characters).<br />
@@ -2532,7 +3344,7 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAutosuggest`2.Delay">
             <summary>
-            The debounce delay in milliseconds.
+            The debounce delay in milliseconds. Default is 300 ms.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAutosuggest`2.Placeholder">
@@ -2543,6 +3355,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAutosuggest`2.InputSize">
             <summary>
             The size of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAutosuggest`2.Spellcheck">
+            <summary>
+            Defines whether the input may be checked for spelling errors. Default is <c>false</c>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAutosuggest`2.LabelType">
@@ -2607,667 +3424,6 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxAutosuggest.Defaults">
             <summary>
             Application-wide defaults for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxAutosuggest`2"/> and derived components.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInputInternal.DropdownOffset">
-            <summary>
-            Offset between the dropdown and the input.
-            <see href="https://popper.js.org/docs/v2/modifiers/offset/#options"/>
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInputInternal.AdditionalAttributes">
-            <summary>
-            Additional attributes to be splatted onto an underlying HTML element.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.ValueSelector">
-            <summary>
-            Selects value from item.
-            Not required when TValue is same as TItemTime.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.TextSelector">
-            <summary>
-            Selects text to display from item.
-            When not set ToString() is used.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.ItemTemplate">
-            <summary>
-            Template to display item.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.EmptyTemplate">
-            <summary>
-            Template to display when items collection is empty
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.ItemFromValueResolver">
-            <summary>
-            Gets item from <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.Value"/>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.MinimumLengthEffective">
-            <summary>
-            Minimal number of characters to start suggesting. Default is <c>2</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.Placeholder">
-            <summary>
-            Short hint displayed in the input field before the user enters a value.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.DelayEffective">
-            <summary>
-            Debounce delay in milliseconds. Default is <c>300 ms</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.DropdownOffset">
-            <summary>
-            Offset between the dropdown and the input.
-            <see href="https://popper.js.org/docs/v2/modifiers/offset/#options"/>
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupCssClass">
-            <summary>
-            Custom CSS class to render with input-group span.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupStartText">
-            <summary>
-            Input-group at the beginning of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupStartTemplate">
-            <summary>
-            Input-group at the beginning of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupEndText">
-            <summary>
-            Input-group at the end of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.InputGroupEndTemplate">
-            <summary>
-            Input-group at the end of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxAutosuggestInternal`2.AdditionalAttributes">
-            <summary>
-            Additional attributes to be splatted onto an underlying HTML element.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueComponentExtensions">
-            <summary>
-            Extension methods for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" />.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueComponentExtensions.ShouldRenderInputGroups(Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent)">
-            <summary>
-            Returns <c>true</c> if <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" /> should render input groups (at least one input group).
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueRenderer">
-            <summary>
-            Renders <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" />.
-            The purpose of this class is to allow the use of a custom renderer.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueRenderer.Current">
-            <summary>
-            Current renderer.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.FormValueRenderer.Render(System.Int32,Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder,Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent)">
-            <summary>
-            Renders <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" />.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.FormValueComponent">
-            <summary>
-            Values for the component renderer.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderTree(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderLabel(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
-            <summary>
-            Renders the label when properties are set.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderInputGroups(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder,Microsoft.AspNetCore.Components.RenderFragment)">
-            <summary>
-            Renders the input groups (with content).
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderValue(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
-            <summary>
-            Renders the value/input.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderHint(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
-            <summary>
-            Renders the hint when the HintTemplate property is set.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer.BuildRenderValidationMessage(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
-            <summary>
-            Renders the validation message.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueRenderer">
-            <summary>
-            Default <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent" /> renderer.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueRenderer.Render(System.Int32,Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder,Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent)">
-            <summary>
-            Adds <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxFormValueComponentRenderer"/> to a builder.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupCssClass">
-            <summary>
-            Custom CSS class to render with input-group span.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupStartText">
-            <summary>
-            Input-group at the beginning of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupStartTemplate">
-            <summary>
-            Input-group at the beginning of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupEndText">
-            <summary>
-            Input-group at the end of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.InputGroupEndTemplate">
-            <summary>
-            Input-group at the end of the input.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateInternal`1.DisposeAsync">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputDateRangeInternal.DisposeAsync">
-            <inheritdoc />
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectInternal`2.AdditionalAttributes">
-            <summary>
-            Additional attributes to be splatted onto an underlying HTML element.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectInternal`2.OnAfterRenderAsync(System.Boolean)">
-            <inheritdoc cref="M:Microsoft.AspNetCore.Components.ComponentBase.OnAfterRenderAsync(System.Boolean)" />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectInternal`2.HandleJsHidden">
-            <summary>
-            Receives notification from JavaScript when item is hidden.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent">
-            <summary>
-            Represents properties (and methods) of a component that renders a form value (i.e., form inputs).
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.CssClass">
-            <summary>
-            Custom CSS class to render with the wrapping div.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.Label">
-            <summary>
-            Label to render before the input (or after the input for Checkbox).
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.LabelTemplate">
-            <summary>
-            Label to render before the input (or after the input for Checkbox).
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.LabelFor">
-            <summary>
-            Element id to render as the label for attribute.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.LabelCssClass">
-            <summary>
-            Custom CSS class to render with the label.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.RenderValue(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
-            <summary>
-            Renders the content of the component (value, input).
-            </summary>
-            <param name="builder"></param>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.RenderValidationMessage(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
-            <summary>
-            Renders the validation message.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.Hint">
-            <summary>
-            Hint to render after the input as form-text.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.HintTemplate">
-            <summary>
-            Hint to render after the input as form-text.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.CoreCssClass">
-            <summary>
-            CSS class to be rendered with the wrapping div.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.CoreLabelCssClass">
-            <summary>
-            CSS class to be rendered with the label.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.CoreHintCssClass">
-            <summary>
-            CSS class to be rendered with the hint.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent.RenderOrder">
-            <summary>
-            Render order LabelValue or ValueLabel.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups">
-            <summary>
-            Extends <see cref="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponent"/> with properties for rendering input groups.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupCssClass">
-            <summary>
-            Custom CSS class to be rendered with the input-group span.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupStartText">
-            <summary>
-            Input-group-text at the beginning of the input.
-            In comparison to <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupStartTemplate"/>, this property is rendered as <c>.input-group-text</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupStartTemplate">
-            <summary>
-            Input-group at the beginning of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupEndText">
-            <summary>
-            Input-group-text at the end of the input.
-            In comparison to <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupEndTemplate"/>, this property is rendered as <c>.input-group-text</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IFormValueComponentWithInputGroups.InputGroupEndTemplate">
-            <summary>
-            Input-group at the end of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputSettingsWithSize.InputSize">
-            <summary>
-            The size of the input.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithLabelType">
-            <summary>
-            Represents an input with a label type.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithLabelType.LabelType">
-            <summary>
-            Gets or sets the label type.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithLabelType.LabelTypeEffective">
-            <summary>
-            Gets the effective label type.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithPlaceholder">
-            <summary>
-            Input with placeholder support.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithPlaceholder.Placeholder">
-            <summary>
-            Placeholder for the input.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithSize">
-            <summary>
-            Input with sizing support.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithSize.InputSizeEffective">
-            <summary>
-            The size of the input.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithSize.GetInputSizeCssClass">
-            <summary>
-            Gets the CSS class for the input size.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.IInputWithSize.GetInputGroupSizeCssClass">
-            <summary>
-            Gets the CSS class for the input group size.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.LabelValueRenderOrder">
-            <summary>
-            Specifies the render order of label and value/input.
-            </summary>
-        </member>
-        <member name="F:Havit.Blazor.Components.Web.Bootstrap.Internal.LabelValueRenderOrder.LabelValue">
-            <summary>
-            Renders the label first, followed by the value/input (used by the majority of components).
-            </summary>
-        </member>
-        <member name="F:Havit.Blazor.Components.Web.Bootstrap.Internal.LabelValueRenderOrder.ValueLabel">
-            <summary>
-            Renders the value/input first, followed by the label (used by the former HxInputCheckbox).
-            Obsolete, should not be needed anymore.
-            </summary>
-        </member>
-        <member name="F:Havit.Blazor.Components.Web.Bootstrap.Internal.LabelValueRenderOrder.ValueOnly">
-            <summary>
-            Renders only the value/input. The label is not rendered (used by HxAutosuggest{TItem, TValue} with floating label which renders the label internally).
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetId">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetColumnOrder">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetHeaderCellTemplate(Havit.Blazor.Components.Web.Bootstrap.GridHeaderCellContext)">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetItemCellTemplate(`0)">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetItemPlaceholderCellTemplate(Havit.Blazor.Components.Web.Bootstrap.GridPlaceholderCellContext)">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetFooterCellTemplate(Havit.Blazor.Components.Web.Bootstrap.GridFooterCellContext)">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetSorting">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxMultiSelectGridColumnInternal`1.GetDefaultSortingOrder">
-            <inheritdoc />
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal">
-            <summary>
-            <see cref="T:Microsoft.AspNetCore.Components.Routing.NavLink"/> variation which adds <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal.OnClick"/> and related stuff.
-            </summary>
-            <remarks>
-            <see href="https://github.com/dotnet/aspnetcore/issues/18460#issuecomment-577175682">https://github.com/dotnet/aspnetcore/issues/18460#issuecomment-577175682</see>.
-            </remarks>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxNavLinkInternal.OnClick">
-            <summary>
-            Raised when the item is clicked.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInputInternal.Offset">
-            <summary>
-            Offset between dropdown input and dropdown menu
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal">
-            <summary>
-            Internal implementation for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxInputTags"/>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.AllowCustomTags">
-            <summary>
-            Indicates whether you are restricted to suggested items only (<c>false</c>).
-            Default is <c>true</c> (you can type your own tags).
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.SuggestMinimumLengthEffective">
-            <summary>
-            Minimal number of characters to start suggesting. Default is <c>2</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.DelimitersEffective">
-            <summary>
-            Characters, when typed, divide the current input into separate tags.
-            Default is comma, semicolon and space.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.ShowAddButtonEffective">
-            <summary>
-            Indicates whether the add-icon (+) should be displayed.
-            Default is <c>false</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.AddButtonText">
-            <summary>
-            Optional text for the add-button.
-            Displayed only when there are no tags (the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.Value"/> is empty).
-            Default is <c>null</c> (none).
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.Naked">
-            <summary>
-            Indicates whether a "naked" variant should be displayed (no border).
-            Default is <c>false</c>.
-            Consider enabling <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTags.ShowAddButton"/> when using <c>Naked</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.Placeholder">
-            <summary>
-            Short hint displayed in the input field before the user enters a value.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.TagBadgeSettingsEffective">
-            <summary>
-            Settings for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxBadge"/> used to render tags.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.CoreFormControlCssClass">
-            <summary>
-            CSS of the wrapping .form-control container (corresponds to InputCssClass on regular inputs)
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputOffset">
-            <summary>
-            Offset between dropdown input and dropdown menu
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.CssClass">
-            <summary>
-            Any additional CSS class to apply.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupCssClass">
-            <summary>
-            Custom CSS class to render with input-group span.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupStartText">
-            <summary>
-            Input-group at the beginning of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupStartTemplate">
-            <summary>
-            Input-group at the beginning of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupEndText">
-            <summary>
-            Input-group at the end of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.InputGroupEndTemplate">
-            <summary>
-            Input-group at the end of the input.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxInputTagsInternal.AdditionalAttributes">
-            <summary>
-            Additional attributes to be splatted onto an underlying HTML input.
-            </summary>
-        </member>
-        <member name="T:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase">
-            <summary>
-            Common implementation for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxTooltip"/> and <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxPopover"/>.
-            </summary>
-            <remarks>
-            We do not want HxPopover to derive from HxTooltip directly as we want
-            to keep the API consistent, e.g. HxPopover.Placement = PopoverPlacement.Auto, not TooltipPlacement.Auto or anything else.
-            </remarks>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.GetSettings">
-            <summary>
-            Returns optional set of component settings.
-            </summary>
-            <remarks>
-            Similar to <see cref="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.GetDefaults"/>, enables defining wider Settings in components descendants (by returning a derived settings class).
-            </remarks>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.GetDefaults">
-            <summary>
-            Returns application-wide defaults for the component.
-            Enables overriding defaults in descendants (use separate set of defaults).
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Html">
-            <summary>
-            Allows you to insert HTML. If <c>false</c>, <c>innerText</c> property will be used to insert content into the DOM.
-            Use text if you're worried about XSS attacks.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Container">
-            <summary>
-            Appends the tooltip/popover to a specific element. Default is <c>body</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Sanitize">
-            <summary>
-            Enable or disable the sanitization. If activated HTML content will be sanitized. <see href="https://getbootstrap.com/docs/5.3/getting-started/javascript/#sanitizer">See the sanitizer section in Bootstrap JavaScript documentation</see>.
-            Default is <c>true</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Offset">
-            <summary>
-            Offset of the component relative to its target (ChildContent).
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.Animation">
-            <summary>
-            Apply a CSS fade transition to the tooltip (enable/disable).<br/>
-            Default is <c>true</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.CssClass">
-            <summary>
-            Custom CSS class to add.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.WrapperCssClass">
-            <summary>
-            Custom CSS class to render with the <c>span</c> wrapper of the child-content.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.ChildContent">
-            <summary>
-            Child content to wrap.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.OnShown">
-            <summary>
-            Fired when the content has been made visible to the user and CSS transitions have completed.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.InvokeOnShownAsync">
-            <summary>
-            Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.OnShown"/> event. Allows interception of the event in derived components.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.OnHidden">
-            <summary>
-            Fired when the content has finished being hidden from the user and CSS transitions have completed.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.InvokeOnHiddenAsync">
-            <summary>
-            Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.OnHidden"/> event. Allows interception of the event in derived components.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.ShowAsync">
-            <summary>
-            Shows the component.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.HideAsync">
-            <summary>
-            Hides the component.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.EnableAsync">
-            <summary>
-            Gives the component the ability to be shown.<br />
-            The component is enabled by default (i.e. this method is not necessary to be called if the component has not been disabled).
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.DisableAsync">
-            <summary>
-            Removes the ability for the component to be shown.<br />
-            It will only be able to be shown if it is re-enabled.
-            </summary>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.HandleJsShown">
-            <summary>
-            Receives notification from JavaScript when content is shown.
-            </summary>
-            <remarks>
-            the shown-event gets raised as the "show" CSS class is added to the HTML element and the transition is completed
-            </remarks>
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.Internal.HxTooltipInternalBase.HandleJsHidden">
-            <summary>
-            Receives notification from JavaScript when content is hidden.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.Animation">
-            <summary>
-            Apply a CSS fade transition to the tooltip (enable/disable).
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.CssClass">
-            <summary>
-            Custom CSS class to add.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.Container">
-            <summary>
-            Appends the tooltip/popover to a specific element. Default is <c>body</c>.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.WrapperCssClass">
-            <summary>
-            Custom CSS class to render with the <c>span</c> wrapper of the child-content.
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.Internal.TooltipInternalSettings.Offset">
-            <summary>
-            Offset of the component relative to its target (ChildContent).
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.BindEvent">
@@ -4048,6 +4204,18 @@
             Size of the input.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputDateRange.FromPlaceholder">
+            <summary>
+            Placeholder for the start-date input.
+            If not set, localized default is used ("From" + localizations).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputDateRange.ToPlaceholder">
+            <summary>
+            Placeholder for the end-date input.
+            If not set, localized default is used ("End" + localizations).
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputDateRange.FromParsingErrorMessage">
             <summary>
             Gets or sets the error message used when displaying a &quot;from&quot; parsing error.
@@ -4164,6 +4332,12 @@
             Feel free to set the InputMode on your own as needed.
             </remarks>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputNumber`1.Type">
+            <summary>
+            Allows switching between textual and numeric input types.
+            Only <see cref="F:Havit.Blazor.Components.Web.InputType.Text"/> (default) and <see cref="F:Havit.Blazor.Components.Web.InputType.Number"/> are supported.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputNumber`1.Placeholder">
             <summary>
             Placeholder for the input.
@@ -4172,6 +4346,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputNumber`1.InputSize">
             <summary>
             Size of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputNumber`1.SelectOnFocus">
+            <summary>
+            Determines whether all the content within the input field is automatically selected when it receives focus.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputNumber`1.LabelType">
@@ -4401,6 +4580,16 @@
             Size of the input.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTextBase.Spellcheck">
+            <summary>
+            Defines whether the input may be checked for spelling errors.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTextBase.SelectOnFocus">
+            <summary>
+            Determines whether all the text within the input field is automatically selected when it receives focus.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTextBase.LabelType">
             <inheritdoc cref="T:Havit.Blazor.Components.Web.Bootstrap.LabelType" />
         </member>
@@ -4576,6 +4765,9 @@
             <summary>
             Icon displayed in filter input for clearing the filter.
             </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxMultiSelect`2.LabelType">
+            <inheritdoc cref="T:Havit.Blazor.Components.Web.Bootstrap.LabelType" />
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxMultiSelect`2.FocusAsync">
             <inheritdoc cref="M:Havit.Blazor.Components.Web.Bootstrap.HxInputBase`1.FocusAsync"/>
@@ -4857,6 +5049,9 @@
             Set of settings to be applied to the component instance (overrides <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxSelect.Defaults"/>, overridden by individual parameters).
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSelectBase`2.LabelType">
+            <inheritdoc cref="T:Havit.Blazor.Components.Web.Bootstrap.LabelType" />
+        </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxSelectBase`2.GetSettings">
             <summary>
             Returns an optional set of component settings.
@@ -5063,6 +5258,21 @@
             Input size.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputDateRangeSettings.FromPlaceholder">
+            <summary>
+            Placeholder for the start-date input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputDateRangeSettings.ToPlaceholder">
+            <summary>
+            Placeholder for the end-date input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputDateRangeSettings.CalendarIcon">
+            <summary>
+            Optional icon to display within the input.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputDateRangeSettings.ShowClearButton">
             <summary>
             Indicates whether the <i>Clear</i> button in the dropdown calendar should be visible.<br/>
@@ -5106,6 +5316,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputDateSettings.InputSize">
             <summary>
             Input size.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputDateSettings.LabelType">
+            <summary>
+            The label type.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputDateSettings.CalendarIcon">
@@ -5155,12 +5370,28 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputNumberSettings.InputSize">
             <summary>
-            Input size.
+            The size of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputNumberSettings.LabelType">
+            <summary>
+            The label type.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputNumberSettings.InputMode">
             <summary>
-            Hint to browsers regarding the type of virtual keyboard configuration to use when editing.
+            A hint to browsers regarding the type of virtual keyboard configuration to use when editing.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputNumberSettings.Type">
+            <summary>
+            Allows switching between textual and numeric input types.
+            Only <see cref="F:Havit.Blazor.Components.Web.InputType.Text"/> (default) and <see cref="F:Havit.Blazor.Components.Web.InputType.Number"/> are supported.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputNumberSettings.SelectOnFocus">
+            <summary>
+            Determines whether all the content within the input field is automatically selected when it receives focus.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.InputRangeSettings">
@@ -5228,9 +5459,24 @@
             Size of the input.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputTextSettings.LabelType">
+            <summary>
+            The label type.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputTextSettings.InputMode">
             <summary>
             Hint to browsers regarding the type of virtual keyboard configuration to use when editing.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputTextSettings.SelectOnFocus">
+            <summary>
+            Determines whether all the text within the input field is automatically selected when it receives focus.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputTextSettings.Spellcheck">
+            <summary>
+            Defines whether the input may be checked for spelling errors.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.LabelType">
@@ -5256,6 +5502,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.MultiSelectSettings.InputSize">
             <summary>
             Input size.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MultiSelectSettings.LabelType">
+            <summary>
+            The label type.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.MultiSelectSettings.AllowFiltering">
@@ -5435,6 +5686,12 @@
             Icon of the input when no text is written.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.SearchIconPlacement">
+            <summary>
+            Placement of the search icon.<br/>
+            Default is <see cref="F:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSearchIconPlacement.End"/>.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.ClearIcon">
             <summary>
             Icon of the input, displayed when text is entered, allowing the user to clear the text.
@@ -5452,13 +5709,16 @@
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.LabelType">
-            <summary>
-            Label type of the input field.
-            </summary>
+            <inheritdoc cref="T:Havit.Blazor.Components.Web.Bootstrap.LabelType" />
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.InputSize">
             <summary>
             Input size of the input field.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.Spellcheck">
+            <summary>
+            Defines whether the input may be checked for spelling errors. Default is <c>false</c>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.MinimumLength">
@@ -5499,6 +5759,15 @@
             Hides the search icon when used!
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.OnHiding">
+            <summary>
+            Fired immediately when the 'hide' method of the dropdown is called.
+            To prevent hiding, set <see cref="P:Havit.Blazor.Components.Web.Bootstrap.DropdownHidingEventArgs.Cancel"/> to <c>true</c>.
+            </summary>
+            <remarks>
+            Exposed to allow derived custom components to cancel hiding the dropdown, for example, when the dropdown contains draggable content and the mouseup event is fired outside the dropdown.
+            </remarks>
+        </member>
         <member name="F:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1._textQueryHasBeenBelowMinimumLength">
             <summary>
             Indicates whether the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.TextQuery"/> has been below minimum required length recently (before data provider loading is completed).
@@ -5507,10 +5776,23 @@
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.OnParametersSet">
             <inheritdoc />
         </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.FocusAsync">
+            <summary>
+            Gives focus to the input element.
+            </summary>
+        </member>
         <member name="F:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.InputKeyboardNavigationIndex">
             <summary>
             Input's index for the keyboard navigation. If this is the current index, then no item is selected.
             </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.HideDropdownAsync">
+            <summary>
+            Hides the dropdown menu.
+            </summary>
+            <remarks>
+            Allows custom actions from <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.DefaultContentTemplate" /> or <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.NotFoundTemplate" /> to hide the dropdown menu.
+            </remarks>
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.ShouldDropdownMenuBeDisplayed">
             <summary>
@@ -5553,6 +5835,11 @@
             Values for <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1.ItemSelectionBehavior"/>.
             </summary>
         </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSearchIconPlacement">
+            <summary>
+            Specifies the position of the search icon within the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox"/>.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSettings">
             <summary>
             Settings for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxSearchBox`1"/> and derived components.
@@ -5561,6 +5848,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSettings.SearchIcon">
             <summary>
             Icon displayed in the input when no item is selected.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSettings.SearchIconPlacement">
+            <summary>
+            Placement of the search icon.<br/>
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSettings.ClearIcon">
@@ -5581,6 +5873,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSettings.InputSize">
             <summary>
             The input size.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSettings.LabelType">
+            <summary>
+            The label type.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSettings.CssClass">
@@ -5608,6 +5905,11 @@
             The behavior when the item is selected.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.SearchBoxSettings.Spellcheck">
+            <summary>
+            Defines whether the input may be checked for spelling errors.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.SelectSettings">
             <summary>
             Settings for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxSelect`2"/> component.
@@ -5616,6 +5918,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.SelectSettings.InputSize">
             <summary>
             The size of the input.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.SelectSettings.LabelType">
+            <summary>
+            The label type.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.ValidationMessageMode">
@@ -5649,6 +5956,21 @@
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.ValidationMessageModeExtensions">
             <summary>
             Extension methods for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.ValidationMessageMode" />.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.GlobalSettings">
+            <summary>
+            Settings you can set globally for all components. Exposed as <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxSetup.Defaults"/>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GlobalSettings.LabelType">
+            <summary>
+            Specifies how the input labels should be displayed.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GlobalSettings.InputSize">
+            <summary>
+            Input size.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.GridCellTemplate">
@@ -5819,6 +6141,36 @@
             We do not use HxGrid because we have HxGrid&lt;TItem&gt;, which leads to GridLoadMoreTemplateContext&lt;TItem&gt;.
             </remark>
         </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.GridPaginationTemplateContext">
+            <summary>
+            Context for the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.PaginationTemplate" /> of the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1"/>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridPaginationTemplateContext.CurrentUserState">
+            <summary>
+            Current grid user state (contains <see cref="P:Havit.Blazor.Components.Web.Bootstrap.GridUserState.PageIndex"/>).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridPaginationTemplateContext.PageSize">
+            <summary>
+            Items per page.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridPaginationTemplateContext.TotalCount">
+            <summary>
+            Total number of data items.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridPaginationTemplateContext.PagerSettings">
+            <summary>
+            Settings for the pager (derived from <c>HxGrid.PagerSettings</c> .. <c>HxGrid.Settings.PagerSettings</c> .. <c>HxGrid.Defaults.PagerSettings</c> cascade).
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.GridPaginationTemplateContext.ChangeCurrentPageIndexAsync(System.Int32)">
+            <summary>
+            Instructs the grid to change the current page index.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.GridPlaceholderCellContext">
             <summary>
             Placeholder cell context.
@@ -5853,7 +6205,8 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridSettings.ItemRowHeight">
             <summary>
-            Height of the item row used for infinite scroll calculations (<see cref="F:Havit.Blazor.Components.Web.Bootstrap.GridContentNavigationMode.InfiniteScroll"/>).
+            Height of the item row (in pixels) used for infinite scroll calculations (<see cref="F:Havit.Blazor.Components.Web.Bootstrap.GridContentNavigationMode.InfiniteScroll"/>).
+            The row height is not applied for other navigation modes, use CSS for that.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridSettings.OverscanCount">
@@ -5880,6 +6233,11 @@
             Indicates whether to render the footer when data is empty.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridSettings.ProgressIndicatorDelay">
+            <summary>
+            Delay in milliseconds before the progress indicator is displayed.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridSettings.TableContainerCssClass">
             <summary>
             Custom CSS class to render with the <c>div</c> element wrapping the main <c>table</c>
@@ -5889,6 +6247,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridSettings.TableCssClass">
             <summary>
             Custom CSS class to render with the main <c>table</c> element.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridSettings.TableHeaderCssClass">
+            <summary>
+            Custom CSS class for the <c>thead</c> element of the grid.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridSettings.HeaderRowCssClass">
@@ -5930,6 +6293,17 @@
             <summary>
             Settings for the "Load more" navigation button (<see cref="F:Havit.Blazor.Components.Web.Bootstrap.GridContentNavigationMode.LoadMore"/> or <see cref="F:Havit.Blazor.Components.Web.Bootstrap.GridContentNavigationMode.PaginationAndLoadMore"/>).
             </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.GridSettings.PreserveSelection">
+            <summary>
+            Gets or sets a value indicating whether the current selection (either <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.SelectedDataItem"/> for single selection
+            or <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.SelectedDataItems"/> for multiple selection) should be preserved during data operations, such as paging, sorting, filtering,
+            or manual invocation of <see cref="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.RefreshDataAsync"/>.<br />
+            </summary>
+            <remarks>
+            This setting ensures that the selection remains intact during operations that refresh or modify the displayed data in the grid.
+            Note that preserving the selection requires that the underlying data items can still be matched in the updated dataset (e.g., by <c>item1.Equals(item2)</c>).
+            </remarks>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.GridUserState">
             <summary>
@@ -6099,6 +6473,11 @@
             Template for rendering when the data source is empty but not null.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.PaginationTemplate">
+            <summary>
+            Template for rendering custom pagination.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.LoadMoreTemplate">
             <summary>
             Template for the "load more" button (or other UI element).
@@ -6133,6 +6512,18 @@
             <summary>
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.SelectedDataItemsChanged"/> event. This method can be overridden in derived components to implement custom logic before or after the event is triggered.
             </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.PreserveSelection">
+            <summary>
+            Gets or sets a value indicating whether the current selection (either <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.SelectedDataItem"/> for single selection
+            or <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.SelectedDataItems"/> for multiple selection) should be preserved during data operations, such as paging, sorting, filtering,
+            or manual invocation of <see cref="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.RefreshDataAsync"/>.<br />
+            Default value is <c>false</c> (can be set by using <c>HxGrid.Defaults</c>).
+            </summary>
+            <remarks>
+            This setting ensures that the selection remains intact during operations that refresh or modify the displayed data in the grid.
+            Note that preserving the selection requires that the underlying data items can still be matched in the updated dataset (e.g., by <c>item1.Equals(item2)</c>).
+            </remarks>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ContentNavigationMode">
             <summary>
@@ -6179,6 +6570,11 @@
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.CurrentUserStateChanged"/> event. This method can be overridden in derived components to add custom logic before or after the state change event is triggered.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ProgressIndicatorDelay">
+            <summary>
+            Delay in milliseconds before the progress indicator is displayed. The default value is <c>300 ms</c>.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.InProgress">
             <summary>
             Gets or sets a value indicating whether the grid is currently processing data, such as loading or refreshing items.
@@ -6195,6 +6591,11 @@
             Custom CSS class for the main <c>table</c> element of the grid. This class allows for styling and customization of the grid's appearance.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.TableHeaderCssClass">
+            <summary>
+            Custom CSS class for the <c>thead</c> element of the grid. This class allows for styling and customization of the grid's appearance.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.HeaderRowCssClass">
             <summary>
             Custom CSS class for the header <c>tr</c> element in the grid. Enables specific styling for the header row separate from the rest of the grid.
@@ -6207,8 +6608,9 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowHeight">
             <summary>
-            Height of each item row, used primarily in calculations for infinite scrolling.
+            Height of each item row, used in calculations for infinite scrolling (<see cref="F:Havit.Blazor.Components.Web.Bootstrap.GridContentNavigationMode.InfiniteScroll"/>).
             The default value (41px) corresponds to the typical row height in the Bootstrap 5 default theme.
+            The row height is not applied for other navigation modes, use CSS for that.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowCssClassSelector">
@@ -6277,6 +6679,48 @@
             <summary>
             Icon to indicate the descending sort direction in the column header. This icon is shown when a column is sorted in descending order.
             </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowAdditionalAttributesSelector">
+            <summary>
+            Defines a function that returns additional attributes for a specific <c>tr</c> element based on the item it represents.
+            This allows for custom behavior or event handling on a per-row basis.
+            </summary>
+            <remarks>
+            If both <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowAdditionalAttributesSelector"/> and <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowAdditionalAttributes"/> are specified,
+            both dictionaries are combined into one.
+            Note that there is no prevention of duplicate keys, which may result in a <see cref="T:System.ArgumentException"/>.
+            </remarks>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowAdditionalAttributes">
+            <summary>
+            Provides a dictionary of additional attributes to apply to all body <c>tr</c> elements in the grid.
+            These attributes can be used to customize the appearance or behavior of rows.
+            </summary>
+            <remarks>
+            If both <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowAdditionalAttributesSelector"/> and <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowAdditionalAttributes"/> are specified,
+            both dictionaries are combined into one.
+            Note that there is no prevention of duplicate keys, which may result in a <see cref="T:System.ArgumentException"/>.
+            </remarks>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.HeaderRowAdditionalAttributes">
+            <summary>
+            Provides a dictionary of additional attributes to apply to the header <c>tr</c> element of the grid.
+            This allows for custom styling or behavior of the header row.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.FooterRowAdditionalAttributes">
+            <summary>
+            Provides a dictionary of additional attributes to apply to the footer <c>tr</c> element of the grid.
+            This allows for custom styling or behavior of the footer row.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.ItemRowAdditionalAttributesSelectorEffective(`0)">
+            <summary>
+            Determines the effective additional attributes for a given data row, combining both the global and per-item attributes.
+            </summary>
+            <param name="item">The data item for the current row.</param>
+            <returns>A dictionary of additional attributes to apply to the row.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when there are duplicate keys in the combined dictionaries.</exception>
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxGrid`1.GetDefaults">
             <summary>
@@ -6418,11 +6862,6 @@
             Returns template for the item.
             </summary>
         </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGridColumn`1.ItemExpandCollapseElementTemplate">
-            <summary>
-            Returns item CSS class (not dependent on data).
-            </summary>
-        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGridColumn`1.ItemExpandCollapseContainerTemplate">
             <summary>
             Returns template for the expand/collapse container item.
@@ -6430,11 +6869,7 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGridColumn`1.ItemCssClass">
             <summary>
-            </summary>
-        </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGridColumn`1.ExpandCollapseElementCssClass">
-            <summary>
-            Returns item CSS class for the specific date item.
+            Returns item CSS class (not dependent on data).
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGridColumn`1.ExpandCollapseContainerCssClass">
@@ -6444,6 +6879,7 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGridColumn`1.ItemCssClassSelector">
             <summary>
+            Returns item CSS class for the specific date item.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxGridColumn`1.ExpandCollapseElementCssClassSelector">
@@ -6697,6 +7133,7 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.TotalPages">
             <summary>
             Total number of pages of data items.
+            Has to be equal to or greater than <c>1</c>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.From">
@@ -6740,9 +7177,19 @@
             Icon for the "First page" button.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.FirstPageContentTemplate">
+            <summary>
+            Content for the "First page" button. If not set, the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.FirstPageIcon"/> is used.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.LastPageIcon">
             <summary>
             Icon for the "Last page" button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.LastPageContentTemplate">
+            <summary>
+            Content for the "Last page" button. If not set, the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.LastPageIcon"/> is used.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.PreviousPageIcon">
@@ -6750,9 +7197,19 @@
             Icon for the "Previous page" button.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.PreviousPageContentTemplate">
+            <summary>
+            Content for the "Previous page" button. If not set, the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.PreviousPageIcon"/> is used.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.NextPageIcon">
             <summary>
             Icon for the "Next page" button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.NextPageContentTemplate">
+            <summary>
+            Content for the "Next page" button. If not set, the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.NextPageIcon"/> is used.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPager.NumericButtonsCount">
@@ -6925,6 +7382,16 @@
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.SortingItemExtensions.ToSortItems``1(System.Collections.Generic.IEnumerable{Havit.Blazor.Components.Web.Bootstrap.SortingItem{``0}})">
             <summary>
             Converts a <see cref="T:Havit.Blazor.Components.Web.Bootstrap.SortingItem`1"/> to a <see cref="T:Havit.Collections.SortItem"/>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSetup.Defaults">
+            <summary>
+            Global settings for the Havit Blazor Components library.
+            </summary>
+        </member>
+        <member name="F:Havit.Blazor.Components.Web.Bootstrap.HxSetup.BootstrapVersion">
+            <summary>
+            Bootstrap version used by the library.
             </summary>
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxSetup.RenderBootstrapJavaScriptReference">
@@ -7112,6 +7579,16 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxListLayout`1.CssClass">
             <summary>
             Additional CSS classes for the wrapping <c>div</c>.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxListLayout`1.ShowFilterOffcanvasAsync">
+            <summary>
+            Opens the filter offcanvas.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxListLayout`1.HideFilterOffcanvasAsync">
+            <summary>
+            Closes the filter offcanvas.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.ILayoutColumnComponent">
@@ -7447,7 +7924,7 @@
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox">
             <summary>
             Component for displaying message boxes.<br/>
-            Usually used via <see cref="T:Havit.Blazor.Components.Web.HxMessageBoxService"/> and <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxMessageBoxHost"/>.<br />
+            Usually used via <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxMessageBoxService"/> and <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxMessageBoxHost"/>.<br />
             Full documentation and demos: <see href="https://havit.blazor.eu/components/HxMessageBox">https://havit.blazor.eu/components/HxMessageBox</see>
             </summary>
         </member>
@@ -7461,6 +7938,19 @@
             Returns the defaults for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox"/>.
             Enables overriding defaults in descendants (use a separate set of defaults).
             </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.Settings">
+            <summary>
+            Set of settings to be applied to the component instance (overrides <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.Defaults"/>, overridden by individual parameters).
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.GetSettings">
+            <summary>
+            Returns an optional set of component settings.
+            </summary>
+            <remarks>
+            Similar to <see cref="M:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.GetDefaults"/>, enables defining wider <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.Settings"/> in component descendants (by returning a derived settings class).
+            </remarks>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.Title">
             <summary>
@@ -7490,7 +7980,7 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.Buttons">
             <summary>
-            Buttons to show. The default is <see cref="F:Havit.Blazor.Components.Web.MessageBoxButtons.Ok"/>.
+            Buttons to show. The default is <see cref="F:Havit.Blazor.Components.Web.Bootstrap.MessageBoxButtons.Ok"/>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.PrimaryButton">
@@ -7500,7 +7990,7 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.CustomButtonText">
             <summary>
-            Text for <see cref="F:Havit.Blazor.Components.Web.MessageBoxButtons.Custom"/>.
+            Text for <see cref="F:Havit.Blazor.Components.Web.Bootstrap.MessageBoxButtons.Custom"/>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.PrimaryButtonSettings">
@@ -7523,7 +8013,7 @@
             Raised when the message box gets closed. Returns the button clicked.
             </summary>
         </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.InvokeOnClosedAsync(Havit.Blazor.Components.Web.MessageBoxButtons)">
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.InvokeOnClosedAsync(Havit.Blazor.Components.Web.Bootstrap.MessageBoxButtons)">
             <summary>
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox.OnClosed"/> event. Allows interception of the event in derived components.
             </summary>
@@ -7546,7 +8036,7 @@
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxMessageBoxHost">
             <summary>
-            Displays message boxes initiated through <see cref="T:Havit.Blazor.Components.Web.IHxMessageBoxService"/>.
+            Displays message boxes initiated through <see cref="T:Havit.Blazor.Components.Web.Bootstrap.IHxMessageBoxService"/>.
             To be placed in the root application component / main layout.
             </summary>
         </member>
@@ -7620,6 +8110,12 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxModal.Fullscreen">
             <summary>
             Fullscreen behavior of the modal. Default is <see cref="F:Havit.Blazor.Components.Web.Bootstrap.ModalFullscreen.Disabled"/>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxModal.RenderMode">
+            <summary>
+            Determines whether the content is always rendered or only if the modal is open.<br />
+            The default is <see cref="F:Havit.Blazor.Components.Web.Bootstrap.ModalRenderMode.OpenOnly"/>.<br />
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxModal.ShowCloseButton">
@@ -7750,6 +8246,71 @@
             Formats a <see cref="T:Havit.Blazor.Components.Web.Bootstrap.ModalBackdrop"/> value for use in the <c>data-bs-backdrop</c> attribute.
             </summary>
         </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest">
+            <summary>
+            Represents a request to display a message box with various customizable options.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.Title">
+            <summary>
+            Title in the header.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.HeaderTemplate">
+            <summary>
+            Template for the header.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.Text">
+            <summary>
+            Content (body) text.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.BodyTemplate">
+            <summary>
+            Body (content) template.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.ShowCloseButton">
+            <summary>
+            Indicates whether to show the close button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.Buttons">
+            <summary>
+            Buttons to show.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.PrimaryButton">
+            <summary>
+            Primary button (if you want to override the default).
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.CustomButtonText">
+            <summary>
+            Text for the <see cref="F:Havit.Blazor.Components.Web.Bootstrap.MessageBoxButtons.Custom"/> button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.Settings">
+            <summary>
+            Settings for the message box.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxRequest.AdditionalAttributes">
+            <summary>
+            Additional attributes to be splatted onto an underlying UI component (Bootstrap: HxMessageBox -> HxModal).
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.MessageBoxServiceCollectionExtensions">
+            <summary>
+            Extension methods for installation of <see cref="T:Havit.Blazor.Components.Web.Bootstrap.IHxMessageBoxService"/> support.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.MessageBoxServiceCollectionExtensions.AddHxMessageBoxHost(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Adds <see cref="T:Havit.Blazor.Components.Web.Bootstrap.IHxMessageBoxService"/> support to be able to display message boxes using HxMessageBoxHost.
+            </summary>
+        </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings">
             <summary>
             Settings for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxMessageBox"/> and derived components.
@@ -7768,6 +8329,41 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings.ModalSettings">
             <summary>
             Settings for the underlying <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxModal"/> component.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings.OkButtonText">
+            <summary>
+            Text for the OK button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings.CancelButtonText">
+            <summary>
+            Text for the Cancel button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings.AbortButtonText">
+            <summary>
+            Text for the Abort button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings.YesButtonText">
+            <summary>
+            Text for the Yes button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings.NoButtonText">
+            <summary>
+            Text for the No button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings.RetryButtonText">
+            <summary>
+            Text for the Retry button.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessageBoxSettings.IgnoreButtonText">
+            <summary>
+            Text for the Ignore button.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.ModalBackdrop">
@@ -7833,6 +8429,23 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.ModalHidingEventArgs.Cancel">
             <summary>
             Set <c>true</c> to prevent modal hiding.
+            </summary>
+        </member>
+        <member name="T:Havit.Blazor.Components.Web.Bootstrap.ModalRenderMode">
+            <summary>
+            Modal render mode.
+            </summary>
+        </member>
+        <member name="F:Havit.Blazor.Components.Web.Bootstrap.ModalRenderMode.OpenOnly">
+            <summary>
+            Modal content is rendered only when it is open.
+            Suitable for item-detail, item-edit, etc.
+            </summary>
+        </member>
+        <member name="F:Havit.Blazor.Components.Web.Bootstrap.ModalRenderMode.Always">
+            <summary>
+            Modal content is always rendered (and hidden with CSS if not open).
+            Needed for rendering chips from filter, etc.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.ModalSettings">
@@ -8188,6 +8801,16 @@
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxNavLink.OnClick"/> event. Allows interception of the event in derived components.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxNavLink.OnClickStopPropagation">
+            <summary>
+            Stops event propagation when the item is clicked. Default is <c>null</c>, which means <c>true</c> when <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxNavLink.OnClick"/> is set.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxNavLink.OnClickPreventDefault">
+            <summary>
+            Prevents the default action for the onclick event. Default is <c>null</c>, which means <c>true</c> when <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxNavLink.OnClick"/> is set.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxNavLink.CssClass">
             <summary>
             Additional CSS class.
@@ -8404,8 +9027,12 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarFooter.CssClass">
             <summary>
-            Allows you to disable the item with <c>false</c>.
-            The default value is <c>true</c>.
+            Any additional CSS class to add.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarFooter.TextCssClass">
+            <summary>
+            Any additional CSS class to add to inner text.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarFooter.ChildContent">
@@ -8436,6 +9063,26 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarItem.Href">
             <summary>
             Item navigation target.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarItem.OnClick">
+            <summary>
+            Raised after the item is clicked.
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxSidebarItem.InvokeOnClickAsync(Microsoft.AspNetCore.Components.Web.MouseEventArgs)">
+            <summary>
+            Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarItem.OnClick"/> event. Allows interception of the event in derived components.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarItem.OnClickStopPropagation">
+            <summary>
+            Stops onClick-event propagation. Default is <c>false</c>.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarItem.OnClickPreventDefault">
+            <summary>
+            Prevents the default action for the onclick event. Default is <c>false</c>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxSidebarItem.Match">
@@ -8775,6 +9422,18 @@
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxOffcanvas.OnShown"/> event. Allows interception of the event in derived components.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxOffcanvas.OnHiding">
+            <summary>
+            Fired immediately when the 'hide' instance method is called.
+            To cancel hiding, set <see cref="P:Havit.Blazor.Components.Web.Bootstrap.OffcanvasHidingEventArgs.Cancel"/> to <c>true</c>.
+            </summary>
+            <remarks>
+            1) This event should probably be named <c>OnClosing</c> to be consistent with other members, but "hide" is the Bootstrap event name and we should stick to it.
+            We should consider renaming the other members in the future.
+            2) There is intentionally no <c>virtual InvokeOnHidingAsync()</c> method to override to avoid confusion.
+            The <code>hide.bs.offcanvas</code> event is only subscribed to when the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxOffcanvas.OnHiding"/> callback is set.
+            </remarks>
+        </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxOffcanvas.#ctor">
             <summary>
             Constructor.
@@ -8788,6 +9447,11 @@
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxOffcanvas.HideAsync">
             <summary>
             Hides the offcanvas (if opened).
+            </summary>
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxOffcanvas.HandleOffcanvasHide">
+            <summary>
+            Receives notification from JS for <c>hide.bs.offcanvas</c> event.
             </summary>
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxOffcanvas.HandleOffcanvasShown">
@@ -8826,6 +9490,11 @@
         <member name="F:Havit.Blazor.Components.Web.Bootstrap.OffcanvasBackdrop.Static">
             <summary>
             A static backdrop will be rendered. The offcanvas will not be closed upon clicking on the backdrop.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.OffcanvasHidingEventArgs.Cancel">
+            <summary>
+            Set <c>true</c> to prevent offcanvas hiding.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.OffcanvasPlacement">
@@ -9101,6 +9770,11 @@
             for all placeholders contained.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPlaceholderContainer.ElementName">
+            <summary>
+            Gets or sets the name of the element to render. Default is <code>span</code>.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPlaceholderContainer.Defaults">
             <summary>
             Application-wide defaults for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxPlaceholderContainer"/> and derived components.
@@ -9150,6 +9824,12 @@
             Additional CSS class.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPlaceholderContainer.Active">
+            <summary>
+            Indicates whether the placeholder is active (if <c>false</c>, the component acts as regular HTML element).
+            Default is <c>true</c>.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxPlaceholderContainer.AdditionalAttributes">
             <summary>
             Additional attributes to be splatted onto an underlying HTML element.
@@ -9178,6 +9858,11 @@
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.PlaceholderContainerSettings">
             <summary>
             Settings for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxPlaceholderContainer"/> and derived components.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.PlaceholderContainerSettings.ElementName">
+            <summary>
+            Gets or sets the name of the element to render.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.PlaceholderContainerSettings.Animation">
@@ -9354,7 +10039,7 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxProgressIndicator.CssClass">
             <summary>
-            Additional CSS class.
+            Additional CSS class to be applied.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxSpinner">
@@ -9418,11 +10103,6 @@
             Single tab for <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel"/>.
             </summary>
         </member>
-        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxTab.TabsRegistration">
-            <summary>
-            Cascading parameter to register the tab.
-            </summary>
-        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxTab.Id">
             <summary>
             ID of the tab (<see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel.ActiveTabId"/>).
@@ -9453,6 +10133,10 @@
             <summary>
             Content of the tab.
             </summary>
+            <remarks>
+            Required RenderFragment parameter forces the component to rerender every time the TabPanel is rerendered.
+            This is necessary to ensure that the tab gets registered in the TabPanel.
+            </remarks>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxTab.Order">
             <summary>
@@ -9495,11 +10179,10 @@
             Triggers the <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxTab.OnTabDeactivated"/> event. Allows interception of the event in derived components.
             </summary>
         </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxTab.OnInitialized">
-            <inheritdoc />
-        </member>
-        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxTab.DisposeAsync">
-            <inheritdoc />
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxTab.ParentTabPanel">
+            <summary>
+            Cascading parameter to register the tab in <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel"/>.
+            </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel">
             <summary>
@@ -9553,7 +10236,8 @@
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel.InitialActiveTabId">
             <summary>
-            ID of the tab which should be active at the very beginning.
+            ID of the tab which should be active at the very beginning.<br />
+            We are considering deprecating this parameter. Please use <see cref="P:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel.ActiveTabId"/> instead (<c>@bind-ActiveTabId</c>).
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxTabPanel.ChildContent">
@@ -9684,13 +10368,18 @@
             A short hint displayed in the input field before the user enters a value.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTags.Spellcheck">
+            <summary>
+            Defines whether the input for new tag may be checked for spelling errors.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTags.TagBadgeSettings">
             <summary>
             The settings for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxBadge"/> used to render tags. The default is <c>Color="<see cref="F:Havit.Blazor.Components.Web.Bootstrap.ThemeColor.Light"/>"</c> and <c>TextColor="<see cref="F:Havit.Blazor.Components.Web.Bootstrap.ThemeColor.Dark"/>"</c>.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTags.LabelType">
-            <inheritdoc cref="T:Havit.Blazor.Components.Web.Bootstrap.HxInputBase`1" />
+            <inheritdoc cref="T:Havit.Blazor.Components.Web.Bootstrap.LabelType" />
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.HxInputTags.InputSize">
             <summary>
@@ -9735,6 +10424,9 @@
             <inheritdoc />
         </member>
         <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxInputTags.RenderChipValue(Microsoft.AspNetCore.Components.Rendering.RenderTreeBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:Havit.Blazor.Components.Web.Bootstrap.HxInputTags.GetChipRemoveValue">
             <inheritdoc />
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.InputTagsDataProviderDelegate">
@@ -9787,6 +10479,11 @@
             Input size.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputTagsSettings.LabelType">
+            <summary>
+            The label type.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputTagsSettings.Delimiters">
             <summary>
             Characters that, when typed, divide the current input into separate tags.
@@ -9800,6 +10497,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputTagsSettings.TagBadgeSettings">
             <summary>
             Settings for the <see cref="T:Havit.Blazor.Components.Web.Bootstrap.HxBadge"/> used to render tags.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.InputTagsSettings.Spellcheck">
+            <summary>
+            Defines whether the input for new tag may be checked for spelling errors.
             </summary>
         </member>
         <member name="T:Havit.Blazor.Components.Web.Bootstrap.ThemeColor">
@@ -9980,6 +10682,11 @@
             Color scheme of informational messages.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessengerServiceExtensionsSettings.InformationCssClass">
+            <summary>
+            CssClass of informational messages.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessengerServiceExtensionsSettings.InformationAutohideDelay">
             <summary>
             Default autohide delay for information (in milliseconds). Default is <c>5000</c> ms.
@@ -9990,6 +10697,11 @@
             Color scheme of warning messages.
             </summary>
         </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessengerServiceExtensionsSettings.WarningCssClass">
+            <summary>
+            CssClass of warning messages.
+            </summary>
+        </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessengerServiceExtensionsSettings.WarningAutohideDelay">
             <summary>
             Default autohide delay for warnings (in milliseconds). Default is <c>null</c> (do not autohide).
@@ -9998,6 +10710,11 @@
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessengerServiceExtensionsSettings.ErrorColor">
             <summary>
             Color scheme of error messages.
+            </summary>
+        </member>
+        <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessengerServiceExtensionsSettings.ErrorCssClass">
+            <summary>
+            CssClass of error messages.
             </summary>
         </member>
         <member name="P:Havit.Blazor.Components.Web.Bootstrap.MessengerServiceExtensionsSettings.ErrorAutohideDelay">

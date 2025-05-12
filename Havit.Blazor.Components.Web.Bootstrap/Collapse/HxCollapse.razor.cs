@@ -87,12 +87,14 @@ public partial class HxCollapse : IAsyncDisposable
 		_dotnetObjectReference = DotNetObjectReference.Create(this);
 	}
 
-	public override async Task SetParametersAsync(ParameterView parameters)
+	public override Task SetParametersAsync(ParameterView parameters)
 	{
-		await base.SetParametersAsync(parameters);
+		parameters.SetParameterProperties(this);
 
 		// To be able to use another default value in ancestors (HxNavbarCollapse)
-		Id = parameters.GetValueOrDefault(nameof(Id), _defaultId);
+		Id = parameters.GetValueOrDefault(nameof(Id), Id ?? _defaultId);
+
+		return base.SetParametersAsync(ParameterView.Empty);
 	}
 
 	/// <inheritdoc cref="ComponentBase.OnAfterRenderAsync(bool)" />
@@ -126,6 +128,11 @@ public partial class HxCollapse : IAsyncDisposable
 	/// </summary>
 	public async Task ShowAsync()
 	{
+		if (_isShown)
+		{
+			return;
+		}
+
 		if (_initialized)
 		{
 			await EnsureJsModuleAsync();
@@ -143,6 +150,11 @@ public partial class HxCollapse : IAsyncDisposable
 	/// </summary>
 	public async Task HideAsync()
 	{
+		if (!_isShown)
+		{
+			return;
+		}
+
 		await EnsureJsModuleAsync();
 		_hideInProgress = true;
 		await _jsModule.InvokeVoidAsync("hide", _collapseHtmlElement);

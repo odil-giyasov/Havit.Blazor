@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using Havit.Blazor.Components.Web.Bootstrap.Forms.Internal;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.Extensions.Localization;
 using Microsoft.JSInterop;
 
@@ -19,6 +20,10 @@ public partial class HxInputDateRangeInternal : InputBase<DateTimeRange>, IAsync
 	[Parameter] public bool ShowPredefinedDateRangesEffective { get; set; }
 	[Parameter] public IEnumerable<InputDateRangePredefinedRangesItem> PredefinedDateRangesEffective { get; set; }
 
+	[Parameter] public string FromPlaceholderEffective { get; set; }
+
+	[Parameter] public string ToPlaceholderEffective { get; set; }
+
 	[Parameter] public string FromParsingErrorMessageEffective { get; set; }
 
 	[Parameter] public string ToParsingErrorMessageEffective { get; set; }
@@ -36,7 +41,11 @@ public partial class HxInputDateRangeInternal : InputBase<DateTimeRange>, IAsync
 
 	[Parameter] public TimeProvider TimeProviderEffective { get; set; }
 
+	[Parameter] public IconBase CalendarIconEffective { get; set; }
+
 	[Inject] protected IStringLocalizerFactory StringLocalizerFactory { get; set; }
+
+	[Inject] protected IJSRuntime JSRuntime { get; set; }
 
 	private DateTimeRange _previousValue;
 	private bool _fromPreviousParsingAttemptFailed;
@@ -48,11 +57,15 @@ public partial class HxInputDateRangeInternal : InputBase<DateTimeRange>, IAsync
 	private FieldIdentifier _fromFieldIdentifier;
 	private FieldIdentifier _toFieldIdentifier;
 	private string[] _validationFieldNames;
+	private ElementReference _fromIconWrapperElement;
+	private ElementReference _toIconWrapperElement;
 
 	private HxDropdownToggleElement _fromDropdownToggleElement;
 	private HxDropdownToggleElement _toDropdownToggleElement;
 
 	private DateTime GetFromCalendarDisplayMonthEffective => CurrentValue.StartDate ?? FromCalendarDisplayMonth;
+
+	private IJSObjectReference _jsModule;
 
 	private DateTime GetToCalendarDisplayMonthEffective
 	{
@@ -98,9 +111,24 @@ public partial class HxInputDateRangeInternal : InputBase<DateTimeRange>, IAsync
 		}
 	}
 
-	protected override void OnAfterRender(bool firstRender)
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		_firstRenderCompleted = true;
+
+		await base.OnAfterRenderAsync(firstRender);
+
+		if (firstRender && (CalendarIconEffective is not null))
+		{
+			_jsModule ??= await JSRuntime.ImportHavitBlazorBootstrapModuleAsync(nameof(HxInputDateRange));
+			await _jsModule.InvokeVoidAsync("addOpenAndCloseEventListeners", _fromDropdownToggleElement.ElementReference, (CalendarIconEffective is not null) ? _fromIconWrapperElement : null);
+			await _jsModule.InvokeVoidAsync("addOpenAndCloseEventListeners", _toDropdownToggleElement.ElementReference, (CalendarIconEffective is not null) ? _toIconWrapperElement : null);
+		}
+	}
+
+	public async ValueTask FocusAsync()
+	{
+		await _fromDropdownToggleElement.ElementReference.FocusAsync();
+		await _fromDropdownToggleElement.ShowAsync();
 	}
 
 	protected override bool TryParseValueFromString(string value, out DateTimeRange result, out string validationErrorMessage)
@@ -136,9 +164,9 @@ public partial class HxInputDateRangeInternal : InputBase<DateTimeRange>, IAsync
 
 		_validationMessageStore.Clear(_fromFieldIdentifier);
 
-		if (HxInputDate<DateTime>.TryParseDateTimeOffsetFromString(newInputValue, null, out var fromDate))
+		if (DateHelper.TryParseDateFromString<DateTime?>(newInputValue, TimeProviderEffective, out var fromDate))
 		{
-			DateTimeRange newValue = Value with { StartDate = fromDate?.DateTime };
+			DateTimeRange newValue = Value with { StartDate = fromDate };
 
 			parsingFailed = false;
 			_previousValue = newValue;
@@ -165,9 +193,9 @@ public partial class HxInputDateRangeInternal : InputBase<DateTimeRange>, IAsync
 		bool parsingFailed;
 		_validationMessageStore.Clear(_toFieldIdentifier);
 
-		if (HxInputDate<DateTime>.TryParseDateTimeOffsetFromString(newInputValue, null, out var toDate))
+		if (DateHelper.TryParseDateFromString<DateTime?>(newInputValue, TimeProviderEffective, out var toDate))
 		{
-			DateTimeRange newValue = Value with { EndDate = toDate?.DateTime };
+			DateTimeRange newValue = Value with { EndDate = toDate };
 
 			parsingFailed = false;
 			_previousValue = newValue;

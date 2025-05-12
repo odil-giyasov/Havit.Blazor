@@ -25,7 +25,8 @@ public partial class Search
 
 	private readonly List<SearchItem> _searchItems = new()
 	{
-		new("/migrating-to-v3", "Migrating to v3", "upgrade release notes update 5.2 5.1"),
+		new("/premium", "Premium", "support subscription sponsorship price pricing license licensing SLA priority enterprise showcase Goran blocks elements"),
+
 
 		// Components and other pages
 
@@ -36,7 +37,7 @@ public partial class Search
 		new("/components/HxAccordion", "HxAccordion", "collapse"),
 		new("/components/HxAlert", "HxAlert", "message warning exclamation panel"),
 		new("/components/HxAnchorFragmentNavigation", "HxAnchorFragmentNavigation", "id scroll"),
-		new("/components/HxAutosuggest", "HxAutosuggest", "autocomplete search typeahead select"),
+		new("/components/HxAutosuggest", "HxAutosuggest", "autocomplete search typeahead select combobox"),
 		new("/components/HxBadge", "HxBadge", "chip tag"),
 		new("/components/HxBreadcrumb", "HxBreadcrumb", "navigation link"),
 		new("/components/HxButton", "HxButton", "click submit input tooltip"),
@@ -54,9 +55,10 @@ public partial class Search
 		new("/components/HxCollapseToggleElement", "HxCollapseToggleElement", ""),
 		new("/components/HxContextMenu", "HxContextMenu", "dropdown popup"),
 		new("/components/HxDialogBase", "HxDialogBase", "custom dialog modal messagebox"),
-		new("/components/HxDropdown", "HxDropdown", "collapse tooltip popover popup popper"),
-		new("/components/HxDropdownButtonGroup", "HxDropdownButtonGroup", "collapse tooltip popover popup popper"),
+		new("/components/HxDropdown", "HxDropdown", "collapse tooltip popover popup popper HxDropdownToggleElement HxDropdownMenu HxDropdownContent HxDropdownHeader HxDropdownItemNavLink HxDropdownItem HxDropdownItemText HxDropdownDivider"),
+		new("/components/HxDropdownButtonGroup", "HxDropdownButtonGroup", "collapse tooltip popover popup popper HxDropdownToggleButton"),
 		new("/components/HxDynamicElement", "HxDynamicElement", "dynamiccomponent html"),
+		new("/components/HxEChart", "HxEChart", "graph piechart barchart map apache echarts"),
 		new("/components/HxFilterForm", "HxFilterForm", "HxListLayout"),
 		new("/components/HxFormState", "HxFormState", "enabled disabled"),
 		new("/components/HxFormValue", "HxFormValue", "readonly"),
@@ -100,6 +102,9 @@ public partial class Search
 		new("/components/HxSearchBox", "HxSearchBox", "autosuggest autocomplete searchbar omnibox input"),
 		new("/components/HxSelect", "HxSelect", "dropdownlist picker"),
 		new("/components/HxSidebar", "HxSidebar", "navigation collapse layout responsive"),
+		new("/components/HxSmartPasteButton", "HxSmartPasteButton", "clipboard ai gpt artificial intelligence copy"),
+		new("/components/HxSmartTextArea", "HxSmartTextArea", "autocompletions suggest intellisense typeahead ai gpt artificial intelligence"),
+		new("/components/HxSmartComboBox", "HxSmartComboBox", "autocomplete search typeahead select suggest ai artificial intelligence autosuggest"),
 		new("/components/HxSpinner", "HxSpinner", "loading progress placeholder skeleton"),
 		new("/components/HxSubmit#HxSubmit", "HxSubmit", "send form button"),
 		new("/components/HxSwitch", "HxSwitch", "hxinputswitch hxradiobutton checkbox"),
@@ -225,14 +230,10 @@ public partial class Search
 
 	private HxAutosuggest<SearchItem, SearchItem> _autosuggest;
 
-	private bool _wasFocused = false;
-
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender && !_wasFocused)
+		if (firstRender && (_autosuggest is not null))
 		{
-			_wasFocused = true;
-			await Task.Delay(1);
 			await _autosuggest.FocusAsync();
 		}
 	}
@@ -254,7 +255,7 @@ public partial class Search
 				.OrderBy(si => si.Level)
 					.ThenByDescending(si => si.GetRelevance(_userInput))
 					.ThenBy(si => si.Title)
-				.Take(5);
+				.Take(8);
 	}
 
 	public void NavigateToSelectedPage(SearchItem searchItem)

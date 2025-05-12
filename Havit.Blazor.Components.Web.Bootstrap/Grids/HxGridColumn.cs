@@ -24,6 +24,7 @@ public class HxGridColumn<TItem> : HxGridColumnBase<TItem>
 	/// </summary>
 	[Parameter] public bool RenderExpandCollapseElement { get; set; } = false;
 
+#pragma warning disable BL0007 // Component parameter 'Havit.Blazor.Components.Web.Bootstrap.HxGridColumn<TItem>.Order' should be auto property
 	/// <summary>
 	/// The order (display index) of the column.
 	/// Columns are displayed in the order of this property.
@@ -36,6 +37,7 @@ public class HxGridColumn<TItem> : HxGridColumnBase<TItem>
 		get => _order;
 		set
 		{
+			// TODO Move validation to OnParametersSet
 			// This is to ensure MultiSelectGridColumn is always displayed as the first column.
 			// MultiSelectGridColumn uses Int32.MinValue and we do not want to enable column to have the same value.
 			Contract.Requires<ArgumentException>(value != Int32.MinValue);
@@ -44,6 +46,7 @@ public class HxGridColumn<TItem> : HxGridColumnBase<TItem>
 		}
 	}
 	private int _order = 0;
+#pragma warning restore BL0007 // Component parameter 'Havit.Blazor.Components.Web.Bootstrap.HxGridColumn<TItem>.Order' should be auto property
 
 	#region Header properties
 	/// <summary>
@@ -63,7 +66,6 @@ public class HxGridColumn<TItem> : HxGridColumnBase<TItem>
 	#endregion
 
 	#region Item properties
-
 	/// <summary>
 	/// Returns text for the item.
 	/// </summary>
@@ -74,9 +76,6 @@ public class HxGridColumn<TItem> : HxGridColumnBase<TItem>
 	/// </summary>
 	[Parameter] public RenderFragment<TItem> ItemTemplate { get; set; }
 
-	/// <summary>
-	/// Returns item CSS class (not dependent on data).
-	/// </summary>
 	[Parameter] public RenderFragment<TItem> ItemExpandCollapseElementTemplate { get; set; }
 
 	/// <summary>
@@ -85,12 +84,10 @@ public class HxGridColumn<TItem> : HxGridColumnBase<TItem>
 	[Parameter] public RenderFragment<TItem> ItemExpandCollapseContainerTemplate { get; set; }
 
 	/// <summary>
+	/// Returns item CSS class (not dependent on data).
 	/// </summary>
 	[Parameter] public string ItemCssClass { get; set; }
 
-	/// <summary>
-	/// Returns item CSS class for the specific date item.
-	/// </summary>
 	[Parameter] public string ExpandCollapseElementCssClass { get; set; }
 
 	/// <summary>
@@ -99,9 +96,9 @@ public class HxGridColumn<TItem> : HxGridColumnBase<TItem>
 	[Parameter] public string ExpandCollapseContainerCssClass { get; set; }
 
 	/// <summary>
+	/// Returns item CSS class for the specific date item.
 	/// </summary>
 	[Parameter] public Func<TItem, string> ItemCssClassSelector { get; set; }
-
 	/// <summary>
 	/// Returns item css class for the expand collapse element
 	/// </summary>
@@ -201,7 +198,15 @@ public class HxGridColumn<TItem> : HxGridColumnBase<TItem>
 	}
 
 	/// <inheritdoc />
-	protected override GridCellTemplate GetItemPlaceholderCellTemplate(GridPlaceholderCellContext context) => GridCellTemplate.Create((PlaceholderTemplate != null) ? PlaceholderTemplate(context) : GetDefaultItemPlaceholder(context));
+	protected override GridCellTemplate GetItemPlaceholderCellTemplate(GridPlaceholderCellContext context)
+	{
+		var templateRenderFragment = (PlaceholderTemplate != null) ? PlaceholderTemplate(context) : GetDefaultItemPlaceholder(context);
+
+		// Known-issue: We do not use ItemCssClassSelector for the placeholder, because we do not have the item.
+		// We could pass null to the selector, but it could break current user code (not expecting null).
+		// We can later change this behavior if needed.
+		return GridCellTemplate.Create(templateRenderFragment, ItemCssClass);
+	}
 
 	private RenderFragment GetDefaultItemPlaceholder(GridPlaceholderCellContext context)
 	{

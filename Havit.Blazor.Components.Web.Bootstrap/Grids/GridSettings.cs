@@ -21,7 +21,8 @@ public record GridSettings
 	public IconBase SortDescendingIcon { get; set; }
 
 	/// <summary>
-	/// Height of the item row used for infinite scroll calculations (<see cref="GridContentNavigationMode.InfiniteScroll"/>).
+	/// Height of the item row (in pixels) used for infinite scroll calculations (<see cref="GridContentNavigationMode.InfiniteScroll"/>).
+	/// The row height is not applied for other navigation modes, use CSS for that.
 	/// </summary>
 	public float? ItemRowHeight { get; set; }
 
@@ -50,6 +51,11 @@ public record GridSettings
 	public bool? ShowFooterWhenEmptyData { get; set; }
 
 	/// <summary>
+	/// Delay in milliseconds before the progress indicator is displayed.
+	/// </summary>
+	public int? ProgressIndicatorDelay { get; set; }
+
+	/// <summary>
 	/// Custom CSS class to render with the <c>div</c> element wrapping the main <c>table</c>
 	/// (<see cref="HxPager"/> is not wrapped in this <c>div</c> element).
 	/// </summary>
@@ -59,6 +65,11 @@ public record GridSettings
 	/// Custom CSS class to render with the main <c>table</c> element.
 	/// </summary>
 	public string TableCssClass { get; set; }
+
+	/// <summary>
+	/// Custom CSS class for the <c>thead</c> element of the grid.
+	/// </summary>
+	public string TableHeaderCssClass { get; set; }
 
 	/// <summary>
 	/// Custom CSS class to render with the header <c>tr</c> element.
@@ -99,4 +110,15 @@ public record GridSettings
 	/// Settings for the "Load more" navigation button (<see cref="GridContentNavigationMode.LoadMore"/> or <see cref="GridContentNavigationMode.PaginationAndLoadMore"/>).
 	/// </summary>
 	public ButtonSettings LoadMoreButtonSettings { get; set; }
+
+	/// <summary>
+	/// Gets or sets a value indicating whether the current selection (either <see cref="HxGrid{TItem}.SelectedDataItem"/> for single selection
+	/// or <see cref="HxGrid{TItem}.SelectedDataItems"/> for multiple selection) should be preserved during data operations, such as paging, sorting, filtering,
+	/// or manual invocation of <see cref="HxGrid{TItem}.RefreshDataAsync"/>.<br />
+	/// </summary>
+	/// <remarks>
+	/// This setting ensures that the selection remains intact during operations that refresh or modify the displayed data in the grid.
+	/// Note that preserving the selection requires that the underlying data items can still be matched in the updated dataset (e.g., by <c>item1.Equals(item2)</c>).
+	/// </remarks>
+	public bool? PreserveSelection { get; set; }
 }

@@ -96,12 +96,16 @@ public class HxCheckbox : HxInputBase<bool>
 		builder.OpenElement(0, "input");
 		BuildRenderInput_AddCommonAttributes(builder, "checkbox");
 		builder.AddAttribute(1000, "checked", BindConverter.FormatValue(CurrentValue));
-		builder.AddAttribute(1001, "onchange", value: EventCallback.Factory.CreateBinder<bool>(this, value => CurrentValue = value, CurrentValue));
-#if NET8_0_OR_GREATER
+
+		// HTML input sends the "on" value when the checkbox is checked, and nothing otherwise.
+		// We include the "value" attribute so that when this is posted by a form, "true"
+		// is included in the form fields.
+		builder.AddAttribute(1001, "value", bool.TrueString);
+
+		builder.AddAttribute(1002, "onchange", value: EventCallback.Factory.CreateBinder<bool>(this, value => CurrentValue = value, CurrentValue));
 		builder.SetUpdatesAttributeName("checked");
-#endif
-		builder.AddEventStopPropagationAttribute(1002, "onclick", true);
-		builder.AddElementReferenceCapture(1003, elementReference => InputElement = elementReference);
+		builder.AddEventStopPropagationAttribute(1003, "onclick", true);
+		builder.AddElementReferenceCapture(1004, elementReference => InputElement = elementReference);
 		builder.CloseElement(); // input
 
 		builder.OpenElement(2000, "label");
@@ -133,6 +137,20 @@ public class HxCheckbox : HxInputBase<bool>
 
 	protected override void RenderChipValue(RenderTreeBuilder builder)
 	{
-		builder.AddContent(0, CurrentValue ? Localizer["ChipValueTrue"] : Localizer["ChipValueFalse"]);
+		// #886 [HxCheckbox] [HxSwitch] Use Text instead of Yes/No for chips
+		// If both Text and Label are set, use Text for the positive chip value.
+		// BTW: Negative value is currently never used as chip is rendered only if the value is not equal to default(TValue).
+		// This might need additional attention if we implement support for three-state checkboxes
+		// or allow setting neutral value other than default(TValue).
+		string positiveValue;
+		if (!String.IsNullOrWhiteSpace(Text) && !String.IsNullOrWhiteSpace(Label))
+		{
+			positiveValue = Text;
+		}
+		else
+		{
+			positiveValue = Localizer["ChipValueTrue"];
+		}
+		builder.AddContent(0, CurrentValue ? positiveValue : Localizer["ChipValueFalse"]);
 	}
 }

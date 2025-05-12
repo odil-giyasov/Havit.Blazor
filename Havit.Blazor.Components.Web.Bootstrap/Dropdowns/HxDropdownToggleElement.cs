@@ -60,6 +60,16 @@ public class HxDropdownToggleElement : ComponentBase, IHxDropdownToggle, IAsyncD
 	protected virtual Task InvokeOnShownAsync() => OnShown.InvokeAsync();
 
 	/// <summary>
+	/// Fired immediately when the 'hide' instance method is called.
+	/// To cancel hiding, set <see cref="DropdownHidingEventArgs.Cancel"/> to <c>true</c>.
+	/// </summary>
+	/// <remarks>
+	/// There is intentionally no <c>virtual InvokeOnHidingAsync()</c> method to override to avoid confusion.
+	/// The <code>hide.bs.dropdown</code> event is only subscribed to when the <see cref="OnHiding"/> callback is set.
+	/// </remarks>
+	[Parameter] public EventCallback<DropdownHidingEventArgs> OnHiding { get; set; }
+
+	/// <summary>
 	/// Fired when the dropdown has finished being hidden from the user and CSS transitions have completed.
 	/// </summary>
 	[Parameter] public EventCallback OnHidden { get; set; }
@@ -94,6 +104,8 @@ public class HxDropdownToggleElement : ComponentBase, IHxDropdownToggle, IAsyncD
 	private ElementReference _elementReference;
 	private DotNetObjectReference<HxDropdownToggleElement> _dotnetObjectReference;
 	private IJSObjectReference _jsModule;
+	private string _currentDropdownJsOptionsReference;
+	private Queue<Func<Task>> _onAfterRenderTasksQueue = new();
 	private bool _disposed;
 
 	public HxDropdownToggleElement()
@@ -129,10 +141,11 @@ public class HxDropdownToggleElement : ComponentBase, IHxDropdownToggle, IAsyncD
 		if (String.Equals(ElementName, "input", StringComparison.OrdinalIgnoreCase))
 		{
 			builder.AddAttribute(10, "value", Value);
+#pragma warning disable VSTHRD101 // Avoid unsupported async delegates
+			// TODO VSTHRD101 via RuntimeHelpers.CreateInferredBindSetter?
 			builder.AddAttribute(11, "onchange", EventCallback.Factory.CreateBinder<string>(this, async (string value) => await InvokeValueChangedAsync(value), Value));
-#if NET8_0_OR_GREATER
+#pragma warning restore VSTHRD101 // Avoid unsupported async delegates
 			builder.SetUpdatesAttributeName("value");
-#endif
 		}
 
 		builder.AddMultipleAttributes(99, AdditionalAttributes);
@@ -159,7 +172,8 @@ public class HxDropdownToggleElement : ComponentBase, IHxDropdownToggle, IAsyncD
 	/// <inheritdoc cref="ComponentBase.OnAfterRenderAsync(bool)" />
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		await base.OnAfterRenderAsync(firstRender);
+		var dropdownJsOptionsReference = DropdownToggleExtensions.GetDropdownJsOptionsReference(this);
+
 		if (firstRender)
 		{
 			await EnsureJsModuleAsync();
@@ -167,26 +181,70 @@ public class HxDropdownToggleElement : ComponentBase, IHxDropdownToggle, IAsyncD
 			{
 				return;
 			}
-			await _jsModule.InvokeVoidAsync("create", _elementReference, _dotnetObjectReference, DropdownToggleExtensions.GetDropdownJsOptionsReference(this));
+			_currentDropdownJsOptionsReference = dropdownJsOptionsReference;
+			await _jsModule.InvokeVoidAsync("create", _elementReference, _dotnetObjectReference, GetDropdownJsOptions(_currentDropdownJsOptionsReference), OnHiding.HasDelegate);
 		}
+		else
+		{
+			if (dropdownJsOptionsReference != _currentDropdownJsOptionsReference)
+			{
+				_currentDropdownJsOptionsReference = dropdownJsOptionsReference;
+				if (_jsModule is not null)
+				{
+					await _jsModule.InvokeVoidAsync("update", _elementReference, GetDropdownJsOptions(dropdownJsOptionsReference));
+				}
+			}
+		}
+
+		// for show/hide/... the dropdown has to be created/updated first 
+		while (_onAfterRenderTasksQueue.TryDequeue(out var task))
+		{
+			await task();
+		}
+	}
+
+	/// <summary>
+	/// Override this method to provide additional options for the dropdown (allows specific customizations such as dropdown with backdrop).
+	/// </summary>
+	/// <param name="referenceOption"><c>reference</c> option to be used</param>
+	protected virtual Dictionary<string, object> GetDropdownJsOptions(string referenceOption)
+	{
+		return new()
+		{
+			["reference"] = referenceOption
+		};
 	}
 
 	/// <summary>
 	/// Shows the dropdown.
 	/// </summary>
-	public async Task ShowAsync()
+	public Task ShowAsync()
 	{
-		await EnsureJsModuleAsync();
-		await _jsModule.InvokeVoidAsync("show", _elementReference);
+		_onAfterRenderTasksQueue.Enqueue(async () =>
+		{
+			await EnsureJsModuleAsync();
+			await _jsModule.InvokeVoidAsync("show", _elementReference);
+		});
+
+		StateHasChanged(); // ensure re-rendering
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
 	/// Hides the dropdown.
 	/// </summary>
-	public async Task HideAsync()
+	public Task HideAsync()
 	{
-		await EnsureJsModuleAsync();
-		await _jsModule.InvokeVoidAsync("hide", _elementReference);
+		_onAfterRenderTasksQueue.Enqueue(async () =>
+		{
+			await EnsureJsModuleAsync();
+			await _jsModule.InvokeVoidAsync("hide", _elementReference);
+		});
+
+		StateHasChanged(); // ensure re-rendering
+
+		return Task.CompletedTask;
 	}
 
 	/// <summary>
@@ -200,6 +258,17 @@ public class HxDropdownToggleElement : ComponentBase, IHxDropdownToggle, IAsyncD
 	{
 		((IDropdownContainer)DropdownContainer).IsOpen = true;
 		await InvokeOnShownAsync();
+	}
+
+	/// <summary>
+	/// Receives notification from JS for <c>hide.bs.dropdown</c> event.
+	/// </summary>
+	[JSInvokable("HxDropdown_HandleJsHide")]
+	public async Task<bool> HandleJsHide()
+	{
+		var eventArgs = new DropdownHidingEventArgs();
+		await OnHiding.InvokeAsync(eventArgs);
+		return eventArgs.Cancel;
 	}
 
 	/// <summary>

@@ -13,7 +13,11 @@ public partial class HxMultiSelectInternal<TValue, TItem> : IAsyncDisposable
 
 	[Parameter] public string InputText { get; set; }
 
+	[Parameter] public IFormValueComponent FormValueComponent { get; set; }
+
 	[Parameter] public bool EnabledEffective { get; set; }
+
+	[Parameter] public LabelType LabelTypeEffective { get; set; }
 
 	[Parameter] public List<TItem> ItemsToRender { get; set; }
 
@@ -63,10 +67,13 @@ public partial class HxMultiSelectInternal<TValue, TItem> : IAsyncDisposable
 
 	[Inject] private IStringLocalizer<HxMultiSelect> StringLocalizer { get; set; }
 
-	protected bool HasInputGroupsEffective => !String.IsNullOrWhiteSpace(InputGroupStartText) || !String.IsNullOrWhiteSpace(InputGroupEndText) || (InputGroupStartTemplate is not null) || (InputGroupEndTemplate is not null);
+	protected bool HasInputGroups => !String.IsNullOrWhiteSpace(InputGroupStartText) || !String.IsNullOrWhiteSpace(InputGroupEndText) || (InputGroupStartTemplate is not null) || (InputGroupEndTemplate is not null);
+	protected bool HasInputGroupEnd => !String.IsNullOrWhiteSpace(InputGroupEndText) || (InputGroupEndTemplate is not null);
+	protected bool HasInputGroupStart => !String.IsNullOrWhiteSpace(InputGroupStartText) || (InputGroupStartTemplate is not null);
 
 	private IJSObjectReference _jsModule;
 	private readonly DotNetObjectReference<HxMultiSelectInternal<TValue, TItem>> _dotnetObjectReference;
+	private ElementReference _inputElementReference;
 	private ElementReference _elementReference;
 	private ElementReference _filterInputReference;
 	private bool _isShown;
@@ -216,11 +223,12 @@ public partial class HxMultiSelectInternal<TValue, TItem> : IAsyncDisposable
 
 	public async ValueTask FocusAsync()
 	{
-		if (EqualityComparer<ElementReference>.Default.Equals(_elementReference, default))
+		if (EqualityComparer<ElementReference>.Default.Equals(_inputElementReference, default))
 		{
-			throw new InvalidOperationException($"Cannot focus {GetType()}. The method must be called after first render.");
+			throw new InvalidOperationException($"[{GetType().Name}] Unable to focus. The method must be called after first render.");
 		}
-		await _elementReference.FocusAsync();
+		await _inputElementReference.FocusAsync();
+		_isShown = true;
 	}
 
 	/// <summary>
@@ -245,8 +253,11 @@ public partial class HxMultiSelectInternal<TValue, TItem> : IAsyncDisposable
 	public async Task HandleJsShown()
 	{
 		_isShown = true;
+
 		if (AllowFiltering)
+		{
 			await _filterInputReference.FocusAsync();
+		}
 	}
 
 	public async ValueTask DisposeAsync()

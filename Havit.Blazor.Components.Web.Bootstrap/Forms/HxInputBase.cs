@@ -108,10 +108,7 @@ public abstract class HxInputBase<TValue> : InputBase<TValue>, ICascadeEnabledCo
 	/// <summary>
 	/// The CSS class to be rendered with the wrapping div.
 	/// </summary>
-	private protected virtual string CoreCssClass => CssClassHelper.Combine("hx-form-group position-relative",
-		((this is IInputWithLabelType inputWithLabelType) && (inputWithLabelType.LabelTypeEffective == LabelType.Floating))
-		? "form-floating"
-		: null);
+	private protected virtual string CoreCssClass => "hx-form-group position-relative";
 
 	/// <summary>
 	/// The CSS class to be rendered with the input element.
@@ -205,10 +202,10 @@ public abstract class HxInputBase<TValue> : InputBase<TValue>, ICascadeEnabledCo
 
 		if ((this is IInputWithLabelType inputWithLabelType)
 			&& (this is IInputWithPlaceholder inputWithPlaceholder)
-			&& (inputWithLabelType.LabelType == LabelType.Floating)
+			&& (inputWithLabelType.LabelTypeEffective == LabelType.Floating)
 			&& !String.IsNullOrEmpty(inputWithPlaceholder.Placeholder))
 		{
-			throw new InvalidOperationException($"Cannot use {nameof(IInputWithPlaceholder.Placeholder)} with floating labels.");
+			throw new InvalidOperationException($"[{GetType().Name}] Cannot use {nameof(IInputWithPlaceholder.Placeholder)} with floating labels.");
 		}
 	}
 
@@ -261,7 +258,7 @@ public abstract class HxInputBase<TValue> : InputBase<TValue>, ICascadeEnabledCo
 	/// When the EditContext was automatically created, this method renders the CascadingValue component with this EditContext and the content of the renderFragment.
 	/// Otherwise, only the renderFragment is rendered.
 	/// </summary>
-	private protected void RenderWithAutoCreatedEditContextAsCascadingValue(RenderTreeBuilder builder, int sequence, RenderFragment renderFragment)
+	protected void RenderWithAutoCreatedEditContextAsCascadingValue(RenderTreeBuilder builder, int sequence, RenderFragment renderFragment)
 	{
 		if (_autoCreatedEditContext != null)
 		{
@@ -296,12 +293,10 @@ public abstract class HxInputBase<TValue> : InputBase<TValue>, ICascadeEnabledCo
 	{
 		builder.AddMultipleAttributes(1, AdditionalAttributes);
 		builder.AddAttribute(2, "id", InputId);
-#if NET8_0_OR_GREATER
 		if (!String.IsNullOrEmpty(NameAttributeValue))
 		{
 			builder.AddAttribute(3, "name", NameAttributeValue);
 		}
-#endif
 		builder.AddAttribute(4, "type", typeValue);
 		builder.AddAttribute(5, "class", GetInputCssClassToRender());
 		builder.AddAttribute(6, "disabled", !EnabledEffective);
@@ -406,14 +401,10 @@ public abstract class HxInputBase<TValue> : InputBase<TValue>, ICascadeEnabledCo
 	/// </summary>
 	protected virtual Action<object> GetChipRemoveAction()
 	{
-		string fieldName = FieldIdentifier.FieldName; // carefully! don't use "this" in lambda below to allow it for GC
 		TValue value = GetChipRemoveValue(); // carefully! don't use the method call in lambda below to allow "this" for GC
-		Action<object> removeAction = (model) =>
-		{
-			var propertyInfo = model.GetType().GetProperty(fieldName);
-			Contract.Assert(propertyInfo is not null, "Invalid FieldIdentifier. Check ValueExpression parameter.");
-			propertyInfo.SetValue(model, value);
-		};
+
+		var builder = new ChipRemoveActionBuilder(ValueExpression, value);
+		Action<object> removeAction = builder.Build();
 
 		return removeAction;
 	}
@@ -433,7 +424,7 @@ public abstract class HxInputBase<TValue> : InputBase<TValue>, ICascadeEnabledCo
 	{
 		if (EqualityComparer<ElementReference>.Default.Equals(InputElement, default))
 		{
-			throw new InvalidOperationException($"Cannot focus {GetType()}. The method must be called after first render.");
+			throw new InvalidOperationException($"[{GetType().Name}] Unable to focus, {nameof(InputElement)} reference not available.  You are most likely calling the method too early. The first render must complete before calling this method.");
 		}
 		await InputElement.FocusAsync();
 	}
@@ -469,7 +460,7 @@ public abstract class HxInputBase<TValue> : InputBase<TValue>, ICascadeEnabledCo
 	protected TAttribute GetValueAttribute<TAttribute>()
 		where TAttribute : Attribute
 	{
-		return FieldIdentifier.Model.GetType().GetMember(FieldIdentifier.FieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).Single().GetCustomAttribute<TAttribute>();
+		return FieldIdentifier.Model.GetType().GetMember(FieldIdentifier.FieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic).FirstOrDefault()?.GetCustomAttribute<TAttribute>();
 	}
 
 	/// <summary>

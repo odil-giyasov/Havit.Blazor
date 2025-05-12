@@ -15,7 +15,8 @@ public class HxInputNumber
 	{
 		Defaults = new InputNumberSettings()
 		{
-			InputSize = InputSize.Regular,
+			Type = InputType.Text,
+			SelectOnFocus = true
 		};
 	}
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.JSInterop;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Localization;
+using Microsoft.JSInterop;
 
 namespace Havit.Blazor.Components.Web.Bootstrap.Internal;
 
@@ -7,6 +9,7 @@ namespace Havit.Blazor.Components.Web.Bootstrap.Internal;
 /// </summary>
 public partial class HxInputTagsInternal
 {
+	[Inject] protected IStringLocalizer<HxInputTags> HxInputTagsLocalizer { get; set; }
 	/// <summary>
 	/// Indicates whether you are restricted to suggested items only (<c>false</c>).
 	/// Default is <c>true</c> (you can type your own tags).
@@ -110,6 +113,8 @@ public partial class HxInputTagsInternal
 	/// </summary>
 	[Parameter] public RenderFragment InputGroupEndTemplate { get; set; }
 
+	[Parameter] public bool? SpellcheckEffective { get; set; }
+
 	/// <summary>
 	/// Additional attributes to be splatted onto an underlying HTML input.
 	/// </summary>
@@ -165,7 +170,7 @@ public partial class HxInputTagsInternal
 			return;
 		}
 
-		Value = Value.Except(new string[] { tag }).ToList();
+		Value = Value.Except([tag]).ToList();
 		await ValueChanged.InvokeAsync(Value);
 	}
 
@@ -226,6 +231,7 @@ public partial class HxInputTagsInternal
 		_dataProviderInProgress = false; // data provider is no longer in progress				 
 	}
 
+	[SuppressMessage("Usage", "VSTHRD100:Avoid async void methods", Justification = "Required by Timer")]
 	private async void HandleTimerElapsed(object sender, System.Timers.ElapsedEventArgs e)
 	{
 		// when a time interval reached, update suggestions

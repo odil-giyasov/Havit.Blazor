@@ -6,7 +6,7 @@
 	bool fromValid = !EditContext.GetValidationMessages(FieldIdentifier).Any() && !EditContext.GetValidationMessages(_fromFieldIdentifier).Any();
 	bool toValid = !EditContext.GetValidationMessages(FieldIdentifier).Any() && !EditContext.GetValidationMessages(_toFieldIdentifier).Any();
 
-	<div class="@CssClassHelper.Combine("hx-input-date-range", (ShowPredefinedDateRangesEffective && (PredefinedDateRangesEffective?.Any() ?? false)) ? "hx-input-date-range-predefined-ranges" : null)">
+	<div class="@CssClassHelper.Combine("hx-input-date-range", (CalendarIconEffective is not null) ? "hx-input-date-has-calendar-icon" : null)">
 		<div class="input-group flex-nowrap">
 			<HxDropdown AutoClose="DropdownAutoClose.Outside">
 				@*Input must not be rendered when bootstrap dropdown is opened. Therefore we add is-invalid class via IJSRuntime. *@
@@ -20,9 +20,10 @@
 										 Caret="false"
 										 Value="@(_fromPreviousParsingAttemptFailed ? _incomingFromValueBeforeParsing : FormatDate(Value.StartDate))"
 										 ValueChanged="HandleFromChanged"
-										 placeholder="@StringLocalizerFactory.GetLocalizedValue("From", typeof(HxInputDateRange))"
+										 placeholder="@(FromPlaceholderEffective ?? StringLocalizerFactory.GetLocalizedValue("From", typeof(HxInputDateRange)))"
 										 disabled="@(!EnabledEffective)"
 										 onfocus="this.select();"
+										 inputmode="none"
 										 @attributes="this.AdditionalAttributes" />
 
 				<HxDropdownContent CssClass="hx-input-date-range-dropdown-menu">
@@ -34,18 +35,35 @@
 						<div class="hx-input-date-range-buttons">
 							@if (ShowClearButtonEffective)
 							{
-								<HxButton Text="@StringLocalizerFactory.GetLocalizedValue("Clear", typeof(HxInputDateRange))" Color="ThemeColor.Link" Size="ButtonSize.Small" OnClick="HandleFromClearClickAsync" tabindex="-1" />
+								<HxButton Text="@StringLocalizerFactory.GetLocalizedValue("Clear", typeof(HxInputDateRange))"
+										  Color="ThemeColor.Link"
+										  Size="ButtonSize.Small"
+										  OnClick="HandleFromClearClickAsync"
+										  tabindex="-1"
+										  Enabled="this.EnabledEffective" />
 							}
 							@if (ShowPredefinedDateRangesEffective && (PredefinedDateRangesEffective != null) && PredefinedDateRangesEffective.Any())
 							{
 								@foreach (var item in PredefinedDateRangesEffective)
 								{
-									<HxButton @key="@item" Text="@StringLocalizerFactory.GetLocalizedValue(item.Label, item.ResourceType)" Color="ThemeColor.Link" Size="ButtonSize.Small" OnClick="() => HandleDateRangeClick(item.DateRange, _fromDropdownToggleElement)" tabindex="-1" />
+									<HxButton @key="@item"
+											  Text="@StringLocalizerFactory.GetLocalizedValue(item.Label, item.ResourceType)"
+											  Color="ThemeColor.Link"
+											  Size="ButtonSize.Small"
+											  OnClick="() => HandleDateRangeClick(item.DateRange, _fromDropdownToggleElement)"
+											  tabindex="-1"
+											  Enabled="this.EnabledEffective" />
 								}
 							}
 						</div>
 					}
 				</HxDropdownContent>
+				@if (CalendarIconEffective is not null)
+				{
+					<div @ref="_fromIconWrapperElement" class="hx-input-date-icon">
+						<HxIcon Icon="CalendarIconEffective" />
+					</div>
+				}
 			</HxDropdown>
 
 			<HxDropdown AutoClose="DropdownAutoClose.Outside">
@@ -59,9 +77,10 @@
                                                                         "rounded-start-0")"
 										 Value="@(_toPreviousParsingAttemptFailed ? _incomingToValueBeforeParsing : FormatDate(Value.EndDate))"
 										 ValueChanged="HandleToChanged"
-										 placeholder="@StringLocalizerFactory.GetLocalizedValue("To", typeof(HxInputDateRange))"
+										 placeholder="@(ToPlaceholderEffective ?? StringLocalizerFactory.GetLocalizedValue("To", typeof(HxInputDateRange)))"
 										 disabled="@(!EnabledEffective)"
 										 onfocus="this.select()"
+										 inputmode="none"
 										 @attributes="this.AdditionalAttributes" />
 
 				<HxDropdownContent CssClass="hx-input-date-range-dropdown-menu">
@@ -73,18 +92,35 @@
 						<div class="hx-input-date-range-buttons">
 							@if (ShowClearButtonEffective)
 							{
-								<HxButton Text="@StringLocalizerFactory.GetLocalizedValue("Clear", typeof(HxInputDateRange))" Color="ThemeColor.Link" Size="ButtonSize.Small" OnClick="HandleToClearClickAsync" tabindex="-1" />
+								<HxButton Text="@StringLocalizerFactory.GetLocalizedValue("Clear", typeof(HxInputDateRange))"
+										  Color="ThemeColor.Link"
+										  Size="ButtonSize.Small"
+										  OnClick="HandleToClearClickAsync"
+										  tabindex="-1"
+										  Enabled="this.EnabledEffective" />
 							}
 							@if (ShowPredefinedDateRangesEffective && (PredefinedDateRangesEffective != null) && PredefinedDateRangesEffective.Any())
 							{
 								@foreach (var item in PredefinedDateRangesEffective)
 								{
-									<HxButton @key="@item" Text="@StringLocalizerFactory.GetLocalizedValue(item.Label, item.ResourceType)" Color="ThemeColor.Link" Size="ButtonSize.Small" OnClick="() => HandleDateRangeClick(item.DateRange, _toDropdownToggleElement)" tabindex="-1" />
+									<HxButton @key="@item"
+											  Text="@StringLocalizerFactory.GetLocalizedValue(item.Label, item.ResourceType)"
+											  Color="ThemeColor.Link"
+											  Size="ButtonSize.Small"
+											  OnClick="() => HandleDateRangeClick(item.DateRange, _toDropdownToggleElement)"
+											  tabindex="-1"
+											  Enabled="this.EnabledEffective" />
 								}
 							}
 						</div>
 					}
 				</HxDropdownContent>
+				@if (CalendarIconEffective is not null)
+				{
+					<div @ref="_toIconWrapperElement" class="hx-input-date-icon">
+						<HxIcon Icon="CalendarIconEffective" />
+					</div>
+				}
 			</HxDropdown>
 		</div>
 

@@ -19,7 +19,6 @@ public class HxInputDateRange : HxInputBase<DateTimeRange>, IInputWithSize
 	{
 		Defaults = new InputDateRangeSettings()
 		{
-			InputSize = Bootstrap.InputSize.Regular,
 			MinDate = HxCalendar.DefaultMinDate,
 			MaxDate = HxCalendar.DefaultMaxDate,
 			ShowClearButton = true,
@@ -63,8 +62,22 @@ public class HxInputDateRange : HxInputBase<DateTimeRange>, IInputWithSize
 	/// Size of the input.
 	/// </summary>
 	[Parameter] public InputSize? InputSize { get; set; }
-	protected InputSize InputSizeEffective => InputSize ?? GetSettings()?.InputSize ?? GetDefaults()?.InputSize ?? throw new InvalidOperationException(nameof(InputSize) + " default for " + nameof(HxInputDateRange) + " has to be set.");
+	protected InputSize InputSizeEffective => InputSize ?? GetSettings()?.InputSize ?? GetDefaults()?.InputSize ?? HxSetup.Defaults.InputSize;
 	InputSize IInputWithSize.InputSizeEffective => InputSizeEffective;
+
+	/// <summary>
+	/// Placeholder for the start-date input.
+	/// If not set, localized default is used ("From" + localizations).
+	/// </summary>
+	[Parameter] public string FromPlaceholder { get; set; }
+	public string FromPlaceholderEffective => FromPlaceholder ?? GetSettings()?.FromPlaceholder ?? GetDefaults().FromPlaceholder; // null = use localizations
+
+	/// <summary>
+	/// Placeholder for the end-date input.
+	/// If not set, localized default is used ("End" + localizations).
+	/// </summary>
+	[Parameter] public string ToPlaceholder { get; set; }
+	public string ToPlaceholderEffective => ToPlaceholder ?? GetSettings()?.ToPlaceholder ?? GetDefaults().ToPlaceholder; // null = use localizations
 
 	/// <summary>
 	/// Gets or sets the error message used when displaying a &quot;from&quot; parsing error.
@@ -127,7 +140,13 @@ public class HxInputDateRange : HxInputBase<DateTimeRange>, IInputWithSize
 	[Parameter] public TimeProvider TimeProvider { get; set; } = null;
 	protected TimeProvider TimeProviderEffective => TimeProvider ?? GetSettings()?.TimeProvider ?? GetDefaults().TimeProvider ?? TimeProviderFromServices;
 
+	[Parameter] public IconBase CalendarIcon { get; set; }
+	protected IconBase CalendarIconEffective => CalendarIcon ?? GetSettings()?.CalendarIcon ?? GetDefaults().CalendarIcon;
+
 	[Inject] private IStringLocalizer<HxInputDateRange> StringLocalizer { get; set; }
+
+
+	private HxInputDateRangeInternal _hxInputDateRangeInternalComponent;
 
 	protected override void BuildRenderInput(RenderTreeBuilder builder)
 	{
@@ -145,23 +164,37 @@ public class HxInputDateRange : HxInputBase<DateTimeRange>, IInputWithSize
 		builder.AddAttribute(200, nameof(HxInputDateRangeInternal.FromInputId), InputId);
 		builder.AddAttribute(201, nameof(HxInputDateRangeInternal.InputCssClass), GetInputCssClassToRender());
 		builder.AddAttribute(203, nameof(HxInputDateRangeInternal.InputSizeEffective), InputSizeEffective);
-		builder.AddAttribute(204, nameof(HxInputDateRangeInternal.EnabledEffective), EnabledEffective);
-		builder.AddAttribute(205, nameof(HxInputDateRangeInternal.FromParsingErrorMessageEffective), GetFromParsingErrorMessage());
-		builder.AddAttribute(206, nameof(HxInputDateRangeInternal.ToParsingErrorMessageEffective), GetToParsingErrorMessage());
-		builder.AddAttribute(207, nameof(HxInputDateRangeInternal.ValidationMessageModeEffective), ValidationMessageModeEffective);
-		builder.AddAttribute(208, nameof(HxInputDateRangeInternal.PredefinedDateRangesEffective), PredefinedDateRangesEffective);
-		builder.AddAttribute(209, nameof(HxInputDateRangeInternal.ShowPredefinedDateRangesEffective), ShowPredefinedDateRangesEffective);
-		builder.AddAttribute(210, nameof(HxInputDateRangeInternal.ShowClearButtonEffective), ShowClearButtonEffective);
-		builder.AddAttribute(211, nameof(HxInputDateRangeInternal.MinDateEffective), MinDateEffective);
-		builder.AddAttribute(212, nameof(HxInputDateRangeInternal.MaxDateEffective), MaxDateEffective);
-		builder.AddAttribute(213, nameof(HxInputDateRangeInternal.FromCalendarDisplayMonth), FromCalendarDisplayMonth);
-		builder.AddAttribute(214, nameof(HxInputDateRangeInternal.ToCalendarDisplayMonth), ToCalendarDisplayMonth);
+		builder.AddAttribute(204, nameof(HxInputDateRangeInternal.CalendarIconEffective), CalendarIconEffective);
+		builder.AddAttribute(205, nameof(HxInputDateRangeInternal.EnabledEffective), EnabledEffective);
+		builder.AddAttribute(206, nameof(HxInputDateRangeInternal.FromPlaceholderEffective), FromPlaceholderEffective);
+		builder.AddAttribute(206, nameof(HxInputDateRangeInternal.ToPlaceholderEffective), ToPlaceholderEffective);
+		builder.AddAttribute(206, nameof(HxInputDateRangeInternal.FromParsingErrorMessageEffective), GetFromParsingErrorMessage());
+		builder.AddAttribute(207, nameof(HxInputDateRangeInternal.ToParsingErrorMessageEffective), GetToParsingErrorMessage());
+		builder.AddAttribute(208, nameof(HxInputDateRangeInternal.ValidationMessageModeEffective), ValidationMessageModeEffective);
+		builder.AddAttribute(209, nameof(HxInputDateRangeInternal.PredefinedDateRangesEffective), PredefinedDateRangesEffective);
+		builder.AddAttribute(210, nameof(HxInputDateRangeInternal.ShowPredefinedDateRangesEffective), ShowPredefinedDateRangesEffective);
+		builder.AddAttribute(211, nameof(HxInputDateRangeInternal.ShowClearButtonEffective), ShowClearButtonEffective);
+		builder.AddAttribute(212, nameof(HxInputDateRangeInternal.MinDateEffective), MinDateEffective);
+		builder.AddAttribute(213, nameof(HxInputDateRangeInternal.MaxDateEffective), MaxDateEffective);
+		builder.AddAttribute(214, nameof(HxInputDateRangeInternal.FromCalendarDisplayMonth), FromCalendarDisplayMonth);
+		builder.AddAttribute(215, nameof(HxInputDateRangeInternal.ToCalendarDisplayMonth), ToCalendarDisplayMonth);
 		builder.AddAttribute(220, nameof(HxInputDateRangeInternal.CalendarDateCustomizationProviderEffective), CalendarDateCustomizationProviderEffective);
 		builder.AddAttribute(221, nameof(HxInputDateRangeInternal.TimeProviderEffective), TimeProviderEffective);
 
 		builder.AddMultipleAttributes(300, AdditionalAttributes);
+		builder.AddComponentReferenceCapture(400, (__value) => _hxInputDateRangeInternalComponent = (HxInputDateRangeInternal)__value);
 
 		builder.CloseComponent();
+	}
+
+	public override ValueTask FocusAsync()
+	{
+		if (_hxInputDateRangeInternalComponent is null)
+		{
+			throw new InvalidOperationException($"[{GetType().Name}] Unable to focus. The component reference is not available. You are most likely calling the method too early. The first render must complete before calling this method.");
+		}
+
+		return _hxInputDateRangeInternalComponent.FocusAsync();
 	}
 
 	protected override void BuildRenderValidationMessage(RenderTreeBuilder builder)

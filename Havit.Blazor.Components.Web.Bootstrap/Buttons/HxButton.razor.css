@@ -1,7 +1,10 @@
-﻿::deep .hx-button-icon-text-spacer {
-	margin-right: var(--hx-button-icon-text-spacer-width);
+﻿.btn:not(.navbar-toggler):not(.placeholder) {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--hx-button-gap);
 }
 
-::deep .hx-button-text-icon-spacer {
-	margin-left: var(--hx-button-icon-text-spacer-width);
+.btn.dropdown-toggle::after  {
+	margin-left: 0;
 }

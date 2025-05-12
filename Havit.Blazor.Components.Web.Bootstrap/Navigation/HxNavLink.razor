@@ -4,12 +4,13 @@
 <HxNavLinkInternal href="@Href"
 				   Match="@(Match ?? NavLinkMatch.All)"
 				   OnClick="@(OnClick.HasDelegate ? InvokeOnClickAsync : null)"
+				   OnClickStopPropagation="OnClickStopPropagation"
+				   OnClickPreventDefault="OnClickPreventDefault"
 				   class="@CssClassHelper.Combine("nav-link", CascadeEnabledComponent.EnabledEffective(this) ? null : "disabled", CssClass)"
 				   ActiveClass="@(((Match is null) || (Href is null)) ? String.Empty : "active")"
 				   tabindex="@(CascadeEnabledComponent.EnabledEffective(this) ? null : "-1")"
 				   aria-disabled="@(CascadeEnabledComponent.EnabledEffective(this) ? null : "true")"
 				   role="@(OnClick.HasDelegate ? "button" : null)"
-				   @attributes="this.AdditionalAttributes">
-	@Text
-	@ChildContent
-</HxNavLinkInternal>
+				   @attributes="this.AdditionalAttributes"
+				   Text="@Text"
+				   ChildContent="ChildContent" />

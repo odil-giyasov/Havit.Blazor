@@ -64,7 +64,7 @@ public class HxAutosuggest<TItem, TValue> : HxInputBase<TValue>, IInputWithSize,
 	/// Icon displayed in the input when no item is selected.
 	/// </summary>
 	[Parameter] public IconBase SearchIcon { get; set; }
-	protected IconBase SearchIconEffective => SearchIcon ?? GetSettings()?.SearchIcon ;
+	protected IconBase SearchIconEffective => SearchIcon ?? GetSettings()?.SearchIcon ?? GetDefaults().SearchIcon;
 
 	/// <summary>
 	/// Icon displayed in the input on the selection clear button when an item is selected.
@@ -79,7 +79,7 @@ public class HxAutosuggest<TItem, TValue> : HxInputBase<TValue>, IInputWithSize,
 	protected int MinimumLengthEffective => MinimumLength ?? GetSettings()?.MinimumLength ?? GetDefaults().MinimumLength ?? throw new InvalidOperationException(nameof(MinimumLength) + " default for " + nameof(HxAutosuggest) + " has to be set.");
 
 	/// <summary>
-	/// The debounce delay in milliseconds.
+	/// The debounce delay in milliseconds. Default is 300 ms.
 	/// </summary>
 	[Parameter] public int? Delay { get; set; }
 	protected int DelayEffective => Delay ?? GetSettings()?.Delay ?? GetDefaults().Delay ?? throw new InvalidOperationException(nameof(Delay) + " default for " + nameof(HxAutosuggest) + " has to be set.");
@@ -93,11 +93,19 @@ public class HxAutosuggest<TItem, TValue> : HxInputBase<TValue>, IInputWithSize,
 	/// The size of the input.
 	/// </summary>
 	[Parameter] public InputSize? InputSize { get; set; }
-	protected InputSize InputSizeEffective => InputSize ?? GetSettings()?.InputSize ?? GetDefaults()?.InputSize ?? throw new InvalidOperationException(nameof(InputSize) + " default for " + nameof(HxAutosuggest) + " has to be set.");
+	protected InputSize InputSizeEffective => InputSize ?? GetSettings()?.InputSize ?? GetDefaults()?.InputSize ?? HxSetup.Defaults.InputSize;
 	InputSize IInputWithSize.InputSizeEffective => InputSizeEffective;
+
+	/// <summary>
+	/// Defines whether the input may be checked for spelling errors. Default is <c>false</c>.
+	/// </summary>
+	[Parameter] public bool? Spellcheck { get; set; }
+	protected bool? SpellcheckEffective => Spellcheck ?? GetSettings()?.Spellcheck ?? GetDefaults()?.Spellcheck;
 
 	/// <inheritdoc cref="Bootstrap.LabelType" />
 	[Parameter] public LabelType? LabelType { get; set; }
+	protected LabelType LabelTypeEffective => LabelType ?? GetSettings()?.LabelType ?? GetDefaults()?.LabelType ?? HxSetup.Defaults.LabelType;
+	LabelType IInputWithLabelType.LabelTypeEffective => LabelTypeEffective;
 
 	/// <summary>
 	/// The offset between the dropdown and the input.
@@ -113,7 +121,7 @@ public class HxAutosuggest<TItem, TValue> : HxInputBase<TValue>, IInputWithSize,
 	/// </remarks>
 	[Parameter] public Func<TValue, Task<TItem>> ItemFromValueResolver { get; set; }
 
-	protected override LabelValueRenderOrder RenderOrder => (LabelType == Bootstrap.LabelType.Floating) ? LabelValueRenderOrder.ValueOnly /* Label rendered by HxAutosuggestInternal */ : LabelValueRenderOrder.LabelValue;
+	protected override LabelValueRenderOrder RenderOrder => (LabelTypeEffective == Bootstrap.LabelType.Floating) ? LabelValueRenderOrder.ValueOnly /* Label rendered by HxAutosuggestInternal */ : LabelValueRenderOrder.LabelValue;
 
 	/// <summary>
 	/// The input-group at the beginning of the input.
@@ -172,9 +180,9 @@ public class HxAutosuggest<TItem, TValue> : HxInputBase<TValue>, IInputWithSize,
 		builder.AddAttribute(1023, nameof(HxAutosuggestInternal<TItem, TValue>.InputGroupStartTemplate), InputGroupStartTemplate);
 		builder.AddAttribute(1024, nameof(HxAutosuggestInternal<TItem, TValue>.InputGroupEndText), InputGroupEndText);
 		builder.AddAttribute(1025, nameof(HxAutosuggestInternal<TItem, TValue>.InputGroupEndTemplate), InputGroupEndTemplate);
-#if NET8_0_OR_GREATER
 		builder.AddAttribute(1026, nameof(HxAutosuggestInternal<TItem, TValue>.NameAttributeValue), NameAttributeValue);
-#endif
+		builder.AddAttribute(1027, nameof(HxAutosuggestInternal<TItem, TValue>.SpellcheckEffective), SpellcheckEffective);
+		builder.AddAttribute(1028, nameof(HxAutosuggestInternal<TItem, TValue>.InputSizeEffective), InputSizeEffective);
 
 		builder.AddMultipleAttributes(2000, AdditionalAttributes);
 
@@ -199,7 +207,7 @@ public class HxAutosuggest<TItem, TValue> : HxInputBase<TValue>, IInputWithSize,
 	{
 		if (_hxAutosuggestInternalComponent == null)
 		{
-			throw new InvalidOperationException($"Cannot focus {GetType()}. The method must be called after first render.");
+			throw new InvalidOperationException($"[{GetType().Name}] Unable to focus, component reference is not available. You are most likely calling the method too early. The first render must complete before calling this method.");
 		}
 
 		await _hxAutosuggestInternalComponent.FocusAsync();

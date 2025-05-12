@@ -1,15 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFrameworks>net8.0;net7.0;net6.0</TargetFrameworks>
+	  <TargetFrameworks>net9.0;net8.0</TargetFrameworks>
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <IsPackable>false</IsPackable>
-	  <EnableMSTestRunner>true</EnableMSTestRunner>
 	  <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="MSTest" Version="3.2.0" />
+	  <PackageReference Include="MSTest" />
   </ItemGroup>
 
   <ItemGroup>

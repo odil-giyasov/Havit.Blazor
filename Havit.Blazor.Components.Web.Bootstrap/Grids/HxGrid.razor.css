@@ -1,9 +1,9 @@
 .hx-grid-sorted ::deep .hx-grid-sort-icon {
-    color: var(--hx-grid-sorted-icon-color);
+	color: var(--hx-grid-sorted-icon-color);
 }
 
 .hx-grid-sortable ::deep .hx-grid-sort-icon {
-    visibility: hidden;
+	visibility: hidden;
 }
 
 ::deep .hx-grid-infinite-scroll {
@@ -15,37 +15,37 @@ th:hover.hx-grid-sortable ::deep .hx-grid-sort-icon {
 }
 
 th > .hx-grid-header-cell-container {
-    display: inline-flex;
-    gap: .5rem;
+	display: inline-flex;
+	gap: 0.25rem;
 }
 
 th.hx-grid-sortable.text-end .hx-grid-sort-icon,
 th.hx-grid-sorted.text-end .hx-grid-sort-icon {
-    order: 0;
+	order: 0;
 }
 
 th.hx-grid-sortable.text-end .hx-grid-header-cell-template,
 th.hx-grid-sorted.text-end .hx-grid-header-cell-template {
-    order: 1;
+	order: 1;
 }
 
 .hx-grid-header-cell-container ::deep .hx-icon {
-    align-self: center;
+	align-self: center;
 }
 
 ::deep .hx-grid-btn {
-    border-radius: var(--hx-grid-button-border-radius);
-    padding: 0 .25rem;
-    background: transparent;
-    border: none;
+	border-radius: var(--hx-grid-button-border-radius);
+	padding: 0 0.25rem;
+	background: transparent;
+	border: none;
 }
 
 ::deep .hx-grid-btn:hover {
-    background: var(--hx-grid-button-hover-background);
+	background: var(--hx-grid-button-hover-background);
 }
 
 ::deep .hx-grid-btn:active {
-    color: currentColor;
+	color: currentColor;
 }
 
 ::deep .hx-context-menu-grid-column {
@@ -53,7 +53,39 @@ th.hx-grid-sorted.text-end .hx-grid-header-cell-template {
 }
 
 .hh-grid-display-mode-selector {
-	display:flex;
-	justify-content:end;
+	display: flex;
+	justify-content: end;
 }
 
+.hx-grid-progress-indicator thead:not(.sticky-top) {
+	position: relative;
+	-webkit-transform: translateZ(0);
+	-moz-transform: translateZ(0);
+	transform: translateZ(0);
+}
+
+.hx-grid-progress-indicator thead:before {
+	content: "";
+	position: absolute;
+	z-index: 1000;
+	display: block;
+	bottom: -1px;
+	height: 1px;
+	background-color: var(--hx-grid-progress-indicator-color);
+	animation: 1.5s ease-in-out 0s 1 slideRight;
+	animation-iteration-count: infinite;
+}
+
+@keyframes slideRight {
+	0% {
+		right: 100%;
+		width: 0;
+	}
+	50% {
+		width: 20%;
+	}
+	100% {
+		right: 0;
+		width: 0;
+	}
+}
