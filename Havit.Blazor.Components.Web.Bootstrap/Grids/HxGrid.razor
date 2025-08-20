@@ -423,15 +423,22 @@
 							    };
 					    @PaginationTemplate(paginationContext)
 				    }
-				    else if (totalPages > 1) // if there is only one page, we do not need to render the pager (default behavior, the PaginationTemplate can override this behavior)
+				    else if (totalPages > 1 || this.PagerShowAlways) // if there is only one page, we do not need to render the pager (default behavior, the PaginationTemplate can override this behavior)
 				    {
 					    <HxPager TotalPages="@totalPages"
                                     TotalItems="@_totalCount.GetValueOrDefault()"
                                     PageSize="@PageSizeEffective"
 								    CurrentPageIndex="@currentPageIndex"
 								    CurrentPageIndexChanged="@HandlePagerCurrentPageIndexChanged"
-								    Settings="@PagerSettingsEffective" />
-				    }
+                        Settings="@PagerSettingsEffective" />
+                    }
+
+                    @if (IsPagerSummaryTextVisible != false && !string.IsNullOrEmpty(PagerSummaryText))
+                    {
+                        <div class="grid-pager-summary @(this._isPagerSummaryTextVisible ? "grid-pager-summary-visible" : "")" @onclick="() => this._isPagerSummaryTextVisible = false">
+                            @PagerSummaryText
+                        </div>
+                    }
 			    }
 
 			    @if (((ContentNavigationModeEffective == GridContentNavigationMode.LoadMore) || (ContentNavigationModeEffective == GridContentNavigationMode.PaginationAndLoadMore)) && (PageSizeEffective > 0) && (_totalCount != null))

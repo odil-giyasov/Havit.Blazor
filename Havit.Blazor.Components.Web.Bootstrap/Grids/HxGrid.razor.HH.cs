@@ -54,6 +54,30 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 		new GridPageSizerDDLItem{ Id = "0", Name = "All" }
 	};
 
+	[Parameter] public bool PagerShowAlways { get; set; } = false;
+
+	public string PagerSummaryText
+	{
+		get
+		{
+			int totalItems = this._totalCount.GetValueOrDefault();
+
+			if (totalItems == 0)
+				return "";
+
+			int currentPageIndex = this.CurrentUserState.PageIndex + ((this.CurrentUserState.LoadMoreAdditionalItemsCount + this.PageSizeEffective - 1) / this.PageSizeEffective);
+
+			int fromRecord = currentPageIndex * this.PageSizeEffective + 1;
+			int toRecord = (currentPageIndex + 1) * this.PageSizeEffective > totalItems ? totalItems : (currentPageIndex + 1) * this.PageSizeEffective;
+
+			return $"Showing {fromRecord} to {toRecord} of {totalItems} entries";
+		}
+	}
+
+	[Parameter] public bool IsPagerSummaryTextVisible { get; set; } = true;
+
+	private bool _isPagerSummaryTextVisible { get; set; } = true;
+
 	#endregion
 
 	private async Task OnRefreshButtonClicked()

@@ -886,6 +886,19 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 			_totalCount = result.TotalCount ?? result.Data?.Count() ?? 0;
 		}
 
+
+		this._isPagerSummaryTextVisible = true;
+
+		if (this.IsPagerSummaryTextVisible == true)
+		{
+			this.IsPagerSummaryTextVisible = false;
+			_ = Task.Run(() =>
+			{
+				this.IsPagerSummaryTextVisible = true;
+				this.StateHasChanged();
+			});
+		}
+
 		return result;
 	}
 
