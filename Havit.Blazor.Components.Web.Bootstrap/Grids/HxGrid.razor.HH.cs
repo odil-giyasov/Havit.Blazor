@@ -125,6 +125,9 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 	}
 
 
+	[Parameter] public int InitialPageIndex { get; set; }   // Part of ListsFilters feature
+
+
 }
 
 

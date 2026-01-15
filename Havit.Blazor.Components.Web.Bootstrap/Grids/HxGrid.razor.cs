@@ -398,6 +398,7 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 		if (isFirstParameterSet)
 		{
 			pageSizerValue = PageSize.GetValueOrDefault(20);
+			this.CurrentUserState.PageIndex = this.InitialPageIndex;
 			isFirstParameterSet = false;
 		}
 
