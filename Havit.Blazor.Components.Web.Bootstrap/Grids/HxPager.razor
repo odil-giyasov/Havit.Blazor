@@ -103,6 +103,6 @@
 @if(TotalItems > 0)
 {
     <div class="w-100 text-center">
-        Showing @From to @To of @TotalItems entries
+        @string.Format(HxSetup.Translations["Showing_to_of_entries"], From, To, TotalItems)
     </div>
 }

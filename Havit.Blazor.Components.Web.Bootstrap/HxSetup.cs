@@ -44,4 +44,11 @@ public static class HxSetup
 	}
 
 	internal static string VersionIdentifierHavitBlazorBootstrap { get; } = Havit.Blazor.Components.Web.JSRuntimeExtensions.GetAssemblyVersionIdentifierForUri(typeof(HxSetup).Assembly);
+
+
+	public static Dictionary<string, string> Translations { get; } = new()
+	{
+		["Showing_to_of_entries"] = "Showing {0} to {1} of {2} entries"
+	};
+
 }

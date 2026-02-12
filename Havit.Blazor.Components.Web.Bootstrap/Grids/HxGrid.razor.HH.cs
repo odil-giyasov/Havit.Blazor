@@ -63,14 +63,16 @@ public partial class HxGrid<TItem> : ComponentBase, IDisposable
 			int totalItems = this._totalCount.GetValueOrDefault();
 
 			if (totalItems == 0)
+			{
 				return "";
+			}
 
 			int currentPageIndex = this.CurrentUserState.PageIndex + ((this.CurrentUserState.LoadMoreAdditionalItemsCount + this.PageSizeEffective - 1) / this.PageSizeEffective);
 
 			int fromRecord = currentPageIndex * this.PageSizeEffective + 1;
 			int toRecord = (currentPageIndex + 1) * this.PageSizeEffective > totalItems ? totalItems : (currentPageIndex + 1) * this.PageSizeEffective;
 
-			return $"Showing {fromRecord} to {toRecord} of {totalItems} entries";
+			return string.Format(HxSetup.Translations["Showing_to_of_entries"], fromRecord, toRecord, totalItems);
 		}
 	}
 
