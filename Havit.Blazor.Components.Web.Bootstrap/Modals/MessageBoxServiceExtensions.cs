@@ -2,7 +2,12 @@
 
 public static class MessageBoxServiceExtensions
 {
-	public static Task<MessageBoxButtons> ShowAsync(this IHxMessageBoxService messageBoxService, string title, string text, MessageBoxButtons buttons = MessageBoxButtons.Ok, MessageBoxButtons? primaryButton = null, string customButtonText = null)
+	public static Task<MessageBoxButtons> ShowAsync(this IHxMessageBoxService messageBoxService,
+													string title,
+													string text,
+													MessageBoxButtons buttons = MessageBoxButtons.Ok,
+													MessageBoxButtons? primaryButton = null,
+													string customButtonText = null)
 	{
 		return messageBoxService.ShowAsync(new MessageBoxRequest()
 		{

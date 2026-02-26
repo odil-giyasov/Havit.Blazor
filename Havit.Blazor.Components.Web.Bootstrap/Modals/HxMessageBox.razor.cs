@@ -239,13 +239,13 @@ public partial class HxMessageBox : ComponentBase
 	{
 		return button switch
 		{
-			MessageBoxButtons.Ok => GetSettings()?.OkButtonText ?? GetDefaults()?.OkButtonText ?? MessageBoxLocalizer["OK"],
-			MessageBoxButtons.Cancel => GetSettings()?.CancelButtonText ?? GetDefaults()?.CancelButtonText ?? MessageBoxLocalizer["Cancel"],
-			MessageBoxButtons.Retry => GetSettings()?.RetryButtonText ?? GetDefaults()?.RetryButtonText ?? MessageBoxLocalizer["Retry"],
-			MessageBoxButtons.Ignore => GetSettings()?.IgnoreButtonText ?? GetDefaults()?.IgnoreButtonText ?? MessageBoxLocalizer["Ignore"],
-			MessageBoxButtons.Abort => GetSettings()?.AbortButtonText ?? GetDefaults()?.AbortButtonText ?? MessageBoxLocalizer["Abort"],
-			MessageBoxButtons.Yes => GetSettings()?.YesButtonText ?? GetDefaults()?.YesButtonText ?? MessageBoxLocalizer["Yes"],
-			MessageBoxButtons.No => GetSettings()?.NoButtonText ?? GetDefaults()?.NoButtonText ?? MessageBoxLocalizer["No"],
+			MessageBoxButtons.Ok => string.Format(HxSetup.Translations["Ok"]) ?? GetDefaults()?.OkButtonText ?? MessageBoxLocalizer["OK"],
+			MessageBoxButtons.Cancel => string.Format(HxSetup.Translations["Cancel"]) ?? GetDefaults()?.CancelButtonText ?? MessageBoxLocalizer["Cancel"],
+			MessageBoxButtons.Retry => string.Format(HxSetup.Translations["Retry"]) ?? GetDefaults()?.RetryButtonText ?? MessageBoxLocalizer["Retry"],
+			MessageBoxButtons.Ignore => string.Format(HxSetup.Translations["Ignore"]) ?? GetDefaults()?.IgnoreButtonText ?? MessageBoxLocalizer["Ignore"],
+			MessageBoxButtons.Abort => string.Format(HxSetup.Translations["Abort"]) ?? GetDefaults()?.AbortButtonText ?? MessageBoxLocalizer["Abort"],
+			MessageBoxButtons.Yes => string.Format(HxSetup.Translations["Yes"]) ?? GetDefaults()?.YesButtonText ?? MessageBoxLocalizer["Yes"],
+			MessageBoxButtons.No => string.Format(HxSetup.Translations["No"]) ?? GetDefaults()?.NoButtonText ?? MessageBoxLocalizer["No"],
 			MessageBoxButtons.Custom => CustomButtonText,
 			_ => throw new InvalidOperationException("Unsupported button type."),
 		};
