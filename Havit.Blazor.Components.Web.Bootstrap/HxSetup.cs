@@ -54,7 +54,8 @@ public static class HxSetup
 		["No"] = "No",
 		["Retry"] = "Retry",
 		["Abort"] = "Abort",
-		["Ignore"] = "Ignore"
+		["Ignore"] = "Ignore",
+		["Nodata"] = "No data",
 	};
 
 }
