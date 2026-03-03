@@ -9,7 +9,9 @@ public partial class HxMessageBoxHost : ComponentBase
 	[Inject] protected IHxMessageBoxService MessageBoxService { get; set; }
 
 	private HxMessageBox _messageBox;
+
 	private MessageBoxRequest _request;
+
 	private TaskCompletionSource<MessageBoxButtons> _resultCompletion;
 
 	protected override void OnInitialized()
@@ -23,11 +25,8 @@ public partial class HxMessageBoxHost : ComponentBase
 	{
 		_request = request;
 		_resultCompletion = new TaskCompletionSource<MessageBoxButtons>();
-
 		StateHasChanged();
-
 		await _messageBox.ShowAsync();
-
 		return await _resultCompletion.Task;
 	}
 
