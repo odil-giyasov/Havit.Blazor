@@ -292,7 +292,7 @@ public class HxMultiSelect<TValue, TItem> : HxInputBase<List<TValue>>, IInputWit
 
 		// The itemsToRender are chosen for processing because they are pre-sorted.
 		List<TItem> selectedItems = _itemsToRender.Where(item => value.Contains(SelectorHelpers.GetValue<TItem, TValue>(ValueSelector, item))).ToList();
-		return String.Join(", ", selectedItems.Select(TextSelector));
+		return selectedItems.Any() ? string.Join(", ", selectedItems.Select(TextSelector)) : EmptyText;
 	}
 
 	/// <inheritdoc />
